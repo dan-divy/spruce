@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Video.JS iPlayer Skin</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link href="https://vjs.zencdn.net/5.19.0/video-js.css" rel="stylesheet">
+  <!-- If you'd like to support IE8 -->
+  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+  <link href="css/videojs-iplayer-theme.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="wrapper" style="width: 600px; margin: auto;">
+    <h1 style="text-align: center;">HTML 5 Video</h1>
+    <div class="media-wrapper" style="width: 600px">
+      <video class="video-js vjs-default-skin" controls="controls" width="600px" height="auto" poster="https://www.html5rocks.com/en/tutorials/video/basics/poster.png"
+        loop="" data-setup='{ "playbackRates": [1, 1.5, 2] }'>
+        <source src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.mp4" type="video/mp4">
+        <source src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.webm" type="video/webm"> Your browser does not support the video element.
+      </video>
+    </div>
+
+
+    <div class="wrapper" style="width: 600px; margin-top:40px;">
+      <h1 style="text-align: center;">HTML 5 Audio</h1>
+      <audio controls class="video-js vjs-default-skin" data-setup="{}" width="600px" height="auto" poster="https://www.html5rocks.com/en/tutorials/video/basics/poster.png">
+        <source src="http://www.html5tutorial.info/media/vincent.ogg" type="audio/ogg">
+        <source src="http://www.html5tutorial.info/media/vincent.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="wrapper" style="width: 600px; margin-top:40px;">
+      <h1 style="text-align: center;">YouTube</h1>
+      <video id="vid1" class="video-js vjs-default-skin" controls="controls" width="600" height="auto" data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v=xjS6SftYQaQ"}], "youtube": { "customVars": { "wmode": "transparent" } } }'>
+      </video>
+    </div>
+  </div>
+
+  <script src="https://vjs.zencdn.net/5.19.0/video.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.3.2/Youtube.min.js"></script>
+</body>
+
+</html>

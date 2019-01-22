@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "ng-cli://commands/definitions.json",
+
+  "definitions": {
+    "architect": {
+      "properties": {
+        "project": {
+          "type": "string",
+          "description": "The name of the project to build. Can be an app or a library.",
+          "$default": {
+            "$source": "argv",
+            "index": 0
+          }
+        },
+        "configuration": {
+          "description": "A named build target, as specified in the \"configurations\" section of angular.json.\nEach named target is accompanied by a configuration of option defaults for that target.",
+          "type": "string",
+          "aliases": [
+            "c"
+          ]
+        },
+        "prod": {
+          "description": "When true, sets the build configuration to the production target.\nAll builds make use of bundling and limited tree-shaking. A production build also runs limited dead code elimination.",
+          "type": "boolean"
+        }
+      }
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "help": {
+          "enum": [true, false, "json", "JSON"],
+          "description": "Shows a help message for this command in the console.",
+          "default": false
+        }
+      }
+    },
+    "schematic": {
+      "properties": {
+        "dryRun": {
+          "type": "boolean",
+          "default": false,
+          "aliases": [ "d" ],
+          "description": "When true, runs through and reports activity without writing out results."
+        },
+        "force": {
+          "type": "boolean",
+          "default": false,
+          "aliases": [ "f" ],
+          "description": "When true, forces overwriting of existing files."
+        },
+        "interactive": {
+          "type": "boolean",
+          "default": "true",
+          "description": "When false, disables interactive input prompts."
+        },
+        "defaults": {
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, disables interactive input prompts for options with a default."
+        }
+      }
+    }
+  }
+}

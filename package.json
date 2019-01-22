@@ -1,0 +1,30 @@
+{
+  "name": "pudding",
+  "version": "0.1.5",
+  "description": "SOCIAL MEDIA",
+  "main": "server.js",
+  "dependencies": {
+    "cloudinary": "^1.13.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "mongoose": "^5.3.13",
+    "multer": "^1.4.1",
+    "multer-storage-cloudinary": "^2.2.1",
+    "mv": "^2.1.1",
+    "ora": "^3.0.0",
+    "passport-local": "^1.0.0",
+    "video.js": "^7.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "social",
+    "nework",
+    "pudding"
+  ],
+  "author": "Divy Srivastava",
+  "license": "ISC"
+}

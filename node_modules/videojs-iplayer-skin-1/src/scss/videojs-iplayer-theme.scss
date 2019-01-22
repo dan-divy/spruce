@@ -1,0 +1,351 @@
+$borderColour: #e0e0e0;
+$hoverColour: rgb(187, 25, 25);
+$bodyColor: #212121;
+$controlBackgroundColour: #000000;
+$transparentizeColour: #000000;
+$volumeHandleBackgoundColour: #FFFFFF;
+.video-js,
+.vjs-default-skin {
+  .vjs-loading-spinner {
+    border-color: $hoverColour;
+    &:before,
+    &:after {
+      border-color: $hoverColour;
+    }
+  }
+  &.vjs-paused {
+    .vjs-tech,
+    .vjs-big-play-button {
+      z-index: 2;
+    }
+    .vjs-control-bar {
+      z-index: -1;
+    }
+  }
+  &.vjs-has-started {
+    .vjs-tech,
+    .vjs-big-play-button {
+      z-index: 0;
+    }
+    .vjs-control-bar {
+      z-index: 2;
+    }
+  }
+  .vjs-menu {
+    bottom: 14px;
+  }
+  .vjs-big-play-button {
+    background-color: transparentize($transparentizeColour, 0.5);
+    position: absolute;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    width: 85px;
+    height: 85px;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    box-shadow: none;
+    transition: background-color .5s ease;
+    .vjs-icon-placeholder {
+      &:hover,
+      &:focus {
+        background-color: $hoverColour;
+      }
+      &:before {
+        font-size: 60px;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        line-height: 85px;
+      }
+    }
+  }
+  &:hover,
+  &:focus {
+    .vjs-big-play-button,
+    .vjs-big-play-button:focus {
+      border-color: transparent;
+      box-shadow: none;
+      background-color: $hoverColour;
+    }
+  }
+  .vjs-load-progress {
+    background: $borderColour;
+  }
+  .vjs-progress-holder .vjs-play-progress,
+  .vjs-progress-holder .vjs-load-progress,
+  .vjs-progress-holder .vjs-load-progress div {
+    height: 6px;
+    line-height: 44px;
+  }
+  .vjs-volume-level,
+  .vjs-play-progress {
+    background-color: $hoverColour;
+    &:before {
+      right: -8px;
+      font-size: 0.9em;
+      height: 14px;
+      width: 9px;
+      background: $volumeHandleBackgoundColour;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      content: '';
+    }
+  }
+  .vjs-control-bar {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    height: 120px;
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(39%, rgba(0, 0, 0, 0.39)), color-stop(39%, rgba(0, 0, 0, 0.39)), color-stop(100%, rgba(0, 0, 0, 1)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 1) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 0.39) 39%, rgba(0, 0, 0, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000', GradientType=0);
+  }
+  .vjs-icon-placeholder {
+    &:before {
+      font-size: 25px;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      line-height: 44px;
+      width: 44px;
+    }
+    &:focus:before,
+    &:hover:before {
+      box-shadow: none;
+      text-shadow: none;
+    }
+  }
+  .vjs-live-control {
+    top: -34px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+  }
+  .vjs-current-time,
+  .vjs-remaining-time {
+    right: 82px;
+  }
+  .vjs-duration {
+    right: 50px;
+  }
+  .vjs-time-divider {
+    right: 75px;
+  }
+  .vjs-playback-rate {
+    .vjs-menu {
+      width: 44px;
+      bottom: 14px;
+    }
+    .vjs-playback-rate-value {
+      line-height: 44px;
+    }
+  }
+  .vjs-current-time,
+  .vjs-duration,
+  .vjs-time-divider {
+    position: absolute;
+    height: 44px;
+    display: block;
+    bottom: 0;
+    >div {
+      line-height: 44px;
+      height: 44px;
+    }
+  }
+  .vjs-remaining-time {
+    display: none;
+  }
+  .vjs-control {
+    width: 44px;
+    height: 44px;
+    transition: background-color .5s ease;
+    bottom: 0;
+    &.vjs-fullscreen-control,
+    &.vjs-subs-caps-button,
+    &.vjs-playback-rate,
+    &.vjs-captions-button,
+    &.vjs-chapters-button,
+    &.vjs-volume-menu-button,
+    &.vjs-quality-button,
+    &.vjs-descriptions-button,
+    &.vjs-audio-button {
+      width: 44px;
+      height: 44px;
+      transition: background-color .5s ease;
+      bottom: -76px;
+      position: relative;
+    }
+    &:hover,
+    &:focus {
+      background-color: $hoverColour;
+    }
+  }
+  .vjs-progress-control {
+    bottom: 40px;
+    width: 100%;
+    position: absolute;
+    .vjs-slider {
+      height: 6px;
+      margin: 0 10px;
+    }
+    .vjs-slider-handle {
+      top: 40%;
+    }
+  }
+  .vjs-progress-control,
+  .vjs-current-time,
+  .vjs-duration,
+  .vjs-time-divider,
+  .vjs-volume-control,
+  .vjs-close-button,
+  .vjs-live-control {
+    &:hover,
+    &:focus {
+      background-color: transparent;
+    }
+  }
+  .vjs-play-control {
+    position: absolute;
+    left: 0;
+  }
+  .vjs-fullscreen-control {
+    margin-left: 85px !important;
+    right: 0;
+    position: absolute;
+  }
+  .vjs-volume-menu-button,
+  .vjs-volume-panel {
+    position: absolute;
+    left: 44px;
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      &:before {
+        background-color: $hoverColour;
+      }
+    }
+    &:before {
+      width: 44px;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(-0%, -50%);
+      -ms-transform: translate(-0%, -50%);
+      transform: translate(-0%, -50%);
+    }
+  }
+  .vjs-volume-bar,
+  .vjs-volume-level {
+    height: 6px;
+  }
+  .vjs-volume-bar {
+    top: 24%;
+    margin: 0;
+    left: 4px;
+    width: 80px;
+  }
+  .vjs-seek-handle {
+    height: auto;
+  }
+  .vjs-slider-handle,
+  .vjs-volume-bar .vjs-volume-handle {
+    &:before {
+      width: 10px;
+      height: 16px;
+      background-color: $volumeHandleBackgoundColour;
+      position: absolute;
+      right: 0;
+      top: -5px;
+      -webkit-transform: none;
+      -ms-transform: none;
+      transform: none;
+      content: "";
+      font-family: none;
+    }
+  }
+  .vjs-live-controls {
+    display: none;
+  }
+  .vjs-menu-button-inline {
+    &:hover,
+    &:focus,
+    &.vjs-slider-active {
+      width: 14em;
+    }
+    .vjs-menu {
+      left: 97px;
+      .vjs-menu-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        overflow: visible;
+        height: auto;
+        width: 8em;
+      }
+    }
+  }
+  &.vjs-no-flex .vjs-menu-button-inline {
+    width: 14em;
+  }
+  .vjs-time-tooltip {
+    line-height: 10px;
+    left: 15px;
+  }
+  .vjs-volume-panel {
+    &:hover .vjs-volume-control.vjs-volume-horizontal,
+    &:active .vjs-volume-control.vjs-volume-horizontal,
+    &:focus .vjs-volume-control.vjs-volume-horizontal {
+      top: 24%;
+      margin: 0;
+      left: 4px;
+      width: 80px;
+    }
+    .vjs-volume-control {
+      top: 24%;
+      margin: 0;
+      left: 4px;
+      width: 0;
+      &:hover.vjs-volume-horizontal,
+      &:active.vjs-volume-horizontal,
+      &:focus.vjs-volume-horizontal {
+        top: 24%;
+        margin: 0;
+        left: 4px;
+        width: 80px;
+      }
+    }
+    .vjs-mute-control {
+      &:hover~.vjs-volume-control.vjs-volume-horizontal,
+      &:active~.vjs-volume-control.vjs-volume-horizontal,
+      &:focus~.vjs-volume-control.vjs-volume-horizontal {
+        top: 24%;
+        margin: 0;
+        left: 4px;
+        width: 80px;
+      }
+    }
+    .vjs-volume-control.vjs-slider-active.vjs-volume-horizontal {
+      top: 24%;
+      margin: 0;
+      left: 4px;
+      width: 80px;
+    }
+  }
+}

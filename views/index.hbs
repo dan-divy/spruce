@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="main" ng-cloak ng-controller="mainController">
+<head>
+  <title>Pudding - Home</title>
+  <base href="/">
+</head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/layout.css">
+<script src="/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<body>
+ <nav class="navbar navbar-default navy navbar-fixed-top agradient cut-top">
+      <div class="container-fluid top-nav">
+        
+          
+          <strong><a class="navbar-brand font white" href="#"><h2 style="color: white;">Pudding</h2></a></strong>
+
+          
+
+        
+        <ul class="nav navbar-nav navbar-right">
+           
+            
+            <li><a class="navbar-brand white" href="#!chat"><h3><i style="color:white;" class="glyphicon glyphicon-send"></i> </h3></a></li>
+            </ul>
+      </div>
+    </nav>
+ 
+   
+<nav class="navbar navbar-default navbar-fixed-bottom agradient">
+      <div class="container-fluid">
+        
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/">
+            <center><i style="color: white;"class="glyphicon glyphicon-home"></i></center>
+          </a>
+          
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/search">
+            <center><i style="color: white;"class="glyphicon glyphicon-search"></i></center>
+          </a>
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/upload">
+            <center><i  style="color:white;" class="glyphicon glyphicon-plus"></i></center>
+          </a>
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="redirect('/activity')">
+            <center><i  style="color:white;" class="glyphicon glyphicon-tasks"></i></center>
+          </a>  
+        
+      </div>
+    </nav>
+
+    <div id="main">
+       <div id="view" ng-view> </div> 
+       <center><a ng-click="refresh()" class="refresh">
+  Refresh <i class="glyphicon glyphicon-refresh"></i>
+</a></center>
+{{#each post}}
+<div class="gram-card">
+    <div class="gram-card-header">
+      <img src="{{ dp }}" class="gram-card-user-image">
+      <a class="gram-card-user-name" href=""> {{ author }}</a>
+      
+            <div class="dropdown gram-card-time">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
+              <ul class="dropdown-menu">
+                <li><a ng-click="redirect('{{ url }}')">View</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+              </div>
+              <div class="time"> {{ timeago }} </div>
+    </div>
+<br>
+<br>
+    <div class="gram-card-image">
+      <img src="{{ url }}" class="img-responsive" />
+    </div>
+
+    <div class="gram-card-content">
+     
+      <p><a class="gram-card-content-user" href="/profile/{{author}}">{{ author }}</a>
+        {{ caption }}
+     </p>
+
+      <p class="comments">{{ comments.length }} comments.</p>
+      <br>
+      {{#each comments}}
+      <div><a class="user-comment" href="">{{ user }}</a> {{ comment }} </div>
+      {{/each}}
+      </br>
+      
+    <hr>
+    </div>  
+
+    <div class="gram-card-footer">
+      <a class="footer-action-icons likes btn btn-pinky non-hoverable" ng-click="update(post.id,$index)" ng-disabled="post.disabled"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</a>
+      <input id="$index" class="comments-input" type="text" placeholder="Comment here..."/>
+      <a class="footer-action-icons btn btn-pinky" ng-click="comment(post.id,$index)"><i class="glyphicon glyphicon-comment"></i></a>
+    </div>
+
+  </div>
+{{/each}}
+    </div>
+
+
+</body>
+<script type="text/javascript" src="/socket.io.js"></script>
+
+<script type="text/javascript" src="/angular/angular.min.js"></script>
+<script type="text/javascript" src="/angular/angular-route.min.js"></script>
+<!-- AngularJS Controllers--> 
+<script type="text/javascript" src="/controllers/controller.main.js"> </script>
+</html>

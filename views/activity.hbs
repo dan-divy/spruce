@@ -1,0 +1,31 @@
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/layout.css">
+<script src="/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<style type="text/css">
+  body {
+    padding-top: 0;
+    padding: 0;
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  }
+</style>
+<body>
+<section class="display-pic">
+
+  <img src="{{ user.dp }}" class="user-image">
+  <h1 class="font" style="margin-bottom: 10px;">{{ user.username }}</h1><br>
+  
+</section>
+<br>
+<section class="main-section" style="margin-left: 10%;">
+<blockquote>
+  Posts - {{user.posts}} <br>
+  Followers - {{user.followers.length}}
+</blockquote>
+</section>
+</body>

@@ -1,0 +1,15 @@
+
+<div class="container gradient">
+	<input type="text" placeholder="Search" class="form-control searchField" name="search" ng-keyup="search($event.target.value)" autofocus><br>
+	<ul class="list-group" ng-repeat="id in users">
+        <li class="list-group-item"><strong><a class="non-hoverable" ng-click="profile(id.username)">{{ id.username }}</a></strong></li>
+        
+    </ul>
+    <div id="alert-not-found" style="display:none;" class="alert alert-danger">
+    	User <strong>{{ nonExistingUser }}</strong> doesn't seem exist.
+    </div>
+
+</div>
+<div> 
+	
+</div>

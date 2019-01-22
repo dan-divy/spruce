@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="main" ng-cloak ng-controller="mainController">
+<head>
+  <title>Post @ Pudding</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/css/signin.css">
+  <link rel="stylesheet" href="/lib/css/loader.css">
+
+<script src="/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body style="padding-top: 50px;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">{{ app.title }}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#" class="active">Post</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/api/auth?new=true">Signup</a></li>
+          </ul>
+          
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+  <div class="container">
+
+      <form class="form-signin" action="/api/settings/dp/post" method="POST" enctype="multipart/form-data">
+        <h2 class="form-signin-heading">New Profile Picture.</h2>
+        <div class="upload-btn-wrapper">
+      
+        <button class="btn btn-success btn-lg btn-action" id="post"><i class="glyphicon glyphicon-upload"></i></button>
+      <input type='file' name='filetoupload' id="file" required/>
+    </div>
+                
+        <input type="text" id="inputPass" name="pass" class="form-control" style="display:none;" required>
+
+        <input type="text" id="inputAuthor" name="user" class="form-control"  style="display:none;" required>
+
+        <button class="btn btn-lg btn-success btn-block" ng-click="loadPic();" type="submit">Upload</button>
+    <div id="circle">
+  <div class="loader" id="loader" style="display: none;">
+    <div class="loader">
+        <div class="loader">
+           <div class="loader">
+
+           </div>
+        </div>
+    </div>
+  </div>
+</div> 
+      </form>
+
+    </div> <!-- /container -->
+</body>
+
+<script type="text/javascript" src="/angular/angular.min.js"></script>
+<script type="text/javascript" src="/controllers/controller.post.js"></script>
+</html>
