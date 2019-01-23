@@ -10,12 +10,13 @@ const bcrypt = require('bcrypt');
 var upload = multer();
 const mime = require('mime-types');
 
-
+mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
+/*
 mongoose.connect('mongodb://localhost:27017/pudding',{
     user:'divysrivastava',
     pass:'Pinewood@123',
     authSource:'admin'
-});
+});*/
 
 const User = require('./models/user')
 
