@@ -1,0 +1,2 @@
+sudo ssh -i /home/divy/key/EC2_Linux_14_01_2019.pem ec2-user@18.218.112.101
+

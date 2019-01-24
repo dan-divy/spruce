@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Post @ Pudding</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	
+	<link rel="stylesheet" href="/layout.css">
+<link rel="stylesheet" href="/signin.css">
+<link rel="stylesheet" href="/loader.css">
+<script src="/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body style="padding-top: 50px;">
+  
+	<div class="container">
+
+      <form class="form-signin" action="/upload" method="POST" enctype="multipart/form-data">
+       <br>
+       <center>
+        <div class="upload-btn-wrapper">
+			   <button class="btn btn-link btn-lg btn-action" id="post">   <i class="fa fa-lg fa-upload"></i>
+         </button>
+			   <input type='file' name='filetoupload' id="file" required/>
+		    </div>
+        <br>
+        <p> <i class="fa fa-lg fa-file-invoice"></i> 
+        Upload a file first..</p>
+      </center>
+
+        <label for="inputEmail" class="sr-only">Caption</label>
+        <input type="textarea" id="inputCaption" name="caption" class="form-control" placeholder="a_cool_caption" required autofocus>
+        <label for="inputPassword" class="sr-only"></label>
+        <input type="text" id="inputTag" name="tag" class="form-control" placeholder="a_searchable_tag" required>
+
+        
+
+        <button class="btn btn-lg btn-success btn-block" type="submit">Post</button>
+    
+      </form>
+
+    </div> <!-- /container -->
+</body>
+<script type="text/javascript" src="/socket.io.js"></script>
+<!-- <script type="text/javascript" src="/angular/angular.min.js"></script>
+<script type="text/javascript" src="/controllers/controller.main.js"></script> -->
+
+</html>
