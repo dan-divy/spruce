@@ -26,9 +26,7 @@
  		$scope.app = {};
 		$scope.app.title = "Pudding";
 		$scope.app.currentPage = "Home"
-		$scope.app.user = localStorage.getItem("pudding_id");
-    $scope.app.pass = localStorage.getItem("pudding_pass");
-;
+		
     var socket = io.connect('/')
 
     socket.on('connect', () => {
@@ -44,7 +42,7 @@
       window.location.reload()
     }
 		
-    $scope.update = function (id,index) {
+    /* $scope.update = function (id,index) {
       var postId = "#"+id;
       $http({method: 'GET', url: '/api/posts?action=update&like='+id,cache: $templateCache}).
           then(function(response) {
@@ -60,8 +58,8 @@
           }, function(response) {
             
           });
-    }
-    $scope.comment = function (id,index) {
+    }*/
+    /*$scope.comment = function (id,index) {
       $scope.commVal = $(".comments-input")[index].value;
       $http({method: 'GET', url: '/api/posts?action=comment&comm='+id+'&txt='+$scope.commVal,cache: $templateCache}).
           then(function(response) {
@@ -76,7 +74,7 @@
           }, function(response) {
             
           });
-    }
+    }*/
     $scope.profile = function (name) {
       window.location.href = '/profile/'+name;
 
@@ -93,7 +91,7 @@
     }
     $scope.search = function (q) {
       $scope.nonExistingUser = q;     
-
+      if(q !== '' || q) {
       $http({method: 'GET', url: '/search/'+q,cache: $templateCache}).
           then(function(response) {
             if(response.data == false) {
@@ -111,6 +109,7 @@
           }, function(response) {
             console.log('Internal Server Error')
           });
+        }
     }
     
  }])

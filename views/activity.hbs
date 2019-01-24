@@ -23,27 +23,33 @@
 </style>
 <body>
 <section class="display-pic">
-  <div style="float:left;margin: 10px;">
-    <a href="/" class="btn btn-lg btn-danger">
-  <i class="glyphicon glyphicon-arrow-left" style="top:0;"></i>
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="/" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-arrow-left" style="top:0;"></i>
+    </a>
+  </div>
+   <div style="float:right;margin: 10px;">
+    <a href="/auth/settings" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-cog" style="top:0;"></i>
     </a>
   </div>
   <div style="float:right;margin: 10px;">
-  <strong> <i class="fa fa-lg fa-users"></i> {{user.followers.length}}</strong><br>
-  <strong> <i class="fa fa-lg fa-upload"></i> {{user.posts.length}}</strong>
+  
 </div>
 <br>
 <br>
 <br><br>
   <img src="{{ user.dp }}" class="user-image" style="float: center;">
-  <h1 class="font" style="margin-bottom: 10px;float: center;">{{ user.username }}</h1><br>
+  <h1 class="font" style="margin-bottom: 10px;float: center;">{{ user.username }}</h1>
+  <br>
+  <strong style="margin:20px;"> <i class="fa fa-lg fa-users"></i> {{user.followers.length}}</strong>
+  <strong> <i class="fa fa-lg fa-upload"></i> {{user.posts.length}}</strong><br><br>
   
 </section>
 <br>
 <section class="main-section">
-
+<h1 style="margin: 20px;" class="h1">Posts</h1>
 {{#each user.posts}}
-<h1 style="margin: 10px;" class="h1">Posts</h1>
 <div class="col-xs-3 col-md-3 col-lg-3 col-sm-3">
   <div class="gram-card-image">
       <img src="{{ src }}" class="img-responsive" />
@@ -51,5 +57,6 @@
 </div>  
   <br> 
 {{/each}}
+<br>
 </section>
 </body>

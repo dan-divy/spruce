@@ -21,13 +21,10 @@ const config = {
 	upload: require('./app/upload'),
 	activity: require('./app/activity')
 }
-/*
-mongoose.connect('mongodb://localhost:27017/pudding',{
-    user:'divysrivastava',
-    pass:'Pinewood@123',
-    authSource:'admin'
-});*/
-mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
+
+mongoose.connect(config.db.url);
+
+//mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
 const feeds = require('./app/models/feeds');
 const users = require('./app/models/user');
 // Parsers for POST data

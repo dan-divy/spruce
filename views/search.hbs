@@ -1,55 +1,20 @@
 <!DOCTYPE html>
-<html ng-app="main" ng-cloak ng-controller="mainController">
+<html>
 <head>
-  <title>Pudding - Home</title>
-  <base href="/">
+  <title>Pudding - Post</title>
+  
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/layout.css">
+<link rel="stylesheet" href="/fontawesome/css/all.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <body>
- <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        
-          
-          <strong><a class="navbar-brand" href="#">Pudding</a></strong>
-
-          
-        <ul class="nav navbar-nav navbar-right">
-           
-            
-            <li><a class="navbar-brand" href="#!chat"><i class="glyphicon glyphicon-send"></i> Whats New?</a></li>
-            </ul>
-      </div>
-    </nav>
- 
-   
-<nav class="navbar navbar-default navbar-fixed-bottom">
-      <div class="container-fluid">
-        
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="redirect('/')">
-            <center><i class="glyphicon glyphicon-home"></i></center>
-          </a>
-          
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="redirect('/search')">
-            <center><i class="glyphicon glyphicon-search"></i></center>
-          </a>
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="redirect('/upload')">
-            <center><i class="glyphicon glyphicon-cloud-upload"></i></center>
-          </a>
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="redirect('/activity')">
-            <center><i class="glyphicon glyphicon-option-vertical"></i></center>
-          </a>  
-        
-      </div>
-    </nav>
-
 <div class="container gradient">
-	<input type="text" placeholder="Search" class="form-control searchField" name="search" ng-keyup="search($event.target.value)" autofocus><br>
+	<input type="text" placeholder="Search" class="form-control searchField" name="search" id="search" onsubmit="search()" autofocus><br>
 	<ul class="list-group" ng-repeat="id in users">
-        <li class="list-group-item"><strong><a class="non-hoverable" ng-click="profile(id.username)">{{ id.username }}</a></strong></li>
+        <li class="list-group-item"><strong><a class="non-hoverable" href="/user/{{ id.username }}">{{ id.username }}</a></strong></li>
         
     </ul>
     <div id="alert-not-found" style="display:none;" class="alert alert-danger">
@@ -57,11 +22,9 @@
     </div>
 
 </div>
+<script type="text/javascript">
+	function search() {
+		window.location.href="/search/"+$("#search").val()
+	}
+</script>
 </body>
-<script type="text/javascript" src="/socket.io.js"></script>
-
-<script type="text/javascript" src="/angular/angular.min.js"></script>
-<script type="text/javascript" src="/angular/angular-route.min.js"></script>
-<!-- AngularJS Controllers--> 
-<script type="text/javascript" src="/controllers/controller.main.js"> </script>
-</html>

@@ -5,18 +5,12 @@ const mongoose = require('mongoose');
 const ta = require('time-ago');
 const formidable = require('formidable');
 const mv = require('mv');
-const multer  = require('multer')
-const bcrypt = require('bcrypt');
-var upload = multer();
+const bcrypt = require('bcrypt-nodejs');
 const mime = require('mime-types');
 
-mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
-/*
-mongoose.connect('mongodb://localhost:27017/pudding',{
-    user:'divysrivastava',
-    pass:'Pinewood@123',
-    authSource:'admin'
-});*/
+// mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
+
+mongoose.connect(require('../config/db').url);
 
 const User = require('./models/user')
 
@@ -47,13 +41,22 @@ router.get('/login', function(req, res) {
         User
         .findOne({username:fields.username})
         .exec((err, user) => {
+            if (err) throw err;
             if(user) {
-                var sure = bcrypt.compareSync(fields.password, user.password)
-                if(sure) { 
+                bcrypt.compare(fields.password, user.password, (err ,bool) => {
+                    if(bool) { 
                     req.session.user = fields.username;
                     res.redirect('/') 
                     
-                }
+                    }
+                    else {
+                        res.render('login', {
+                    layout: false,
+                    message:'Naah! Check your credentials again.'
+                    })
+                    }
+                })
+                    }
                 else {
                     res.render('login', {
                     layout: false,
@@ -61,13 +64,7 @@ router.get('/login', function(req, res) {
                 })
                 }    
                 
-            }
-            else {
-                res.render('login', {
-                    layout: false,
-                    message:'Naah! Check your credentials again.'
-                })
-            }
+            
     
         })
         
@@ -132,8 +129,10 @@ router.get('/signup', function(req, res) {
     // LOGOUT ==============================
     // =====================================
 router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+    req.session.destroy(() => {
+        res.redirect('/');    
+    })
+    
 });
 
 module.exports = router;
