@@ -23,14 +23,20 @@ router.get('/', (req, res) => {
     })    
 });
 	// $http.get() GET Route for SEARCH.HBS AngularJS controller
-router.get('/:username', (req, res) => {
-	this.search = req.params.username;
+router.post('/', (req, res) => {
+	var form = new formidable.IncomingForm()
+    form.parse(req, (err, fields, files) => {
+    this.search = fields.search;
 	user
 	.find({username:this.search})
 	.exec((err, results) => {
 		var users = []
 		if(results[0] == undefined) {
-		res.send(false);
+		res.render('search', {
+			layout: false,
+			searchedFor: this.search,
+			notFound: true
+		})
 	}
 	else {
 		results.map(function (name, index) {	
@@ -41,10 +47,14 @@ router.get('/:username', (req, res) => {
     			dp:name.profilePic
 			});
 		});
-		res.send(users);
+		res.render('search',{ 
+			layout: false,
+			id:users 
+		});
 		
 	}
 	})
-});
+   });
+ }); 
 
 module.exports = router;

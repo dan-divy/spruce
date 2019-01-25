@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pudding - Post</title>
+  <title>Pudding - Search</title>
   
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,19 +12,22 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <body>
 <div class="container gradient">
-	<input type="text" placeholder="Search" class="form-control searchField" name="search" id="search" onsubmit="search()" autofocus><br>
-	<ul class="list-group" ng-repeat="id in users">
-        <li class="list-group-item"><strong><a class="non-hoverable" href="/user/{{ id.username }}">{{ id.username }}</a></strong></li>
+	<form action="/search" method="post" enctype="multipart/form-data">
+	<input type="text" placeholder="Search" class="form-control" name="search" id="search" autofocus required><br>
+	</form>
+	{{#if id}}
+	<ul class="list-group">
+		{{#each id}}
+        <li class="list-group-item"><strong><a class="non-hoverable" href="/user/{{ username }}">{{ username }}</a></strong></li>
+		{{/each}}
         
     </ul>
-    <div id="alert-not-found" style="display:none;" class="alert alert-danger">
-    	User <strong>{{ nonExistingUser }}</strong> doesn't seem exist.
+    {{/if}}
+    {{#if notFound}}
+    <div id="alert-not-found" class="alert alert-danger">
+    	User <strong> {{ searchedFor }} </strong> doesn't seem exist..
     </div>
-
+    {{/if}}
 </div>
-<script type="text/javascript">
-	function search() {
-		window.location.href="/search/"+$("#search").val()
-	}
-</script>
 </body>
+</html>
