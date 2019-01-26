@@ -18,7 +18,10 @@ const feeds = require('./models/feeds')
     // HOME PAGE (with post links) ========
     // =====================================
 router.get('/', (req, res) => {
-    res.redirect('/#!upload')    
+    res.render('upload', {
+    	layout: false,
+    	user: req.session.user
+    })    
 });
 	
 router.post('/', (req, res) => {
@@ -65,7 +68,7 @@ router.post('/', (req, res) => {
 		});
 	}
 	else {
-		res.redirect('/#!upload')
+		res.redirect('/upload')
 	}
 });
 	});
