@@ -4,28 +4,64 @@
 	<title>Pudding - Post</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-	
+	<link rel="stylesheet" href="/fontawesome/css/all.css">
+  
 	<link rel="stylesheet" href="/layout.css">
 <link rel="stylesheet" href="/signin.css">
 <link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<body style="padding-top: 50px;">
+<body>
+  <style type="text/css">
+  body {
+    padding-top: 0;
+    padding: 0;
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  }
+  .h1 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: normal;
+    color: #159957;
+  }
+</style>
+<body>
+
+  <section class="display-pic">
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="/" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-arrow-left" style="top:0;"></i>
+    </a>
+  </div>
+   <div style="float:right;margin: 10px;">
+    <a href="/auth/settings" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-cog" style="top:0;"></i>
+    </a>
+  </div>
   
-	<div class="container">
+<br>
+<br>
+<br>
+	
+  </section>
+  <br>
+  <div class="container">
 
       <form class="form-signin" action="/upload" method="POST" enctype="multipart/form-data">
        <br>
        <center>
         <div class="upload-btn-wrapper">
-			   <button class="btn btn-link btn-lg btn-action" id="post">   <i class="fa fa-lg fa-upload"></i>
+         <button class="btn btn-link btn-lg btn-action" id="post">   <i class="fa fa-lg fa-upload"></i> Choose an image.
          </button>
-			   <input type='file' name='filetoupload' id="file" required/>
-		    </div>
+         <input type='file' name='filetoupload' id="file" required/>
+        </div>
         <br>
-        <p> <i class="fa fa-lg fa-file-invoice"></i> 
-        Upload a file first..</p>
+        
       </center>
 
         <label for="inputEmail" class="sr-only">Caption</label>
@@ -33,15 +69,16 @@
         <label for="inputPassword" class="sr-only"></label>
         <input type="text" id="inputTag" name="tag" class="form-control" placeholder="a_searchable_tag" required>
 
-        
+        <br>
+        <br>
 
-        <button class="btn btn-lg btn-success btn-block" type="submit">Post</button>
+        <button class="btn btn-lg agradient btn-action" type="submit"><i class="fa fa-file-invoice"></i> Post</button>
     
       </form>
 
     </div> <!-- /container -->
 </body>
-<script type="text/javascript" src="/socket.io.js"></script>
+
 <!-- <script type="text/javascript" src="/angular/angular.min.js"></script>
 <script type="text/javascript" src="/controllers/controller.main.js"></script> -->
 
