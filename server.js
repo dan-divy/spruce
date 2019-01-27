@@ -19,7 +19,8 @@ const config = {
 	authentication: require('./app/auth'),
 	search: require('./app/search'),
 	upload: require('./app/upload'),
-	activity: require('./app/activity')
+	activity: require('./app/activity'),
+	chat: require('./app/chat')
 }
 
 mongoose.connect(config.db.url);
@@ -56,14 +57,20 @@ app.use(express.static(path.join(__dirname, './bin')));
 app.use('/auth', config.authentication);
 app.use('/upload', config.upload);
 app.use('/search', config.search);
-app.use('/activity', config.activity)
+app.use('/activity', config.activity);
+app.use('/chat', config.chat);
 
 //app.use('/profile', user);
 
 const server = http.createServer(app);
+
 var clients = []
+
 const io = require('socket.io')(server);
 app.io = io;
+
+
+
 io.on('connection', function(client){ 
     clients.push(client);
 });
