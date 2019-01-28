@@ -23,16 +23,6 @@ router.get('/', (req, res) => {
     	user: req.session.user
     })   
 
-	var nsp = req.app.io.of('/chat');
-	nsp.on('connection', function(socket){
-  		socket.on('msg', (data) =>{
-  			nsp.emit('msg', {
-  				txt:data.txt,
-  				name:req.session.user,
-  				time:new Date()
-  			})
-  		})
-	}); 
 });
 	
 

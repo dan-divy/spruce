@@ -7,6 +7,7 @@ const fs = require('fs');
 const mongoose = require('mongoose'); 
 const ta = require('time-ago');
 const session = require('express-session');
+const sharedsession = require("express-socket.io-session");
 const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
@@ -34,17 +35,18 @@ const users = require('./app/models/user');
 
 app.use(cookieParser());
 
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set('trust proxy', 1) // trust first proxy
-app.use(flash())
-app.use(session({
+var cooky = {
 	secret: 'work hard',
   	resave: true,
   	expires: new Date() * 60 * 60 * 24 * 7,
   	saveUninitialized: true
-}))
+}
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('trust proxy', 1) // trust first proxy
+app.use(flash())
+app.use(session(cooky))
+
 app.set('view engine', 'hbs'); 
 app.engine( 'hbs', hbs( { 
 	extname: '.hbs'
@@ -67,8 +69,29 @@ const server = http.createServer(app);
 var clients = []
 
 const io = require('socket.io')(server);
+
 app.io = io;
 
+	var nsp = io.of('/chat');
+	nsp.use(sharedsession(session(cooky), {
+    autoSave: true
+	}));
+	nsp.on('disconnection', function (socket) {
+		nsp.emit('msg', {
+			txt:'User '+socket+' Disconnected'
+		})
+	});
+	nsp.on('connection', function(socket){
+		socket.emit('init');
+		
+  		socket.on('msg', (data) =>{
+  			nsp.emit('msg', {
+  				txt:data.txt,
+  				user: socket.handshake.session.user,
+  				time:new Date()
+  			})
+  		})
+	}); 
 
 
 io.on('connection', function(client){ 
