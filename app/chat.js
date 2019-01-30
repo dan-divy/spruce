@@ -18,11 +18,19 @@ const user = require('./models/user');
     // HOME PAGE (with post links) ========
     // =====================================
 router.get('/', (req, res) => {
+	if(req.session.user) {
     res.render('chat', {
     	layout: false,
-    	user: req.session.user
+    	user: req.session.user,
+    	roomid: req.session.user
     })   
-
+}
+else {
+	res.render('login', {
+		layout: false,
+		redirect:'chat'
+	})
+}
 });
 	
 

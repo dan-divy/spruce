@@ -6,27 +6,51 @@
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/layout.css">
+
 <link rel="stylesheet" href="/fontawesome/css/all.css">
+<link rel="stylesheet" href="/layout.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
+<style type="text/css">
+  body {
+    padding-top: 0;
+    padding: 0;
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  }
+  
+</style>
 <body>
- <nav class="navbar navbar-default navy navbar-fixed-top agradient cut-top">
-      <div class="container-fluid top-nav">
-        
-          
-          <strong><a class="navbar-brand font white" href="#"><h2 style="color: white;"><i class="fa fa-poo"> </i> Pudding</h2></a></strong>
-
-          
-
-        
-        <ul class="nav navbar-nav navbar-right">
-           
-            
-            <li><a class="navbar-brand white" href="/chat"><h3><i style="color:white;" class="fa fa-paper-plane"></i> </h3></a></li>
-            </ul>
-      </div>
-    </nav>
+  <section class="display-pic">
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="/" class="btn btn-lg btn-link non-hoverable" style="color:#fff;">
+  
+        <strong><p class="font"> Pudding </p></strong>
+  
+    </a>
+  </div>
+   <div style="float:right;margin: 10px;">
+    <a href="/auth/settings" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-cog" style="top:0;"></i>
+    </a>
+    
+  </div>
+  <div style="float:right;margin: 10px;">
+    <a href="/chat" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-paper-plane"></i>
+    </a>
+    
+  </div>
+  
+<br>
+<br>
+<br>
+  
+  </section>
+ 
  
    
 <nav class="navbar navbar-default navbar-fixed-bottom agradient">
@@ -40,17 +64,34 @@
             <center><i style="color: white;"class="fa fa-search"></i></center>
           </a>
           <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/upload">
-            <center><i style="color:white;" class="fa fa-upload"></i></center>
+            <center><i style="color:white;" class="fa fa-plus"></i></center>
           </a>
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" ng-click="/activity">
-            <center><i  style="color:white;" class="fa fa-user"></i></center>
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/activity">
+            <center><i style="color:white;" class="fa fa-user"></i></center>
           </a>  
         
       </div>
     </nav>
 
     <div id="main">
-       <div id="view" ng-view> </div> 
+       <br>
+       <div class="container alert alert-info">
+         <strong>What's new!?</strong>
+         <ul>
+           <li> Added activity feature - Click on user button below.</li>
+
+           <li> New global chat service available - Hit the paperplane button above.</li>
+           <li> If you face any issue, contact me at <a href="mailto:dj.srivastava23@gmail.com">dj.srivastava23@gmail.com</a>. You can even give suggestions for new features!</li>
+           <li> WARNING - chat might not work on low-end devices.
+           Will fix soon.</li>
+           <li> ALERT - you will get an error if you hit the settings button. If bychance you click it , just press go back or restart the app/website.</li>
+           <li> Comments and like function is ready and will be implemented once we have enough users. 
+            <strong>SPREAD THE WORD!</strong></li>
+         </ul>
+         <span class="text-muted">&copy; Divy Srivastava 2019</span>
+         <span class="text-muted" style="float:right;">project under MIT liscense and security by <a href="https://console.aws.com">AWS</a> and <a href="https://npmjs.com/package/bcrypt-nodejs">BCrypt</a></span>
+       </div>
+       <br>
        <center><a ng-click="refresh()" class="refresh">
   Refresh <i class="glyphicon glyphicon-refresh"></i>
 </a></center>
@@ -62,7 +103,7 @@
       
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu dropdown-menu-right">
                 <li><a ng-click="redirect('{{ url }}')">View</a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>

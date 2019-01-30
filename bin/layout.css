@@ -37,8 +37,20 @@
 .font {
   font-weight: 1;
   font-family: 'theFont';
+  animation-name: fa-spin;
   
 }
+
+@keyframes flip {
+  from {
+    float: right;
+  }
+  to {
+    float: left;
+  }
+}
+
+
 .top-nav {
   padding-bottom: 10px;
 }

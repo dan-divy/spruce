@@ -76,18 +76,14 @@ app.io = io;
 	nsp.use(sharedsession(session(cooky), {
     autoSave: true
 	}));
-	nsp.on('disconnection', function (socket) {
-		nsp.emit('msg', {
-			txt:'User '+socket+' Disconnected'
-		})
-	});
+	
 	nsp.on('connection', function(socket){
 		socket.emit('init');
-		
+		 
   		socket.on('msg', (data) =>{
   			nsp.emit('msg', {
   				txt:data.txt,
-  				user: socket.handshake.session.user,
+  				user: data.user,
   				time:new Date()
   			})
   		})
