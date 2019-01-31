@@ -49,6 +49,11 @@
 <br>
 	
   </section>
+   <div class="loaderBar" style="display:none" data-example-id="animated-progress-bar">
+    <div class="progress" style="background-color: #fff;">
+      <div class="progress-bar progress-bar-striped load" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+    </div>
+  </div>
   <br>
   <div class="container">
 
@@ -71,14 +76,27 @@
 
         <br>
         <br>
-
-        <button class="btn btn-lg agradient btn-action" type="submit"><i class="fa fa-file-invoice"></i> Post</button>
+        
+        <button class="btn btn-lg agradient btn-action" onclick="load()" type="submit"><i class="fa fa-file-invoice"></i> Post</button>
     
       </form>
-
+<div class="cog-div" style="display: none;">
+          <center><i class="fa fa-5x fa-cog loading"></i>
+            </center><br>
+            <center class="text-muted">Just a sec..</center>
+        </div> 
+    
+  </div>
     </div> <!-- /container -->
 </body>
-
+<script type="text/javascript">
+  function load() {
+    $('.loaderBar')[0].style.display='inherit';
+    $('.cog-div')[0].style.display='inherit';       
+    
+    
+  }
+</script>
 <!-- <script type="text/javascript" src="/angular/angular.min.js"></script>
 <script type="text/javascript" src="/controllers/controller.main.js"></script> -->
 

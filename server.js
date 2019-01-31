@@ -11,6 +11,8 @@ const sharedsession = require("express-socket.io-session");
 const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
+const morgan = require('morgan');
+
 
 const app = express();
 
@@ -29,10 +31,11 @@ mongoose.connect(config.db.url);
 //mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
 const feeds = require('./app/models/feeds');
 const users = require('./app/models/user');
+const room = require('./app/models/room');
 // Parsers for POST data
 
 
-
+app.use(morgan('dev'));
 app.use(cookieParser());
 
 var cooky = {
@@ -72,22 +75,38 @@ const io = require('socket.io')(server);
 
 app.io = io;
 
-	var nsp = io.of('/chat');
-	nsp.use(sharedsession(session(cooky), {
-    autoSave: true
-	}));
-	
-	nsp.on('connection', function(socket){
-		socket.emit('init');
-		 
-  		socket.on('msg', (data) =>{
-  			nsp.emit('msg', {
-  				txt:data.txt,
-  				user: data.user,
-  				time:new Date()
-  			})
-  		})
-	}); 
+var nsp = io.of('/chat');
+nsp.use(sharedsession(session(cooky), {
+	autoSave: true
+}));
+
+nsp.on('connection', function(socket){
+	socket.emit('init');
+	socket.on('join', room => {
+		socket.join(room);
+			}) 
+		socket.on('msg', (data) =>{
+			room
+			.findOne({_id:data.roomid})
+			.exec((err, chatRoom) => {
+				chatRoom.chats.push({
+					txt:data.txt,
+					by:data.user,
+					time:new Date()
+				})
+				chatRoom.save((err, theChatSaveRes) => {
+					nsp.to(data.roomid).emit('msg', {
+						txt:data.txt,
+						user: data.user,
+						time:new Date(),
+						to:data.targetUser
+					})
+				})
+				
+			})
+			
+		})
+}); 
 
 
 io.on('connection', function(client){ 
@@ -95,47 +114,26 @@ io.on('connection', function(client){
 });
 
 
-
 // Catch all other routes and return the index file
 app.get('/', (req, res) => {
 	if(!req.session.user) {
-		res.redirect('/auth/login');
+		//req.flash('info','Redirecting...')
+		res.render('login', {
+			layout:false
+
+		});
 	}
 	else {
 	feeds
 	.find({})
-	.exec(function(err,results) {
-		var posts = []
-		results.map(function (post, index) {
-		users
-		.findOne({username:post.author})
-		.exec((err, id) => {
-			posts.push({
-				author:post.author,
-				likes:post.likes,
-				url:post.pudding,
-				id:post._id,
-				caption:post.caption,
-    			tags: post.tags,
-    			type: post.type,
-    			disabledFor:post.disabledFor,
-    			comments:post.comments,
-    			time:post.time,
-    			dp: id.profilePic,
-    			timeago:ta.ago(post.timeago)
-			});
-		
+	.sort({'timeago':'desc'})
+	.then(function(results) {
+		res.render('index', {
+			layout: false,
+			post: results
 		})
-		
-		});	
-	res.render('index', {
-		layout : false,
-		post : posts
 	})
-	
-	});
-	}
-  
+  }
 	
 });
 

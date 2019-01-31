@@ -9,6 +9,7 @@
 
 <link rel="stylesheet" href="/fontawesome/css/all.css">
 <link rel="stylesheet" href="/layout.css">
+<link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <style type="text/css">
@@ -24,6 +25,7 @@
   
 </style>
 <body>
+  <div style="display:none;" class="body">
   <section class="display-pic">
   <div style="float:left;margin: 10px; margin-right: 0;">
     <a href="/" class="btn btn-lg btn-link non-hoverable" style="color:#fff;">
@@ -50,24 +52,28 @@
 <br>
   
   </section>
+  <div class="loaderBar" data-example-id="animated-progress-bar">
+    <div class="progress" style="background-color: #fff;border:none;">
+      <div class="progress-bar progress-bar-striped load" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+    </div>
+  </div>
  
- 
-   
+   <br>
 <nav class="navbar navbar-default navbar-fixed-bottom agradient">
       <div class="container-fluid">
         
           <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/">
-            <center><i style="color: white;"class="fa fa-igloo"></i></center>
+            <center><i style="color: white;"class="fa fa-1x fa-igloo"></i></center>
           </a>
           
           <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/search">
-            <center><i style="color: white;"class="fa fa-search"></i></center>
+            <center><i style="color: white;"class="fa fa-1x fa-search"></i></center>
           </a>
           <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/upload">
-            <center><i style="color:white;" class="fa fa-plus"></i></center>
+            <center><i style="color:white;" class="fa fa-1x fa-plus"></i></center>
           </a>
           <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/activity">
-            <center><i style="color:white;" class="fa fa-user"></i></center>
+            <center><i style="color:white;" class="fa fa-1x fa-user"></i></center>
           </a>  
         
       </div>
@@ -98,13 +104,13 @@
 {{#each post}}
 <div class="gram-card">
     <div class="gram-card-header">
-      <img src="{{ dp }}" class="gram-card-user-image">
+      <img src="/lib/user.png" class="gram-card-user-image">
       <a class="gram-card-user-name" href=""> {{ author }}</a>
       
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
-                <li><a ng-click="redirect('{{ url }}')">View</a></li>
+                <li><a ng-click="redirect('{{ pudding }}')">View</a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
@@ -118,7 +124,7 @@
 <br>
 <br>
     <div class="gram-card-image">
-      <img src="{{ url }}" class="img-responsive" />
+      <img src="{{ pudding }}" class="img-responsive" />
     </div>
 
     <div class="gram-card-content">
@@ -146,9 +152,31 @@
   </div>
 {{/each}}
     </div>
-
+  </div>
+ <div class="col-sm-6 col-sm-offset-3 load-logo">
+  <br>
+  <br><br><br><br><br><br>
+    <div class="agradient logo-div"> 
+        <h2 class="font"><center> Pudding </center></h2>
+    </div><br>
+    <div class="cog-div">
+          <center><i class="fa fa-5x fa-cog loading"></i>
+            </center><br>
+            <center class="text-muted">Retriving data...</center>
+        </div> 
+    
+  </div>
+  </div>
 
 </body>
-<script type="text/javascript" src="/socket.io.js"></script>
 
+ 
+<script type="text/javascript" src="/socket.io.js"></script>
+<script type="text/javascript">
+  setTimeout(() => {
+    $('.loaderBar')[0].style.display = 'none';
+    $('.body')[0].style.display = 'inherit';
+    $('.load-logo')[0].style.display = 'none';
+  },4000)
+</script>
 </html>

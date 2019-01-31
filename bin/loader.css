@@ -29,7 +29,29 @@
   border-radius: 50%;
   animation: rotate 5s linear infinite;
 }
-
+.loading {
+    animation: rotate 5s linear infinite;
+    width: 50%;
+    height: 50%;
+}
+.load {
+  animation: load 5s linear infinite;
+}
+@keyframes load {
+0% {width: 0%}
+20% {width: 20%}
+40% {width: 40%}
+60% {width: 60%}
+70% {width: 70%}
+80% {witdh: 80%;}
+90% {width: 90%}
+92% {width: 92%}
+94% {width: 94%}
+95% {width: 95%}
+96% {width: 96%}
+97% {width: 97%}
+100% {witdh:100%;}
+} 
 @keyframes rotate {
 100% {transform: rotate(360deg);}
 } 

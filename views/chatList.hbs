@@ -12,7 +12,7 @@
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body> 
   <style type="text/css">
   body {
     padding-top: 0;
@@ -62,35 +62,18 @@
   <div class="container-fluid">
 
       <ul class="list-group" id="chat-div">
-    
-        {{#if already}}
-      {{#each chats}}
-      <ul class="list-group"><li class="list-group-item">{{txt}}<strong><a class="non-hoverable" style="float:right;" href="/user/{{by}}"> {{by}}</a></strong></li></ul>
-      {{/each}}
-        {{/if}}
-      
+      {{#each target_users}}
+        <ul class="list-group"><li class="list-group-item"><strong><a class="non-hoverable" href="/chat/{{username}}"> {{username}}</a></strong></li></ul>
+    {{/each}}
+        
     </ul>
 
     </div> <!-- /container -->
-    <nav class="navbar navbar-fixed-bottom chatNav">
-      
-        	<div class="input-group">
-                
-                <input type="text" placeholder="Type Something..." class="form-control" name="chat" id="chatBox" />
-                <span class="input-group-btn">
-<button type="button" onclick="send()" class="btn btn-primary"><i class="fa fa-lg fa-paper-plane"></i></button>
-</span>
-           </div>
+    
 
-        	
-        	               
-        
-      
-    </nav>
- 
 </body>
 <script type="text/javascript" src="/socket.io.js"></script>
-{{#if source_user}}
+{{#if user}}
 <script type="text/javascript">
 	
 	var socket = io.connect('/chat')
@@ -100,7 +83,7 @@
     });
     socket.on('init', data => {
       socket.emit('join', '{{roomid}}')
-      $(".container-fluid").append('<div class="alert alert-warning"><strong>Welcome to room no:{{roomid}}<br> <i class="fa fa-ban"></i> </strong> Work under construction.</div>')
+      $("#chat-div").append('<div class="alert alert-warning"><strong>Welcome to room no:{{roomid}}<br> <i class="fa fa-ban"></i> </strong> Work under construction.</div>')
     });
     socket.on('msg', data => {
       console.log(data);
@@ -111,9 +94,8 @@ function send() {
 	if(msgToSend !== '') {
 		socket.emit('msg', {
 			txt: msgToSend,
-			user: '{{source_user}}',
-			roomid: '{{roomid}}',
-			target_user:'{{target_user}}'
+			user: '{{user}}',
+			roomid: '{{roomid}}'
 		});	
 	}
 	
