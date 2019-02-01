@@ -11,9 +11,13 @@
 
 <link rel="stylesheet" href="/fontawesome/css/all.css">
 <link rel="stylesheet" href="/layout.css">
+
 <link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/push.js"></script>
+<link rel="stylesheet" href="/blur.css">
+<script src="/blur.js"></script>
 <style type="text/css">
   body {
     padding-top: 0;
@@ -176,6 +180,18 @@
 <script type="text/javascript" src="/socket.io.js"></script>
 <script type="text/javascript">
   var user = "{{client}}";
+  Push.Permission.request(() => {
+    Push.create("Hello from Pudding!", {
+        body: "This is a startup notification!",
+        icon: "/lib/user.png",
+        
+        onClick: function() {
+            console.log(this);
+        }
+    });
+  }, () => {
+
+  });
   var socket = io.connect('/')
 
     socket.on('connect', () => {
