@@ -109,8 +109,32 @@ nsp.on('connection', function(socket){
 }); 
 
 
-io.on('connection', function(client){ 
-    clients.push(client);
+io.on('connection', function(socket){ 
+    socket.on('like' , post => {
+    	feeds
+    	.findOne({_id:post.id})
+    	.exec((err, res) => {
+    		var isDisabled = false;
+    		res.disabledFor.map((a) => {
+    			if(a == post.initiater) {
+    				isDisabled = true;
+    				return;
+    			}
+    		})
+    		if(!isDisabled) {
+    			res.likes = res.likes+1;
+	    		res.disabledFor.push(post.initiater);
+	    		res.save((err) => {
+	    			socket.emit('disabled', post.id)
+	    			console.info('{LIKE} : '+post.initiater)
+	    		})
+    		}
+    		else {
+    			socket.emit('disabled', post.id)
+    		}
+    		
+    	})
+    })
 });
 
 
@@ -130,7 +154,8 @@ app.get('/', (req, res) => {
 	.then(function(results) {
 		res.render('index', {
 			layout: false,
-			post: results
+			post: results,
+			client: req.session.user
 		})
 	})
   }

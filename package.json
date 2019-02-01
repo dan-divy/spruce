@@ -27,6 +27,7 @@
     "ora": "^3.0.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "push.js": "^1.0.9",
     "socket.io": "",
     "time-ago": "^0.2.1",
     "video.js": "^7.3.0"

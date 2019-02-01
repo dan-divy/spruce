@@ -20,7 +20,15 @@ const User = require('./models/user')
     // =====================================
 router.get('/', function(req, res) {
     res.redirect('/auth/login')
-    
+ 
+});
+
+router.get('/settings', function(req, res) {
+    res.render('settings', {
+        layout: false,
+        user: req.session.user
+    })
+ 
 });
 
     // =====================================

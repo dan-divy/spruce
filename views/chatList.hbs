@@ -63,7 +63,15 @@
 
       <ul class="list-group" id="chat-div">
       {{#each target_users}}
-        <ul class="list-group"><li class="list-group-item"><strong><a class="non-hoverable" href="/chat/{{username}}"> {{username}}</a></strong></li></ul>
+        <ul class="list-group"><li class="list-group-item">
+           <img src="{{profilePic}}" class="gram-card-user-image">
+          <strong><a class="non-hoverable" style="margin-left: 10px;" href="/chat/{{username}}"> {{username}}</a></strong>
+
+          <div style="float: right;">
+          <i class="fa fa-upload"></i>
+          {{posts.length}}
+          </div>
+          </li></ul>
     {{/each}}
         
     </ul>

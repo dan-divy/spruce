@@ -2,6 +2,8 @@
 <html ng-app="main" ng-cloak ng-controller="mainController">
 <head>
   <title>Pudding - Home</title>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> 
+  <script> (adsbygoogle = window.adsbygoogle || []).push({ google_ad_client: "ca-pub-2302021365742224", enable_page_level_ads: true }); </script>
   <base href="/">
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -144,7 +146,7 @@
     </div>  
 
     <div class="gram-card-footer">
-      <a class="footer-action-icons likes btn btn-pinky non-hoverable" ng-click="update(post.id,$index)" ng-disabled="post.disabled"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</a>
+      <a class="footer-action-icons likes btn btn-pinky non-hoverable" onclick="like('{{ _id }}')" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</a>
       <input id="$index" class="comments-input" type="text" placeholder="Comment here..."/>
       <a class="footer-action-icons btn btn-pinky" ng-click="comment(post.id,$index)"><i class="glyphicon glyphicon-comment"></i></a>
     </div>
@@ -173,10 +175,27 @@
  
 <script type="text/javascript" src="/socket.io.js"></script>
 <script type="text/javascript">
-  setTimeout(() => {
+  var user = "{{client}}";
+  var socket = io.connect('/')
+
+    socket.on('connect', () => {
+      console.log('connected');
+    });
+    socket.on('disabled', (res) => {
+      $("#"+res)[0].disabled = ""
+    })
+  function like(id) {
+    console.log(id)
+     socket.emit('like', {
+        id: id,
+        initiater: user
+     })
+  }
+   setTimeout(() => {
     $('.loaderBar')[0].style.display = 'none';
     $('.body')[0].style.display = 'inherit';
     $('.load-logo')[0].style.display = 'none';
   },4000)
+   
 </script>
 </html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pudding - Post</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/fontawesome/css/all.css">
+  
+	<link rel="stylesheet" href="/layout.css">
+<link rel="stylesheet" href="/signin.css">
+<link rel="stylesheet" href="/loader.css">
+<script src="/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body> 
+  <style type="text/css">
+  body {
+    padding-top: 0;
+    padding: 0;
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  }
+  
+  .input-group {
+  	margin : 10px;
+
+  }
+  .chatNav {
+  	height: 60px;
+  	background-color: transparent;
+  }
+  .h1 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: normal;
+    color: #159957;
+  }
+</style>
+<body>
+
+  <section class="display-pic">
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="/" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-igloo" style="top:0;"></i>
+    </a>
+  </div>
+   <div style="float:right;margin: 10px;">
+    <a href="/search" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-search" style="top:0;"></i>
+    </a>
+  </div>
+  
+<br>
+<br>
+<br>
+	
+  </section>
+  <br>
+  <div class="container-fluid">
+    <div class="col-sm-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title"><i class="fa fa-user-circle"></i> User info</h3>
+            </div>
+            <div class="panel-body">
+              Editing this might affect:
+                <li> Your logins on other devices.</li>
+                <li> Lose your previous credentials.</li>
+                <li> Your display information.</li>
+                <br>
+              <form action="/auth/update" method="post">
+                <input type="text" name="username" placeholder="Enter new username..." class="form-control" />
+                <input type="password"  placeholder="Enter new password..." name="password" class="form-control" />
+                <button type="submit" class="btn btn-link btn-action non-hoverable" style="float: right;">
+                  Submit 
+                </button>
+              </form>  
+            </div>
+          </div>
+        </div><!-- /.col-sm-4 -->   
+        <div class="col-sm-4">
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title"><i class="fa fa-user-circle"></i> Danger Zone</h3>
+            </div>
+            <div class="panel-body">
+              Editing this might affect:
+                <li> Your whole pudding account.</li>
+                <li> Lose your data.</li>
+                <li> Your display information.</li>
+                <br>
+              <form action="/auth/update" method="post">
+                <input type="text" name="username" placeholder="Enter new username..." class="form-control" />
+                <input type="password"  placeholder="Enter new password..." name="password" class="form-control" />
+                <button type="submit" class="btn btn-link btn-action non-hoverable" style="float: right;">
+                  Submit 
+                </button>
+              </form>  
+            </div>
+          </div>
+        </div><!-- /.col-sm-4 -->     
+
+    </div> <!-- /container -->
+    
+
+</body>
+<script type="text/javascript" src="/socket.io.js"></script>
+
+
+<!-- <script type="text/javascript" src="/angular/angular.min.js"></script>
+<script type="text/javascript" src="/controllers/controller.main.js"></script> -->
+
+</html>
+

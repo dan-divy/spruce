@@ -23,12 +23,12 @@ router.get('/', (req, res) => {
 	user
 	.find({})
 	.exec((err,all) => {
-
+		
 	res.render('chatList', {
     	layout: false,
     	source_user: req.session.user,
     	target_users: all
-    })   	
+    	})   	
 	})	
     
 }
@@ -40,9 +40,15 @@ else {
 }
 });
 router.get('/:username', (req, res)=>{
+	if(req.params.username == req.session.user) {
+		res.send('You cannot chat with yourself <(--_--)>')
+		return;
+	}
+
 	if(req.session.user) {
 	var users = [req.params.username,req.session.user].sort();
 	users = users[0]+users[1]
+	
 	//var ulta_users = req.params.username+req.session.username;
 	user
 	.find({})
