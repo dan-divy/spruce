@@ -175,7 +175,7 @@
 <script type="text/javascript" src="/socket.io.js"></script>
 <script type="text/javascript">
   var user = "{{client}}";
-  Push.Permission.request(() => {
+  Push.Permission.request(function (){
     Push.create("Hello from Pudding!", {
         body: "This is a startup notification!",
         icon: "/lib/user.png",
@@ -184,15 +184,17 @@
             console.log(this);
         }
     });
-  }, () => {
+  },function (argument) {
+    
+  
     Push.clear()
   });
   var socket = io.connect('/services')
 
-    socket.on('connect', () => {
+    socket.on('connect', function () {
       console.log('connected');
     });
-    socket.on('disabled', (res) => {
+    socket.on('disabled', function(res) {
       console.log(res+'disabled')
       $("#"+res)[0].disabled = "none;"
     })
@@ -203,7 +205,7 @@
         initiater: user
      })
   }
-   setTimeout(() => {
+   setTimeout(function() {
     $('.loaderBar')[0].style.display = 'none';
     $('.body')[0].style.display = 'inherit';
     $('.load-logo')[0].style.display = 'none';
