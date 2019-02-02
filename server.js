@@ -11,7 +11,8 @@ const sharedsession = require("express-socket.io-session");
 const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
-const morgan = require('morgan');
+//const async = require('async')
+
 
 
 const app = express();
@@ -35,7 +36,7 @@ const room = require('./app/models/room');
 // Parsers for POST data
 
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(cookieParser());
 
 var cooky = {
@@ -76,6 +77,7 @@ const io = require('socket.io')(server);
 app.io = io;
 
 var nsp = io.of('/chat');
+var service = io.of('/services');
 nsp.use(sharedsession(session(cooky), {
 	autoSave: true
 }));
@@ -109,24 +111,25 @@ nsp.on('connection', function(socket){
 }); 
 
 
-io.on('connection', function(socket){ 
+service.on('connection', function(socket){ 
+
     socket.on('like' , post => {
+    	console.log(post)
     	feeds
     	.findOne({_id:post.id})
     	.exec((err, res) => {
-    		var isDisabled = false;
-    		res.disabledFor.map((a) => {
-    			if(a == post.initiater) {
-    				isDisabled = true;
-    				return;
+    		var reducer = (found, currVal) => {
+    			if(currVal==post.initiater) {
+    				return true;
     			}
-    		})
+    		}
+    		var isDisabled = res.disabledFor.reduce(reducer, false)
     		if(!isDisabled) {
     			res.likes = res.likes+1;
 	    		res.disabledFor.push(post.initiater);
 	    		res.save((err) => {
 	    			socket.emit('disabled', post.id)
-	    			console.info('{LIKE} : '+post.initiater)
+	    			console.info('{LIKED} : '+post.initiater)
 	    		})
     		}
     		else {
@@ -148,16 +151,37 @@ app.get('/', (req, res) => {
 		});
 	}
 	else {
+	
 	feeds
 	.find({})
-	.sort({'timeago':'desc'})
-	.then(function(results) {
-		res.render('index', {
-			layout: false,
-			post: results,
-			client: req.session.user
+	.sort({timeago:1})
+	.exec( (err,e) => {
+	 
+var finalData = e.map((val, index)=> {
+
+	var data={
+				author:val.author,
+				pudding:val.pudding,
+				timeago:ta.ago(val.timeago),
+				likes:val.likes,
+				comments:val.comments,
+				_id:val._id
+			}
+	return data
+
+})	
+//console.log(finalData)
+	res.render('index', {
+		layout:false,
+		post: finalData,
+		client: req.session.user
 		})
-	})
+	})	
+	//.then(function(results) {
+		
+		
+		
+	//})
   }
 	
 });

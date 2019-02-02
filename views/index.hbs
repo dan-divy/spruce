@@ -116,13 +116,8 @@
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
-                <li><a ng-click="redirect('{{ pudding }}')">View</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#"></a></li>
+                <li><a href="{{ pudding }}"><i class="fa fa-share"></i> View</a></li>
+                
               </ul>
               </div>
               <div class="time"> {{ timeago }} </div>
@@ -130,7 +125,7 @@
 <br>
 <br>
     <div class="gram-card-image">
-      <img src="{{ pudding }}" class="img-responsive" />
+      <center><img src="{{ pudding }}" class="img-responsive" style="animation: blurOut 4s linear 1" /></center>
     </div>
 
     <div class="gram-card-content">
@@ -150,7 +145,7 @@
     </div>  
 
     <div class="gram-card-footer">
-      <a class="footer-action-icons likes btn btn-pinky non-hoverable" onclick="like('{{ _id }}')" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</a>
+      <button class="footer-action-icons likes btn btn-pinky non-hoverable" onclick="like('{{ _id }}')" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
       <input id="$index" class="comments-input" type="text" placeholder="Comment here..."/>
       <a class="footer-action-icons btn btn-pinky" ng-click="comment(post.id,$index)"><i class="glyphicon glyphicon-comment"></i></a>
     </div>
@@ -190,15 +185,16 @@
         }
     });
   }, () => {
-
+    Push.clear()
   });
-  var socket = io.connect('/')
+  var socket = io.connect('/services')
 
     socket.on('connect', () => {
       console.log('connected');
     });
     socket.on('disabled', (res) => {
-      $("#"+res)[0].disabled = ""
+      console.log(res+'disabled')
+      $("#"+res)[0].disabled = "none;"
     })
   function like(id) {
     console.log(id)
@@ -211,7 +207,7 @@
     $('.loaderBar')[0].style.display = 'none';
     $('.body')[0].style.display = 'inherit';
     $('.load-logo')[0].style.display = 'none';
-  },4000)
+  },1500)
    
 </script>
 </html>
