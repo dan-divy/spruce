@@ -3,7 +3,12 @@
 <head>
   <title>Pudding - Home</title>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> 
-  <script> (adsbygoogle = window.adsbygoogle || []).push({ google_ad_client: "ca-pub-2302021365742224", enable_page_level_ads: true }); </script>
+  <script> 
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2302021365742224",
+          enable_page_level_ads: true
+     });
+   </script>
   <base href="/">
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -145,9 +150,14 @@
     </div>  
 
     <div class="gram-card-footer">
+      {{#if disabled}}
+      <button class="footer-action-icons likes btn btn-pinky non-hoverable" disabled="true" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
+      {{/if}}
+      {{#else}}
       <button class="footer-action-icons likes btn btn-pinky non-hoverable" onclick="like('{{ _id }}')" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
-      <input id="$index" class="comments-input" type="text" placeholder="Comment here..."/>
-      <a class="footer-action-icons btn btn-pinky" ng-click="comment(post.id,$index)"><i class="glyphicon glyphicon-comment"></i></a>
+      {{/else}}
+      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
+      <a class="footer-action-icons btn btn-pinky" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></a>
     </div>
 
   </div>
@@ -163,7 +173,7 @@
     <div class="cog-div">
           <center><i class="fa fa-5x fa-cog loading"></i>
             </center><br>
-            <center class="text-muted">Retriving data...</center>
+            <center class="text-muted">Getting your data...</center>
         </div> 
     
   </div>
@@ -179,7 +189,7 @@
     Push.create("Hello from Pudding!", {
         body: "This is a startup notification!",
         icon: "/lib/user.png",
-        
+        timeout: 5000,
         onClick: function() {
             console.log(this);
         }
@@ -196,15 +206,37 @@
     });
     socket.on('disabled', function(res) {
       console.log(res+'disabled')
-      $("#"+res)[0].disabled = "none;"
+      $("#"+res)[0].disabled = "none"
+      Push.create("Notification by Pudding", {
+        body: "The post was liked by you!",
+        icon: "/lib/user.png",
+        
+        onClick: function() {
+            console.log(this);
+        }
+      });
     })
   function like(id) {
-    console.log(id)
+    //console.log(id)
      socket.emit('like', {
         id: id,
         initiater: user
      })
   }
+  function comment(id) {
+    //console.log(id)
+     socket.emit('comment', {
+        id: id,
+        text: $('#input_'+id).val(),
+        initiater: user
+     })
+  }
+  $('.img-responsive').map(function(e,i) {
+    e.onload = function () {
+      e.style.animation='blurOut 4s linear 1'
+
+    }
+  })
    setTimeout(function() {
     $('.loaderBar')[0].style.display = 'none';
     $('.body')[0].style.display = 'inherit';

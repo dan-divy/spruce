@@ -118,13 +118,13 @@ service.on('connection', function(socket){
     	feeds
     	.findOne({_id:post.id})
     	.exec((err, res) => {
-    		var reducer = (found, currVal) => {
-    			if(currVal==post.initiater) {
-    				return true;
+    		var found = false;
+    		res.disabledFor.map((value, indexOf) => {
+    			if(value = post.initiater) {
+    				return found = true;
     			}
-    		}
-    		var isDisabled = res.disabledFor.reduce(reducer, false)
-    		if(!isDisabled) {
+    		})
+    		if(!found) {
     			res.likes = res.likes+1;
 	    		res.disabledFor.push(post.initiater);
 	    		res.save((err) => {
@@ -136,6 +136,21 @@ service.on('connection', function(socket){
     			socket.emit('disabled', post.id)
     		}
     		
+    	})
+    })
+    socket.on('comment' , post => {
+    	console.log(post)
+    	feeds
+    	.findOne({_id:post.id})
+    	.exec((err, res) => {
+    		
+    			
+	    		res.comments.push({user:post.initiater,comment:post.text,time:new Date()});
+	    		res.save((err) => {
+	    			socket.emit('commented', post.txt)
+	    			console.info('{COMMENTED} : '+post.initiater)
+	    		})
+    	
     	})
     })
 });
@@ -158,12 +173,17 @@ app.get('/', (req, res) => {
 	.exec( (err,e) => {
 	 
 var finalData = e.map((val, index)=> {
-
+	var disabled = false;
+	val.disabledFor.map((userFound, indexOfUser) =>{
+		if(userFound = req.session.user) return disabled = true;
+	})
 	var data={
 				author:val.author,
 				pudding:val.pudding,
 				timeago:ta.ago(val.timeago),
 				likes:val.likes,
+				disabled:disabled,
+				caption:val.caption,
 				comments:val.comments,
 				_id:val._id
 			}
@@ -173,7 +193,7 @@ var finalData = e.map((val, index)=> {
 //console.log(finalData)
 	res.render('index', {
 		layout:false,
-		post: finalData,
+		post: finalData.sort({timeago:1}),
 		client: req.session.user
 		})
 	})	
