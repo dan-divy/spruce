@@ -7,7 +7,7 @@ const formidable = require('formidable');
 const mv = require('mv');
 const bcrypt = require('bcrypt-nodejs');
 const mime = require('mime-types');
-
+const _ = require('lodash/_arrayIncludes')
 // mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
 
 mongoose.connect(require('../config/db').url);
@@ -82,7 +82,13 @@ router.get('/login', function(req, res) {
     // =====================================
     // SIGNUP ==============================
     // =====================================
+function checkSpace(name) {
+	var charSplit = name.split('')
+    //console.log(charSplit)
+	return _(charSplit, ' ');
+}
     // show the signup form
+
 router.get('/signup', function(req, res) {
 
     // render the page and pass in any flash data if it exists
@@ -97,6 +103,14 @@ router.get('/signup', function(req, res) {
 
         var form = new formidable.IncomingForm()
         form.parse(req, (err, fields, files) => {
+	if (checkSpace(fields.username)) {
+		res.render('signup', {
+		  layout:false,
+		  err: 'No space allowed in username.'
+		})
+		return;
+	}
+    else {
         User
         .findOne({username:fields.username})
         .exec((err, user) => {
@@ -122,6 +136,7 @@ router.get('/signup', function(req, res) {
             }
     
         })
+    }
         
     });
         });

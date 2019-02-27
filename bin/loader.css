@@ -35,7 +35,7 @@
     height: 50%;
 }
 .load {
-  animation: load 5s linear infinite;
+  animation: load 5s linear 1;
 }
 @keyframes load {
 0% {width: 0%}
@@ -55,3 +55,7 @@
 @keyframes rotate {
 100% {transform: rotate(360deg);}
 } 
+.progress {
+  width: 100%;
+  border: none;
+}

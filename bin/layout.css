@@ -10,15 +10,30 @@
   
   src :url('./fonts/HALO____.TTF') format('truetype');
 }
+.dbox-donation-button {
+  margin-right: 0;
+}
+
+.dbox-new-button {
+  margin-left: 0;
+}
+.auth-footer {
+  background-color: transparent;
+
+}
 .navbar-fixed-bottom {
   box-shadow: 0 -5px 5px -5px #333
+
+
 }
 .display-pic {
   color: #fff;
   text-align: center;
   background-color: #159957;
 box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
-  background-image: linear-gradient(120deg, #155799, #159957); }
+  /*background-image: linear-gradient(120deg, #155799, #159957); */
+background-image: linear-gradient(120deg, cornflowerblue,deepskyblue)
+}
   @media screen and (min-width: 64em) {
     .page-header {
       padding: 5rem 6rem; } }
@@ -71,8 +86,8 @@ box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
 }
 .agradient {
 
-   background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957); 
+   
+   background-image: linear-gradient(120deg, cornflowerblue,deepskyblue); 
  color:#fff;
  border: none;
 }
@@ -104,11 +119,6 @@ a:focus {
   color:#fff;
 }
 
-.agradient:hover,
-.agradient:active {
-  
-  color:#fafafa;
-}
 
 .top-nav {
   padding-bottom: 25px;
@@ -298,6 +308,14 @@ blockquote {
   border-radius: 50%;
   width: 40px;
   height: 40px;
+  
+}
+.active-nav,
+.active-nav:hover,
+.active-nav:active {
+  background-color: white;
+  color: cornflowerblue;
+  border-radius: 6px;
   
 }
 .time {
