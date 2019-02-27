@@ -89,11 +89,7 @@
      })
   }
   
-   setTimeout(function() {
-    $('.loaderBar')[0].style.display = 'none';
-    $('.body')[0].style.display = 'inherit';
-    $('.load-logo')[0].style.display = 'none';
-  },1500)
+  
    
 </script>
 <link rel="stylesheet" href="/blur.css">
@@ -286,6 +282,15 @@
 
 </body>
 
- 
+ <script type="text/javascript">
+   
+    $(document).ready(function() {  
+      $('.loaderBar')[0].style.display = 'none';
+      $('.body')[0].style.display = 'inherit';
+      $('.load-logo')[0].style.display = 'none';
+    });
+
+  
+ </script>
 
 </html>
