@@ -10,7 +10,18 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="/layout.css"> <!-- load fontawesome -->
     <style>
-        body        { padding-top:80px; }
+        body        { 
+            padding-top:80px;
+             width: device-width;
+  height: device-height;
+        
+        
+            background-image: url('http://ultraimg.com/images/Ho6hQWs.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+        }   
+               
         .shadow { box-shadow: 0 3px 6px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius: 10px; }
     </style>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -36,11 +47,11 @@
     <!-- LOGIN FORM -->
     <form action="/auth/login" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label class="text-muted">Username</label>
+            <label class="text-muted" style="color:white;">Username</label>
             <input type="text" placeholder="your_nick_name" class="form-control" name="username">
         </div>
         <div class="form-group">
-            <label class="text-muted">Password</label>
+            <label class="text-muted" style="color:white;">Password</label>
             <input type="password" placeholder="the_secret" class="form-control" name="password">
         </div>
 
@@ -50,12 +61,14 @@
 
     <hr>
 
-    <p>Need an account? <a href="/auth/signup">Register</a></p>
-    <p>Or go <a href="/">home</a>.</p>
+    <p>Need an account? <a href="/auth/signup" style="color:#159957">Register</a></p>
+    <p>Or go <a href="/" style="color:#159957">home</a>.</p>
 
 </div>
 
 </div>
+<br>
+<br><br><br><br><br><br><br><br><br><br>
 </body>
 
 </html>
