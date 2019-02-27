@@ -13,7 +13,7 @@ const mime = require('mime-types');
 mongoose.connect(require('../config/db').url);
 
 const user = require('./models/user');
-const feeds = require('./models/feeds')
+const feeds = require('./models/feeds');
     // =====================================
     // HOME PAGE (with post links) ========
     // =====================================

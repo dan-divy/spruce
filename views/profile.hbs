@@ -1,86 +1,123 @@
-<!DOCTYPE html>
-<html ng-app="profile" ng-cloak ng-controller="profileController">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard @ Pudding</title>
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/layout.css">
+<link rel="stylesheet" type="text/css" href="/fontawesome/css/all.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/lib/css/dashboard.css">
+<style type="text/css">
+  body {
+    padding-top: 0;
+    padding: 0;
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  }
+  .h1 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: normal;
+    color: #159957;
+  }
+</style>
 <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">{{ app.title }}</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
+<section class="display-pic">
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="/search" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-arrow-left" style="top:0;"></i>
+    </a>
+  </div>
+   <div style="float:right;margin: 10px;">
+    <a href="/chat/{{ user.username }}" class="btn btn-lg btn-link" style="color:#fff;">
+  <i class="fa fa-lg fa-paper-plane" style="top:0;"></i>
+    </a>
+  </div>
+  <div style="float:right;margin: 10px;">
+  
+</div>
+<br>
+<br>
+<br><br>
+  <img src="{{ user.dp }}" class="user-image" style="float: center;">
+  <h1 class="font" style="margin-bottom: 10px;float: center;">{{ user.username }}</h1>
+  <br>
+   <button class="btn btn-action btn-link non-hoverable" style="color:white;margin: 20px;" data-toggle="modal" data-target="#followerModal"><i class="fa fa-lg fa-users"></i> {{user.followers.length}}</button>
+   <i class="fa fa-lg fa-upload"></i> {{user.posts.length}}<br><br>
+  
+</section>
+<br>
+<section class="main-section">
+  <div class="container-fluid">
+  <center>
+<ul id="myTabs" class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true"><i class="fa fa-image"></i></a></li>
+      <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile"></a></li>
+      <li role="presentation" class="dropdown">
+        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Dropdown <span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+          <li><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">@fat</a></li>
+          <li><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">@mdo</a></li>
+        </ul>
+      </li>
+    </ul></center>
+        <div id="myTabContent" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
       </div>
-    </nav>
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">{{ user.name }}<span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Posts - {{ user.posts }}</a></li>
-            <li><a href="#">Followers - {{ user.followers.length }}</a></li>
-            <li><a href="#">Chat</a></li>
-          </ul>
-         
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Profile</h1>
-
-          <div class="row placeholders jumbotron">
-            
-            <div class="col-lg-2">
-              <center>
-              <img src="{{ user.pic }}" class="img-responsive img-thumbnail" alt="User Display Picture">
-              <h4>{{ user.name }}</h4>
-              <span class="text-muted">Bio</span><br>
-              
-            {{#if self}}
-            <a href="/api/settings/dp" style="display:none;" id="dp" class="btn btn-lg btn-link"><i class="glyphicon glyphicon-user"></i> Edit ProPic </a>
-            {{/if}}
-            
-            {{#if other}}
-             <button ng-click="follow()" id="follow" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-cloud"></i> Follow </button>
-            {{/if}}
-             <button class="btn btn-lg btn-link"><i class="glyphicon glyphicon-comment"></i> Chat </button>
-           
-            </center>
-            </div>
-            
-          </div>
-
-          <h2 class="sub-header">Posts</h2>
-          
-          </div>
-        </div>
+      <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="dropdown1" aria-labelledby="dropdown1-tab">
+        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="dropdown2" aria-labelledby="dropdown2-tab">
+        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
       </div>
     </div>
+        </div>
+{{#each user.posts}}
+<div class="col-xs-3 col-md-3 col-lg-3 col-sm-3">
+  <div class="gram-card-image">
+      <img src="{{ src }}" class="img-responsive" />
+    </div>
+</div>  
+  <br> 
+{{/each}}
+<br>
+</section>
 </body>
-<script type="text/javascript" src="/lib/js/check.log.js"></script>
-<script type="text/javascript" src="/angular/angular.min.js"></script>
-<!-- AngularJS Controllers--> 
-<script type="text/javascript" src="/controllers/controller.profile.js"> </script>
-</html>
+
+<div class="modal fade" id="followerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">{{user.followers.length}} Follower(s).</h4>
+      </div>
+      <div class="modal-body">
+          <div class="container-fluid">
+
+      <ul class="list-group" id="chat-div">
+      {{#each user.followers as |followers|}}
+        <ul class="list-group"><li class="list-group-item">
+          <strong><a class="non-hoverable" style="margin-left: 10px;" href="/user/{{followers}}"> {{followers}}</a></strong>
+
+          <div style="float: right;">
+          <a href="/chat/{{followers}}"><i class="fa fa-paper-plane"></i></a>
+          
+          </div>
+          </li></ul>
+    {{/each}}
+        
+    </ul>
+
+    </div> <!-- /container -->
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Follow @{{user.username}}</button>
+      </div>
+    </div>
+  </div>
+</div>

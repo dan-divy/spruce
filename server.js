@@ -24,7 +24,8 @@ const config = {
 	search: require('./app/search'),
 	upload: require('./app/upload'),
 	activity: require('./app/activity'),
-	chat: require('./app/chat')
+	chat: require('./app/chat'),
+	user: require('./app/user')
 }
 
 mongoose.connect(config.db.url);
@@ -64,6 +65,7 @@ app.use('/auth', config.authentication);
 app.use('/upload', config.upload);
 app.use('/search', config.search);
 app.use('/activity', config.activity);
+app.use('/user', config.user);
 app.use('/chat', config.chat);
 
 //app.use('/profile', user);
@@ -147,7 +149,7 @@ service.on('connection', function(socket){
     			
 	    		res.comments.push({user:post.initiater,comment:post.text,time:new Date()});
 	    		res.save((err) => {
-	    			socket.emit('commented', post.txt)
+	    			socket.emit('commented', post)
 	    			console.info('{COMMENTED} : '+post.initiater)
 	    		})
     	

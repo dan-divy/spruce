@@ -12,6 +12,7 @@
   <base href="/">
 </head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 
 <link rel="stylesheet" href="/fontawesome/css/all.css">
@@ -21,6 +22,80 @@
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/push.js"></script>
+<script type="text/javascript" src="/socket.io.js"></script>
+<script type="text/javascript">
+  var user = "{{client}}";
+  Push.Permission.request(function (){
+    Push.create("Hello from Pudding!", {
+        body: "This is a startup notification!",
+        icon: "/lib/user.png",
+        timeout: 5000,
+        onClick: function() {
+            console.log(this);
+        }
+    });
+  },function (argument) {
+    
+  
+    Push.clear()
+  });
+  var socket = io.connect('/services')
+
+    socket.on('connect', function () {
+      console.log('connected');
+    });
+    socket.on('disabled', function(res) {
+      console.log(res+'disabled')
+      $("#"+res)[0].disabled = "none";
+      $("#"+res)[0].innerHTML = "Liked!"
+      Push.create("Notification by Pudding", {
+        body: "The post was liked by you!",
+        icon: "/lib/user.png",
+        
+        onClick: function() {
+            console.log(this);
+        }
+      });
+    })
+    socket.on('commented', function(res) {
+      console.log(res+'commented')
+      
+      $('#comment_'+res.id).append('<div><a class="user-comment" href="/user/{{client}}">{{ client }}</a> '+res.text+' </div>')
+
+      Push.create("Notification by Pudding", {
+        body: "New comment by you! Whoo-ho! -- "+res.text,
+        icon: "/lib/user.png",
+        
+        onClick: function() {
+            console.log(this);
+        }
+      });
+    })
+  
+  function like(id) {
+    //console.log(id)
+     socket.emit('like', {
+        id: id,
+        initiater: user
+     })
+  }
+   
+  function comment(id) {
+    //console.log(id)
+     socket.emit('comment', {
+        id: id,
+        text: $('#input_'+id).val(),
+        initiater: user
+     })
+  }
+  
+   setTimeout(function() {
+    $('.loaderBar')[0].style.display = 'none';
+    $('.body')[0].style.display = 'inherit';
+    $('.load-logo')[0].style.display = 'none';
+  },1500)
+   
+</script>
 <link rel="stylesheet" href="/blur.css">
 <script src="/blur.js"></script>
 <style type="text/css">
@@ -35,6 +110,13 @@
   }
   
 </style>
+<script type="text/javascript">
+  function load(id) {
+   console.log(id)
+         $('#img_'+id)[0].style.animation = 'blurOut 7s linear 1'
+      $('#img_'+id)[0].style.filter = 'blur(0px)'
+    } 
+</script>
 <body>
   <div style="display:none;" class="body">
   <section class="display-pic">
@@ -44,6 +126,12 @@
         <strong><p class="font"> Pudding </p></strong>
   
     </a>
+  </div>
+  <div style="float:right;margin: 10px;">
+    <button class="btn btn-link btn-lg non-hoverable" data-toggle="modal" data-target="#infoModal" style="color:#fff;">
+  What's New?
+    </button>
+    
   </div>
    <div style="float:right;margin: 10px;">
     <a href="/auth/settings" class="btn btn-lg btn-link" style="color:#fff;">
@@ -89,25 +177,41 @@
         
       </div>
     </nav>
-
-    <div id="main">
-       <br>
-       <div class="container alert alert-info">
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Yayy! It's Official now! Version 1.5.7 is here!!</h4>
+      </div>
+      <div class="modal-body">
+          <div class="container-fluid alert agradient">
          <strong>What's new!?</strong>
          <ul>
            <li> Added activity feature - Click on user button below.</li>
 
-           <li> New global chat service available - Hit the paperplane button above.</li>
-           <li> If you face any issue, contact me at <a href="mailto:dj.srivastava23@gmail.com">dj.srivastava23@gmail.com</a>. You can even give suggestions for new features!</li>
+           <li> New chat service available - Hit the paperplane button above.</li>
+           <li> If you face any issue, contact me at <a style="color:#fff;" href="mailto:dj.srivastava23@gmail.com">dj.srivastava23@gmail.com</a>. You can even give suggestions for new features!</li>
            <li> WARNING - chat might not work on low-end devices.
            Will fix soon.</li>
            <li> ALERT - you will get an error if you hit the settings button. If bychance you click it , just press go back or restart the app/website.</li>
            <li> Comments and like function is ready and will be implemented once we have enough users. 
             <strong>SPREAD THE WORD!</strong></li>
          </ul>
-         <span class="text-muted">&copy; Divy Srivastava 2019</span>
-         <span class="text-muted" style="float:right;">project under MIT liscense and security by <a href="https://console.aws.com">AWS</a> and <a href="https://npmjs.com/package/bcrypt-nodejs">BCrypt</a></span>
+         <span style="color:#fff;" class="text-muted">&copy; Divy Srivastava 2019</span>
+         <span style="color:#fff;" class="text-muted" style="float:right;">project under MIT liscense and security by <a style="color:yellow;" href="https://console.aws.com">AWS</a> and <a style="color:yellow;" href="https://npmjs.com/package/bcrypt-nodejs">BCrypt</a></span>
        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        <button type="button" class="btn btn-primary">Contact</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <div id="main">
+       <br>
+       
        <br>
        <center><a ng-click="refresh()" class="refresh">
   Refresh <i class="glyphicon glyphicon-refresh"></i>
@@ -130,7 +234,7 @@
 <br>
 <br>
     <div class="gram-card-image">
-      <center><img src="{{ pudding }}" class="img-responsive" style="animation: blurOut 4s linear 1" /></center>
+      <center><img src="{{ pudding }}" id="img_{{_id}}" class="img-responsive" onload="load('{{_id}}')" style="filter:blur(8px)"></center>
     </div>
 
     <div class="gram-card-content">
@@ -141,21 +245,22 @@
 
       <p class="comments">{{ comments.length }} comments.</p>
       <br>
+
+      <div id="comment_{{_id}}" class="comments-div">
       {{#each comments}}
-      <div><a class="user-comment" href="">{{ user }}</a> {{ comment }} </div>
+      <div><a class="user-comment" href="/user/{{user}}">{{ user }}</a> {{ comment }} </div>
       {{/each}}
-      </br>
       
+      </div>
     <hr>
     </div>  
 
     <div class="gram-card-footer">
-      {{#if disabled}}
-      <button class="footer-action-icons likes btn btn-pinky non-hoverable" disabled="true" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
-      {{/if}}
-      {{#else}}
-      <button class="footer-action-icons likes btn btn-pinky non-hoverable" onclick="like('{{ _id }}')" id="{{_id}}"><i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
-      {{/else}}
+      
+      <button class="footer-action-icons likes btn btn-pinky non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="like('{{_id}}')" id="{{_id}}">
+        <i class="glyphicon glyphicon-thumbs-up"></i> {{ likes }}</button>
+      
+      
       <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
       <a class="footer-action-icons btn btn-pinky" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></a>
     </div>
@@ -173,7 +278,7 @@
     <div class="cog-div">
           <center><i class="fa fa-5x fa-cog loading"></i>
             </center><br>
-            <center class="text-muted">Getting your data...</center>
+            <center class="text-muted">Prettifying for you...</center>
         </div> 
     
   </div>
@@ -182,66 +287,5 @@
 </body>
 
  
-<script type="text/javascript" src="/socket.io.js"></script>
-<script type="text/javascript">
-  var user = "{{client}}";
-  Push.Permission.request(function (){
-    Push.create("Hello from Pudding!", {
-        body: "This is a startup notification!",
-        icon: "/lib/user.png",
-        timeout: 5000,
-        onClick: function() {
-            console.log(this);
-        }
-    });
-  },function (argument) {
-    
-  
-    Push.clear()
-  });
-  var socket = io.connect('/services')
 
-    socket.on('connect', function () {
-      console.log('connected');
-    });
-    socket.on('disabled', function(res) {
-      console.log(res+'disabled')
-      $("#"+res)[0].disabled = "none"
-      Push.create("Notification by Pudding", {
-        body: "The post was liked by you!",
-        icon: "/lib/user.png",
-        
-        onClick: function() {
-            console.log(this);
-        }
-      });
-    })
-  function like(id) {
-    //console.log(id)
-     socket.emit('like', {
-        id: id,
-        initiater: user
-     })
-  }
-  function comment(id) {
-    //console.log(id)
-     socket.emit('comment', {
-        id: id,
-        text: $('#input_'+id).val(),
-        initiater: user
-     })
-  }
-  $('.img-responsive').map(function(e,i) {
-    e.onload = function () {
-      e.style.animation='blurOut 4s linear 1'
-
-    }
-  })
-   setTimeout(function() {
-    $('.loaderBar')[0].style.display = 'none';
-    $('.body')[0].style.display = 'inherit';
-    $('.load-logo')[0].style.display = 'none';
-  },1500)
-   
-</script>
 </html>
