@@ -171,7 +171,7 @@ app.get('/', (req, res) => {
 	
 	feeds
 	.find({})
-	.sort({timeago:1})
+	
 	.exec( (err,e) => {
 	 
 var finalData = e.map((val, index)=> {
@@ -195,7 +195,7 @@ var finalData = e.map((val, index)=> {
 //console.log(finalData)
 	res.render('index', {
 		layout:false,
-		post: finalData.sort({timeago:1}),
+		post: finalData,
 		client: req.session.user
 		})
 	})	
