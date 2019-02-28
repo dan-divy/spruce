@@ -1,6 +1,6 @@
   body{
   background-color: #fff;
-  padding-top:90px;
+  padding-top:80px;
   font-family: 'Droid Sans', sans-serif;
 
 }
@@ -9,6 +9,15 @@
 
   
   src :url('./fonts/HALO____.TTF') format('truetype');
+}
+@font-face {
+  font-family: 'prettyFont';
+
+  
+  src :url('./fonts/Precious.ttf') format('truetype');
+}
+.prettify {
+  font-family: 'prettyFont';
 }
 .dbox-donation-button {
   margin-right: 0;
@@ -121,7 +130,7 @@ a:focus {
 
 
 .top-nav {
-  padding-bottom: 25px;
+  
   
 }
 .back {
@@ -129,6 +138,11 @@ a:focus {
   left:  10px; /* Place the button 30px from the right */
  
   padding: 15px; /* Some padding */
+}
+.whoop:hover,
+.whoop:active,
+.whoop:focus {
+  transform: rotate(20deg);
 }
 .refresh {
   
@@ -156,6 +170,7 @@ a:focus {
   max-width: 600px;
   margin:auto;
   margin-bottom: 40px;
+
   
 }
 
@@ -310,14 +325,7 @@ blockquote {
   height: 40px;
   
 }
-.active-nav,
-.active-nav:hover,
-.active-nav:active {
-  background-color: white;
-  color: cornflowerblue;
-  border-radius: 6px;
-  
-}
+
 .time {
   float:right;
   

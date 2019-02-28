@@ -35,7 +35,7 @@
     height: 50%;
 }
 .load {
-  animation: load 5s linear 1;
+  animation: load 15s linear 1;
 }
 @keyframes load {
 0% {width: 0%}
