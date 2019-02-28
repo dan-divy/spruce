@@ -12,6 +12,20 @@
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
+<script type="text/javascript">
+       function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
 <body>
   <style type="text/css">
   body {
@@ -60,10 +74,11 @@
       <form class="form-signin" action="/upload" method="POST" enctype="multipart/form-data">
        <br>
        <center>
+        <img id="blah" class="img-responsive" style="border-radius: 15px;" src="http://placehold.it/180" alt="your image" />
         <div class="upload-btn-wrapper">
          <button class="btn btn-link btn-lg btn-action" id="post">   <i class="fa fa-lg fa-upload"></i> Choose an image.
          </button>
-         <input type='file' name='filetoupload' id="file" required/>
+         <input type='file' name='filetoupload' onchange="readURL(this);" id="file" required/>
         </div>
         <br>
         

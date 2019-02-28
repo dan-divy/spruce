@@ -11,11 +11,26 @@ const sharedsession = require("express-socket.io-session");
 const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
+const morgan = require('morgan');
+const rfs = require('rotating-file-stream')
 //const async = require('async')
 
 
 
 const app = express();
+
+var logDirectory = path.join(__dirname, 'log')
+
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream
+var accessLogStream = rfs('access.log', {
+  interval: '1d', // rotate daily
+  path: logDirectory
+})
+
+// setup the logger
 
 // Get our API routes
 const config = {
@@ -36,7 +51,7 @@ const users = require('./app/models/user');
 const room = require('./app/models/room');
 // Parsers for POST data
 
-
+app.use(morgan('tiny', { stream: accessLogStream }))
 //app.use(morgan('dev'));
 app.use(cookieParser());
 
