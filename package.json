@@ -32,7 +32,8 @@
     "push.js": "^1.0.9",
     "socket.io": "",
     "time-ago": "^0.2.1",
-    "video.js": "^7.3.0"
+    "video.js": "^7.3.0",
+    "lodash":"^4.17.11"
   },
   "devDependencies": {},
   "scripts": {
