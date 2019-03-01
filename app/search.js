@@ -17,10 +17,20 @@ const user = require('./models/user')
     // HOME PAGE (with search links) ========
     // =====================================
 router.get('/', (req, res) => {
+	if(req.query.light) {
+		res.render('search', {
+    	layout: false,
+    	data: req.session.user,
+    	light: true
+    })    
+	}
+	else {
     res.render('search', {
     	layout: false,
-    	data: req.session.user
+    	data: req.session.user,
+    	normal: true
     })    
+}
 });
 	// $http.get() GET Route for SEARCH.HBS AngularJS controller
 router.post('/', (req, res) => {
@@ -35,7 +45,8 @@ router.post('/', (req, res) => {
 		res.render('search', {
 			layout: false,
 			searchedFor: this.search,
-			notFound: true
+			notFound: true,
+			normal:true
 		})
 	}
 	else {
@@ -49,7 +60,8 @@ router.post('/', (req, res) => {
 		});
 		res.render('search',{ 
 			layout: false,
-			id:users 
+			id:users,
+			normal:true 
 		});
 		
 	}

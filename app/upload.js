@@ -18,10 +18,21 @@ const feeds = require('./models/feeds')
     // HOME PAGE (with post links) ========
     // =====================================
 router.get('/', (req, res) => {
-    res.render('upload', {
+	if(req.query.light) {	
+		 res.render('upload', {
     	layout: false,
-    	user: req.session.user
-    })    
+    	author: req.session.user,
+    	light:true
+    })   
+		}
+		else {
+			 res.render('upload', {
+    	layout: false,
+    	author: req.session.user,
+    	normal:true
+    })   
+		}
+    
 });
 	
 router.post('/', (req, res) => {
@@ -32,7 +43,7 @@ router.post('/', (req, res) => {
      var static_url = '/upload/'+ files.filetoupload.name;
 	 var auth = req.session.user;
 	 var caption = fields.caption;
-	 var tags = fields.tag;
+	 //var tags = fields.tag;
 	 var type = mime.lookup(files.filetoupload.name);
 	 type = type.split('/')[0];
 	 if (type == 'image') {
@@ -43,7 +54,7 @@ router.post('/', (req, res) => {
 	 			pudding:static_url,
 				likes:0,
 				caption:caption,
-				tags:tags,
+				//tags:tags,
 				type:type,
 				time:(new Date()).getTime(),
 				timeago:new Date()

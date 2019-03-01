@@ -16,8 +16,12 @@
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 
 <link rel="stylesheet" href="/fontawesome/css/all.css">
+{{#if normal}}
+<link rel="stylesheet" href="/layout.blue.css">
+{{/if}}
+{{#if light}}
 <link rel="stylesheet" href="/layout.css">
-
+{{/if}}
 <link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
@@ -126,8 +130,8 @@
   </div>
  
    <div style="float:right;margin: 10px;">
-    <a href="/auth/settings" class="btn btn-lg btn-link whoop" style="color:#fff;">
-  <i class="fa fa-lg fa-cog" style="top:0;"></i>
+    <a href="/auth/logout" class="btn btn-lg btn-link whoop" style="color:#fff;">
+  <i class="fa fa-lg fa-power-off" style="top:0;"></i>
     </a>
     
   </div>
@@ -153,17 +157,17 @@
 <nav class="navbar navbar-default navbar-fixed-bottom agradient">
       <div class="container-fluid">
         
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3 whoop" href="/">
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3 whoop" href="/{{#if light}}?light=true{{/if}}">
             <center><i style="color: white;" class="fa fa-1x fa-igloo"></i></center>
           </a>
           
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/search">
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/search/{{#if light}}?light=true{{/if}}">
             <center><i style="color: white;" class="fa fa-1x fa-search"></i></center>
           </a>
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3 whoop" href="/upload">
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3 whoop" href="/upload/{{#if light}}?light=true{{/if}}">
             <center><i style="color:white;" class="fa fa-1x fa-plus"></i></center>
           </a>
-          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/activity">
+          <a class="navbar-brand col-xs-3 col-md-3 col-lg-3 col-sm-3" href="/activity/{{#if light}}?light=true{{/if}}">
             <center><i style="color:white;" class="fa fa-1x fa-user"></i></center>
           </a>  
         
@@ -205,12 +209,21 @@
        
 
 <center>
-<a class="dbox-donation-button" href="https://donorbox.org/pudding" style="background:cornflowerblue url(https://d1iczxrky3cnb2.cloudfront.net/red_logo.png) no-repeat 37px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 75px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;  text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+<a href="https://donorbox.org/pudding" style="background:white url(https://d1iczxrky3cnb2.cloudfront.net/red_logo.png) no-repeat 37px center; color: cornflowerblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 70px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;  text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
 
-<a class="dbox-new-button" data-toggle="modal" data-target="#infoModal" style="background:deepskyblue; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 38px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
-<i class="fa fa-alert"></i> What's New!</a>
-    
-    
+<a data-toggle="modal" data-target="#infoModal" style="background:white; color: deepskyblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 33px;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
+<i class="fa fa-alert"></i>What's New!</a>
+{{#if normal}}
+ <a href="/?light=true" style="background:white; color: cornflowerblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 33px;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
+
+<i class="fa fa-alert"></i>Light mode</a>   
+   {{/if}} 
+   {{#if light}}
+ <a href="/" style="background:white; color: cornflowerblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 33px;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
+
+<i class="fa fa-alert"></i>Gradient mode</a>   
+   {{/if}} 
+
 
 </center>
 <br>
@@ -273,7 +286,7 @@
     <a class="btn btn-link non-hoverable" href="https://twitter.com/undefined_void"><img src="/twitter.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
     <a class="btn btn-link non-hoverable" href="https://divysrivastava.tumblr.com"><img src="/tumblr.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
     <a class="btn btn-link non-hoverable" href="https://facebook.com/undefined_void"><img src="/facebook.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
-    <a class="btn btn-link non-hoverable" href="https://reddit.com/r/undefined_void"><img src="/reddit.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
+    <a class="btn btn-link non-hoverable" href="https://reddit.com/u/undefined_void"><img src="/reddit.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
     <a class="btn btn-link non-hoverable" href="https://youtube.com/users/PoodleStudios"><img src="/social-youtube-w.png" class="gram-card-user-image" style="background-color:red;"></a>
     <a class="btn btn-link non-hoverable" href="https://stumbleupon.com/undefined_void"><img src="/stumbleupon.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
     <a class="btn btn-link non-hoverable" href="#"><img src="/linkedin.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>

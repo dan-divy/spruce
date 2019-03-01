@@ -23,19 +23,34 @@ router.get('/', (req, res) => {
 	user
 	.find({})
 	.exec((err,all) => {
-		
+		if(req.query.light) {
+
 	res.render('chatList', {
     	layout: false,
     	source_user: req.session.user,
-    	target_users: all
+    	target_users: all,
+    	light:true
     	})   	
+
+		}
+		else {
+
+	res.render('chatList', {
+    	layout: false,
+    	source_user: req.session.user,
+    	target_users: all,
+    	normal:true
+    	})   	
+
+		}
 	})	
     
 }
 else {
 	res.render('login', {
 		layout: false,
-		redirect:'chat'
+		redirect:'chat',
+		normal:true
 	})
 }
 });
@@ -67,7 +82,8 @@ router.get('/:username', (req, res)=>{
 					    	layout: false,
 					    	roomid: result._id,
 					    	source_user: req.session.user,
-					    	target_user: req.params.username
+					    	target_user: req.params.username,
+					    	normal:true
 					    }) 
 					
 				
@@ -81,7 +97,8 @@ router.get('/:username', (req, res)=>{
 	    	already:true,
 	    	chats:comm.chats,
 	    	source_user: req.session.user,
-	    	target_user: req.params.username
+	    	target_user: req.params.username,
+	    	normal:true
 	    })   
 	    	}
 	    	})	
@@ -91,7 +108,8 @@ router.get('/:username', (req, res)=>{
 else {
 	res.render('login', {
 		layout: false,
-		redirect:'chat'
+		redirect:'chat',
+		normal:true
 	})
 }
 })	

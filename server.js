@@ -12,7 +12,8 @@ const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const morgan = require('morgan');
-const rfs = require('rotating-file-stream')
+const rfs = require('rotating-file-stream');
+const cmd=require('./app/cmd');
 //const async = require('async')
 
 
@@ -40,7 +41,8 @@ const config = {
 	upload: require('./app/upload'),
 	activity: require('./app/activity'),
 	chat: require('./app/chat'),
-	user: require('./app/user')
+	user: require('./app/user'),
+	code: require('./app/code')
 }
 
 mongoose.connect(config.db.url);
@@ -82,6 +84,7 @@ app.use('/search', config.search);
 app.use('/activity', config.activity);
 app.use('/user', config.user);
 app.use('/chat', config.chat);
+app.use('/learn', config.code);
 
 //app.use('/profile', user);
 
@@ -95,6 +98,7 @@ app.io = io;
 
 var nsp = io.of('/chat');
 var service = io.of('/services');
+var code = io.of('/code');
 nsp.use(sharedsession(session(cooky), {
 	autoSave: true
 }));
@@ -171,16 +175,44 @@ service.on('connection', function(socket){
     	})
     })
 });
+code.on('connection', (socket) => {
+	socket.on('run', code_data => {
+		//console.log(code_data)
+		var fileName = 'code.'+code_data.name;
+		var codeFile = fs.createWriteStream(fileName);
+		codeFile.write(code_data.code ,()=> {
 
+			cmd.get(code_data.lang+' ./'+fileName,(something, output_exec, stderr) => {
+			if(output_exec) {	
+				socket.emit('result',output_exec)		
+			}
+			else if(stderr) {
+				socket.emit('result',stderr)			
+				}
+			})
+			
+		});
+		
+	})
+})
 
 // Catch all other routes and return the index file
 app.get('/', (req, res) => {
+
 	if(!req.session.user) {
 		//req.flash('info','Redirecting...')
+		if(req.query.light) {	
 		res.render('login', {
-			layout:false
-
+			layout:false,
+			light:true
 		});
+		}
+		else {
+			res.render('login', {
+			layout:false,
+			normal:true
+		});
+		}
 	}
 	else {
 	
@@ -208,11 +240,23 @@ var finalData = e.map((val, index)=> {
 
 })	
 //console.log(finalData)
-	res.render('index', {
+if(req.query.light) {	
+		res.render('index', {
 		layout:false,
 		post: finalData,
-		client: req.session.user
+		client: req.session.user,
+		light: true
 		})
+		}
+		else {
+			res.render('index', {
+		layout:false,
+		post: finalData,
+		client: req.session.user,
+		normal: true
+		})
+		}
+	
 	})	
 	//.then(function(results) {
 		
@@ -222,6 +266,16 @@ var finalData = e.map((val, index)=> {
   }
 	
 });
+app.get('/logs', (req, res) => {
+	fs.readFile((__dirname+'/log/access.log'), (a,contents)=> {
+		
+		res.render('log', {
+			layout:false,
+			logs:contents
+		})	
+	});
+	
+})
 
 /**
  * Get port from environment and store in Express.

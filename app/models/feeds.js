@@ -9,7 +9,7 @@ var pudding = new mongoose.Schema({
    	pudding: String,
    	likes: Number,
    	caption:String,
-	tags:String,
+	//tags:String,
 	type:String,
 	disabledFor:Array,
 	comments:Array,

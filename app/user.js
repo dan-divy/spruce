@@ -18,10 +18,21 @@ const user = require('./models/user')
     // HOME PAGE (with search links) ========
     // =====================================
 router.get('/', (req, res) => {
-    res.render('search', {
+	if(req.query.light) {
+	res.render('search', {
     	layout: false,
-    	data: req.session.user
+    	data: req.session.user,
+    	light: true
+    })    	
+	}
+	else {
+		res.render('search', {
+    	layout: false,
+    	data: req.session.user,
+    	normal: true
     })    
+	}
+    
 });
 
 router.get('/:username', (req, res) => {
@@ -50,6 +61,7 @@ router.get('/:username', (req, res) => {
 					
 			res.render('profile' , {
 	    	layout: false,
+	    	normal:true,
 	    	user: {
 					username:results.username,
 	    			followers:results.followers,

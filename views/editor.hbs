@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Code with Divy!!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/fontawesome/css/all.css">
+  <link rel="stylesheet" href="/layout.css">
+ <link rel="stylesheet" href="/prismDark.css">
+<script src="/jquery.min.js"></script>
+<script src="/prismDark.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body style="padding-top: 0;height: 100%;">
+
+  <section class="display-pic">
+  <div style="float:left;margin: 10px; margin-right: 0;">
+    <a href="#" class="btn btn-lg btn-link non-hoverable" style="color:#fff;">
+  <strong><i class="fa fa-lg fa-code" style="top:0;"></i> {{language}} Editor</strong>
+    </a>
+  </div>
+<br>
+<br>
+<br><br>
+
+</section>
+
+  <button class="btn" style="float: left;width: 50%;border-radius: 0px;background-color: white;color: cornflowerblue;">
+    <i class="fa fa-edit"></i> Edit</button>
+  <button class="btn btn-success" style="float: right;width: 50%;border-radius: 0px;" onclick="run();"><i class="fa fa-play"></i> Run</button>
+<br>
+<br>
+<br>
+<div class="container">
+<textarea class="form-control" placeholder="Houston, Do you copy?" id="code_input"></textarea>  
+</div>
+<div class="container">
+<div class="code-toolbar"><pre class="language-javascript"><code class=" line-numbers language-javascript" id="result"></code></pre></div>
+</div>
+    </body>
+<script type="text/javascript" src="/socket.io.js"></script>
+<script type="text/javascript">
+  var socket = io.connect('/code')
+
+    socket.on('connect', function (){
+      console.log('connected');
+    });
+    socket.on('result', function (data){
+      
+      $("#result").text(data)
+    });
+  function run() {
+    if($('#code_input').val()) {
+      socket.emit('run',{
+          code:$('#code_input').val(),
+          lang:'{{command}}',
+          name:'{{language}}'
+        })
+      }
+    }  
+</script>    
+</html>

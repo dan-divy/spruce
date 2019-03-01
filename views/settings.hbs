@@ -6,7 +6,12 @@
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/fontawesome/css/all.css">
   
-	<link rel="stylesheet" href="/layout.css">
+	{{#if normal}}
+<link rel="stylesheet" href="/layout.blue.css">
+{{/if}}
+{{#if light}}
+<link rel="stylesheet" href="/layout.css">
+{{/if}}
 <link rel="stylesheet" href="/signin.css">
 <link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>

@@ -1,0 +1,28 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'link' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 verbose linkPkg /media/divy/Data/Pudding/0.1.5
+5 silly gentlyRm /usr/local/lib/node_modules/pudding is being purged
+6 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/pudding
+7 verbose stack Error: EACCES: permission denied, symlink '/media/divy/Data/Pudding/0.1.5' -> '/usr/local/lib/node_modules/pudding'
+7 verbose stack     at Error (native)
+8 verbose cwd /media/divy/Data/Pudding/0.1.5
+9 error Linux 4.13.0-37-generic
+10 error argv "/usr/bin/nodejs" "/usr/bin/npm" "link"
+11 error node v4.2.6
+12 error npm  v3.5.2
+13 error path /media/divy/Data/Pudding/0.1.5
+14 error code EACCES
+15 error errno -13
+16 error syscall symlink
+17 error Error: EACCES: permission denied, symlink '/media/divy/Data/Pudding/0.1.5' -> '/usr/local/lib/node_modules/pudding'
+17 error     at Error (native)
+17 error  { [Error: EACCES: permission denied, symlink '/media/divy/Data/Pudding/0.1.5' -> '/usr/local/lib/node_modules/pudding']
+17 error   errno: -13,
+17 error   code: 'EACCES',
+17 error   syscall: 'symlink',
+17 error   path: '/media/divy/Data/Pudding/0.1.5',
+17 error   dest: '/usr/local/lib/node_modules/pudding' }
+18 error Please try running this command again as root/Administrator.
+19 verbose exit [ -13, true ]

@@ -6,7 +6,12 @@
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/fontawesome/css/all.css">
   
-	<link rel="stylesheet" href="/layout.css">
+	{{#if normal}}
+<link rel="stylesheet" href="/layout.blue.css">
+{{/if}}
+{{#if light}}
+<link rel="stylesheet" href="/layout.css">
+{{/if}}
 <link rel="stylesheet" href="/signin.css">
 <link rel="stylesheet" href="/loader.css">
 <script src="/jquery.min.js"></script>
@@ -20,6 +25,10 @@
                 reader.onload = function (e) {
                     $('#blah')
                         .attr('src', e.target.result);
+                     $('#postBtn')   
+                        .attr('disabled', false)
+                      $('#postDiv')[0].style.background="linear-gradient(120deg,cornflowerblue,deepskyblue)";
+                        $('#postBtn')[0].style.color="white";
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -69,40 +78,80 @@
     </div>
   </div>
   <br>
-  <div class="container">
-
-      <form class="form-signin" action="/upload" method="POST" enctype="multipart/form-data">
+  
+<div class="container-fluid">
+      <form action="/upload" method="POST" enctype="multipart/form-data">
        <br>
-       <center>
-        <img id="blah" class="img-responsive" style="border-radius: 15px;" src="http://placehold.it/180" alt="your image" />
+<div class="gram-card">
+    <div class="gram-card-header">
+      <img src="/lib/user.png" class="gram-card-user-image">
+      <a class="gram-card-user-name" href=""> {{ author }}</a>
+      
+            <div class="dropdown gram-card-time">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="{{ pudding }}"><i class="fa fa-share"></i> View</a></li>
+                
+              </ul>
+              </div>
+              <div class="time">1 min ago.</div>
+    </div>
+<br>
+<br>
+    <div class="gram-card-image">
+      <center>
+    
+
         <div class="upload-btn-wrapper">
-         <button class="btn btn-link btn-lg btn-action" id="post">   <i class="fa fa-lg fa-upload"></i> Choose an image.
+         <button class="btn agradient btn-action whoop" id="post">   <i class="fa fa-lg fa-upload"></i> Upload an image.
          </button>
          <input type='file' name='filetoupload' onchange="readURL(this);" id="file" required/>
         </div>
+
         <br>
         
       </center>
+      <center><img src="" id="blah" class="img-responsive"></center>
+    </div>
 
+    <div class="gram-card-content">
+     
+      <p>
         <label for="inputEmail" class="sr-only">Caption</label>
         <input type="textarea" id="inputCaption" name="caption" class="form-control" placeholder="a_cool_caption" required autofocus>
-        <label for="inputPassword" class="sr-only"></label>
-        <input type="text" id="inputTag" name="tag" class="form-control" placeholder="a_searchable_tag" required>
+     </p>
 
-        <br>
-        <br>
-        
-        <button class="btn btn-lg agradient btn-action" onclick="load()" type="submit"><i class="fa fa-file-invoice"></i> Post</button>
-    
-      </form>
-<div class="cog-div" style="display: none;">
-          <center><i class="fa fa-5x fa-cog loading"></i>
-            </center><br>
-            <center class="text-muted">Just a sec..</center>
-        </div> 
-    
+      <p class="comments">0 comments.</p>
+      <br>
+
+      <div id="comment" class="comments-div">
+      
+      <div><a class="user-comment" href="/user/"></a> </div>
+      
+      
+      </div>
+    <hr>
+    </div>  
+
+    <div class="gram-card-footer">
+      
+      <button type="button" class="footer-action-icons likes btn btn-link non-hoverable">
+        <i class="glyphicon glyphicon-thumbs-up"></i> 0</button>
+      
+      
+      <input class="comments-input" type="text" placeholder="Comment here..."/>
+      <button type="button" class="footer-action-icons btn btn-link"><i class="glyphicon glyphicon-comment"></i></button>
+    </div>
+
   </div>
-    </div> <!-- /container -->
+<nav class="navbar navbar-default navbar-fixed-bottom" style="height: 10%;background: white;box-shadow: none;" id="postDiv">
+        <button id="postBtn" class="btn btn-lg form-control" style="background: transparent;color: deepskyblue;font-size:30px;" type="submit" disabled>Post</button>
+   </nav> 
+      </form>
+</div>
+    
+  
+    
 </body>
 <script type="text/javascript">
   function load() {

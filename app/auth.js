@@ -38,7 +38,8 @@ router.get('/settings', function(req, res) {
 router.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
     res.render('login.hbs', { 
-        layout: false
+        layout: false,
+        normal:true
     }); 
 });
 
@@ -60,6 +61,7 @@ router.get('/login', function(req, res) {
                     else {
                         res.render('login', {
                     layout: false,
+                    normal: true,
                     message:'Naah! Check your credentials again.'
                     })
                     }
@@ -68,6 +70,7 @@ router.get('/login', function(req, res) {
                 else {
                     res.render('login', {
                     layout: false,
+                    normal: true,
                     message:'Naah! Check your credentials again.'
                 })
                 }    
@@ -93,7 +96,8 @@ router.get('/signup', function(req, res) {
 
     // render the page and pass in any flash data if it exists
     res.render('signup.hbs', { 
-        layout:false
+        layout:false,
+        normal:true
     });
 });
 
@@ -106,7 +110,8 @@ router.get('/signup', function(req, res) {
 	if (checkSpace(fields.username)) {
 		res.render('signup', {
 		  layout:false,
-		  err: 'No space allowed in username.'
+		  err: 'No space allowed in username.',
+          normal:true
 		})
 		return;
 	}
@@ -117,7 +122,8 @@ router.get('/signup', function(req, res) {
             if(user) {
                 res.render('signup', {
                     layout:false,
-                    err: 'Already exists.'
+                    err: 'Already exists.',
+                    normal:true
                 })
             }
             else {

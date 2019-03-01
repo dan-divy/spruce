@@ -9,7 +9,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="stylesheet" href="/layout.css"> <!-- load fontawesome -->
+    {{#if normal}}
+<link rel="stylesheet" href="/layout.blue.css">
+{{/if}}
+{{#if light}}
+<link rel="stylesheet" href="/layout.css">
+{{/if}}
     <style>
     .theauth {
         background-color: #fff;
@@ -25,10 +30,15 @@
              width: device-width;
               height: device-height;
         
-        
-            
+         {{#if normal}}
+            background-image: linear-gradient(180deg, #155799,#159957); 
+            {{/if}}
+           
+            {{#if light}}
             background-image: linear-gradient(180deg, cornflowerblue, deepskyblue); 
+            {{/if}}
              /*background-color: cornflowerblue; */
+           
             background-repeat: no-repeat;
             background-size: cover;
             
@@ -87,15 +97,15 @@
 <div class="container-fluid auth-footer">
     <br>
     
-    <a class="btn btn-link non-hoverable" href="https://instagram.com/undefined_void"><img src="/social-instagram-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
+    <a class="btn btn-link non-hoverable" href="https://instagram.com/undefined_void"><img src="/social-instagram-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
 
-    <a class="btn btn-link non-hoverable" href="https://twitter.com/undefined_void"><img src="/social-twitter-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
+    <a class="btn btn-link non-hoverable" href="https://twitter.com/undefined_void"><img src="/social-twitter-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
 
-    <a class="btn btn-link non-hoverable" href="https://facebook.com/undefined_void"><img src="/social-facebook-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
-    <a class="btn btn-link non-hoverable" href="https://slack.com/undefined_void"><img src="/social-slack-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
-    <a class="btn btn-link non-hoverable" href="https://youtube.com/users/PoodleStudios"><img src="/social-youtube-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
+    <a class="btn btn-link non-hoverable" href="https://facebook.com/undefined_void"><img src="/social-facebook-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
+    <a class="btn btn-link non-hoverable" href="https://slack.com/undefined_void"><img src="/social-slack-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
+    <a class="btn btn-link non-hoverable" href="https://youtube.com/users/PoodleStudios"><img src="/social-youtube-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
 
-    <a class="btn btn-link non-hoverable" href="#"><img src="/social-linked-in-w.png" class="gram-card-user-image" style="background-color:deepskyblue;"></a>
+    <a class="btn btn-link non-hoverable" href="#"><img src="/social-linked-in-w.png" class="gram-card-user-image" style="background-color:transparent;"></a>
     <br><br><br>
     <br><br><br><br>
     </div>

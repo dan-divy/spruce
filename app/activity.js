@@ -38,15 +38,32 @@ router.get('/', isLoggedIn, (req, res) => {
 				} 
 			})
 		})
-		res.render('activity' , {
+		if(req.query.light) {
+			res.render('activity' , {
     	layout: false,
+    	light:true,
     	user: {
 				username:results.username,
     			followers:results.followers,
     			posts:postArray,
     			dp:results.profilePic
 			}
+
     	}) 
+		}
+		else {
+			res.render('activity' , {
+    	layout: false,
+    	normal:true,
+    	user: {
+				username:results.username,
+    			followers:results.followers,
+    			posts:postArray,
+    			dp:results.profilePic
+			}
+
+    	}) 
+		}
 		
 		}
 	})
