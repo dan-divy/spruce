@@ -52,6 +52,7 @@
       console.log(res+'disabled')
       $("#"+res)[0].disabled = "none";
       $("#"+res)[0].innerHTML = "Liked!"
+      notify('You just liked a post.');
       Push.create("Notification by Pudding", {
         body: "The post was liked by you!",
         icon: "/lib/user.png",
@@ -65,7 +66,7 @@
       console.log(res+'commented')
       
       $('#comment_'+res.id).append('<div><a class="user-comment" href="/user/{{client}}">{{ client }}</a> '+res.text+' </div>')
-
+      notify('New comment - '+res.text);
       Push.create("Notification by Pudding", {
         body: "New comment by you! Whoo-ho! -- "+res.text,
         icon: "/lib/user.png",
@@ -92,8 +93,13 @@
         initiater: user
      })
   }
-  
-  
+  function notify(data) {
+    $(".refresh")[0].style.display = 'inherit';
+    $(".notification").text(data);
+  }
+  function closeNotificationPanel() {
+   $(".refresh")[0].style.display = 'none'; 
+  }
    
 </script>
 <link rel="stylesheet" href="/blur.css">
@@ -147,7 +153,7 @@
 <br>
   
   </section>
-  <div class="loaderBar" style="height: 7px;" data-example-id="animated-progress-bar">
+  <div class="loaderBar" style="height: 7px;display:none;" data-example-id="animated-progress-bar">
     <div class="progress" style="height: 100%;border:none;background-color: #fff;box-shadow:none;">
       <div class="progress-bar load" style="background-image:linear-gradient(120deg,white,deepskyblue)" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%;height: 100%;"></div>
     </div>
@@ -209,7 +215,7 @@
        
 
 <center>
-<a href="https://donorbox.org/pudding" style="background:white url(https://d1iczxrky3cnb2.cloudfront.net/red_logo.png) no-repeat 37px center; color: cornflowerblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 70px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;  text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+<a href="https://donorbox.org/pudding" style="background:white; color: cornflowerblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding:10px 33px 10px 33px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;  text-shadow: 0 1px rgba(0, 0, 0, 0.3);" ><i class="fa fa-heart"></i> Donate</a>
 
 <a data-toggle="modal" data-target="#infoModal" style="background:white; color: deepskyblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 33px;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
 <i class="fa fa-alert"></i>What's New!</a>
@@ -223,9 +229,17 @@
 
 <i class="fa fa-alert"></i>Gradient mode</a>   
    {{/if}} 
+<a href="https://s3.amazonaws.com/gonativeio/static/5c554a320b6636521fe38b00/app-release.apk" style="background:white; color: deepskyblue;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 33px 10px 33px;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; text-shadow: 0 1px rgba(0, 0, 0, 0.3);">
 
+<i class="fa fa-download"></i> Download app</a> 
 
 </center>
+<center>
+<div class="refresh">
+   <button type="button" class="btn btn-link" style="float:right;color:white" onclick="closeNotificationPanel();">X</button>
+  <div class="notification"> </div>
+ 
+</div></center>
 <br>
 {{#each post}}
 <div class="gram-card">

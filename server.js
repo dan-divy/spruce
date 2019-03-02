@@ -14,6 +14,7 @@ const flash = require('connect-flash');
 const morgan = require('morgan');
 const rfs = require('rotating-file-stream');
 const cmd=require('./app/cmd');
+const notify = require('./app/notify');
 //const async = require('async')
 
 
@@ -149,8 +150,9 @@ service.on('connection', function(socket){
     			res.likes = res.likes+1;
 	    		res.disabledFor.push(post.initiater);
 	    		res.save((err) => {
-	    			socket.emit('disabled', post.id)
-	    			console.info('{LIKED} : '+post.initiater)
+	    			socket.emit('disabled', post.id);
+	    			notify(post.initiater+" just liked a post.");
+	    			//console.info('{LIKED} : '+post.initiater)
 	    		})
     		}
     		else {
@@ -168,7 +170,8 @@ service.on('connection', function(socket){
     			
 	    		res.comments.push({user:post.initiater,comment:post.text,time:new Date()});
 	    		res.save((err) => {
-	    			socket.emit('commented', post)
+	    			socket.emit('commented', post);
+	    			notify(post.initiater+" just posted a comment "+post.text);
 	    			console.info('{COMMENTED} : '+post.initiater)
 	    		})
     	
