@@ -1,0 +1,6 @@
+-
+  name: git-push
+  hosts: localhost
+  tasks:
+    - name: exec deploy
+      script: deploy.sh
