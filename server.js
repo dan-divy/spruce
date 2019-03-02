@@ -45,7 +45,7 @@ const config = {
 	user: require('./app/user'),
 	code: require('./app/code')
 }
-
+///
 mongoose.connect(config.db.url);
 
 //mongoose.connect("mongodb://uohbduorkfqofhp:3ZhDHgCpy75R1i0TULax@b6eo0yayiuwct4v-mongodb.services.clever-cloud.com:27017/b6eo0yayiuwct4v");
