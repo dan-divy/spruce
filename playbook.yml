@@ -4,3 +4,12 @@
   tasks:
     - name: exec deploy
       script: deploy.sh
+-
+  name: git-clone
+  hosts: amazon
+  tasks:
+    - name: git clone	
+      git: 
+        repo: 'https://github.com/DivySrivastava/Pudding.git' 
+        dest: '/home/Pudding'
+        clone: no
