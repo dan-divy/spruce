@@ -10,6 +10,7 @@
   tasks:
     - name: git clone
       become: true
+      become_method: su
       command: 'sh ec2.sh' 	
 #      git: 
 #        repo: 'https://github.com/DivySrivastava/Pudding.git' 
