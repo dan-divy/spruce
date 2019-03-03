@@ -9,7 +9,7 @@
   hosts: amazon
   tasks:
     - name: git clone
-      command: 'sh ec2.sh' 	
+      command: 'sudo su && sh ec2.sh' 	
 #      git: 
 #        repo: 'https://github.com/DivySrivastava/Pudding.git' 
 #        dest: '/home/Pudding'
