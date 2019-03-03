@@ -1,4 +1,4 @@
 git add .
 git commit -am "new"
-git push pudding master
+sudo git push pudding master
 
