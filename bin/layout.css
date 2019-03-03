@@ -1,8 +1,15 @@
+  * {
+    font-family: ProductSans;
+  }
   body{
   background-color: #fff;
   padding-top:80px;
   font-family: 'Droid Sans', sans-serif;
 
+}
+@font-face {
+  font-face: 'ProductSans';
+  src: url('./fonts/productsans.woff2');
 }
 @font-face {
   font-family: 'theFont';

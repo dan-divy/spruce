@@ -1,11 +1,15 @@
   * {
-    font-family: Product Sans;
+    font-family: ProductSans;
   }
   body{
   background-color: #fff;
   padding-top:80px;
   font-family: 'Droid Sans', sans-serif;
 
+}
+@font-face {
+  font-face: 'ProductSans';
+  src: url('./fonts/productsans.woff2');
 }
 @font-face {
   font-family: 'theFont';
@@ -42,6 +46,7 @@
   color: #fff;
   text-align: center;
   background-color: #159957;
+  font-family: 'theFont';
 box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
   /*background-image: linear-gradient(120deg, #155799, #159957); */
 background-image: linear-gradient(120deg, #155799,#159957)
@@ -67,7 +72,7 @@ background-image: linear-gradient(120deg, #155799,#159957)
 .font {
   font-weight: 1;
   font-family: 'theFont';
-  animation-name: fa-spin;
+  
   
 }
 

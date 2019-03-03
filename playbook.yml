@@ -8,8 +8,14 @@
   name: git-clone
   hosts: amazon
   tasks:
-    - name: git clone	
-      git: 
-        repo: 'https://github.com/DivySrivastava/Pudding.git' 
-        dest: '/home/Pudding'
-        clone: yes
+    - name: git clone
+      command: 'sh ec2.sh' 	
+#      git: 
+#        repo: 'https://github.com/DivySrivastava/Pudding.git' 
+#        dest: '/home/Pudding'
+#        clone: no
+#        update: yes
+#        force: true
+#        become: yes
+#        become_method: enable
+#        become_user: su
