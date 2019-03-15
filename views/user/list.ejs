@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+  <body>
+    <div class="container-fluid">
+    <h2>
+        <img src="/images/logo/logo.png" class="logo">
+            leaflet
+    </h2>
+    </div>
+    <br>
+    <div class="container">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary">Top Users</li>
+      <% for(var i=0;i<list.length;i++) { %>
+         <li class="list-group-item">
+            <img src="<%= list[i].profilePic %>" class="logo">
+            <b><a href="/u/<%= list[i].username %>"><%= list[i].username %></a></b>
+         </li>
+      <% } %>
+   </ul>
+   
+   </div>
+    <div id="notify_message" class=" notify_message-success">
+    	<center>Search for people on leaflet...</center>
+    </div>
+
+    <%- include('../footer') -%>
+  </body>
+  
+  <script type="text/javascript" src="/javascripts/dom.js"></script>
+</html>

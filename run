@@ -1,0 +1,3 @@
+#!/bin/sh
+mongod &
+node ./bin/www

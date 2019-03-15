@@ -1,0 +1,69 @@
+ <% for(var i=0;i<people.length;i++) { %>
+ <% for(var z=0;z<people[i].posts.length;z++) { %>
+<div class="column col-xs-12 col-sm-9 col-lg-10" id="main">
+<ul class="list-group">
+  <li class="list-group-item list-group-item-primary">
+    <img src="/images/logo/logo.png" class="gram-card-user-image">
+     <a class="gram-card-user-name" href="/me"> @<%= user %>'s Dashboard</a> 
+     
+   </li>
+ </ul>   
+<div class="gram-card">
+    <div class="gram-card-header">
+      <img src="/images/logo/logo.png" class="gram-card-user-image">
+      <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].author %>"><%= people[i].posts[z].author %></a>
+      
+            <div class="dropdown gram-card-time">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="{{ pudding }}"><i class="fa fa-share"></i> View</a></li>
+                
+              </ul>
+              </div>
+              <div class="time"> 20 min ago </div>
+    </div>
+<br>
+<br>
+    <div class="gram-card-image">
+      <center><img src="/images/logo/logo.png" id="img_{{_id}}" class="img-responsive" onload="load('{{_id}}')" style="filter:blur(8px)"></center>
+    </div>
+
+    <div class="gram-card-content">
+     
+      <p><a class="gram-card-content-user" href="/u/undefined_void">undefined_void</a>
+        a_cool_caption_indeed
+     </p>
+
+      <p class="comments">1 comment(s).</p>
+      <br>
+
+      <div id="comment_{{_id}}" class="comments-div">
+      
+      <div>
+        <a class="user-comment" href="/user/{{user}}">
+        javascript_void
+      </a>
+       nice_caption_indeed
+     </div>
+           
+      </div>
+    <hr>
+    </div>  
+
+    <div class="gram-card-footer">
+      
+      <button class="footer-action-icons likes btn btn-link non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="like('{{_id}}')" id="{{_id}}">
+        <i class="glyphicon glyphicon-thumbs-up"></i> 10</button>
+      
+      
+      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
+      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></button>
+    </div>
+
+  </div>
+
+<br>
+<br>
+</div>
+  <% } %>    
+  <% } %>    
