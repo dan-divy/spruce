@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <%- include('head') -%>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+  <%- include('navbar')	-%>
+  <%- include('sidebar') -%>
+  <%- include('main') -%>
+  <div id="notify_message" class=" notify_message-success">
+  	<center>You are now a part of leaflet!</center>
+  </div>
+  <%- include('footer') -%>
+  </body>
+  <script type="text/javascript">
+    show_notification('Welcome home!','success')
+  </script>
+  
+</html>

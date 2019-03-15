@@ -1,0 +1,73 @@
+<br>
+            <div id="sidebar" class="column no-side-pad hidden-xs col-xs-12 col-sm-3 col-lg-2 sidebar-offcanvas">
+                <div class="row">
+                    <div class="col-lg-12 no-pad-left no-pad-right">
+                        <div class="navTitle"> 
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 no-pad-left no-pad-right">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-primary">Major</li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-search"></i>&nbsp;
+                                    <a href="/u">search</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-plus"></i>&nbsp;
+                                    <a href="/upload">upload</a>
+                                </li>
+                        </ul>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-primary">Categories</li>
+                                <li class="list-group-item">
+                                	<i class="fa fa-mug-hot"></i>&nbsp;
+                                	<a href="/category/moments">moments</a>
+                                </li>
+                                <li class="list-group-item">
+                                	<i class="fa fa-guitar"></i>&nbsp;
+                                	<a href="/category/events">events</a>
+                                </li>
+                                <li class="list-group-item">
+                                	<i class="fa fa-brain"></i>&nbsp;
+                                	<a href="/category/thoughts">thoughts</a>
+                                </li>                                     
+                        </ul>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-primary">
+                                Tasks
+                            </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-images"></i>&nbsp;
+                                    <a href="/me/">my profile</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-cog"></i>&nbsp;
+                                    <a href="/me/settings/">settings</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-id-badge"></i>&nbsp;
+                                    <a href="/me/settings/change">change username</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-power-off"></i>&nbsp;
+                                    <a href="/account/out">log out</a>
+                                </li>
+                        </ul>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-primary">
+                                People you might know
+                            </li>
+                            <% for(var i=0;i<people.length;i++) { %>
+                                <li class="list-group-item">
+                                    <img src="<%= people[i].profilePic %>" class="logo">
+                                    <a href="/u/<%= people[i].username %>"><%= people[i].username %></a>
+                                </li>
+                            <% } %>    
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>

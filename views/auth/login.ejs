@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+  
+  <body>
+    <div class="container-fluid">
+    <h2>
+        <img src="/images/logo/logo.png" class="logo">
+            leaflet
+    </h2>
+    </div>
+    <br>
+<div class="col-sm-6 col-sm-offset-3">
+    <!-- show any messages that come back with authentication -->
+    <% if (error) { %>
+    <div class="alert alert-danger">
+        <%= error %>
+    </div>
+    <% } %>
+    <!-- LOGIN FORM -->
+    <form action="/account/getin" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="text-muted">Username</label>
+            <input type="text" placeholder="your_nick_name" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label class="text-muted">Password</label>
+            <input type="password" placeholder="the_secret" class="form-control" name="password">
+        </div>
+
+        <button type="submit" class="btn btn-action btn-warning">GET ME IN</button>
+        
+    </form>
+
+    <hr>
+    <p class="text-muted">No Account? <a href="/account/new">Get one now!</a></p>    
+</div>

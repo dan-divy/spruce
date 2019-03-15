@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+    <div class="container-fluid top-navbar box-shadow">
+      <div class="float-left">
+      <h2>
+        <img src="/images/logo/logo.png" class="logo">
+        leaflet
+      </h2>
+      </div>
+      <div class="float-right margin-top-20">
+        <button type="button" class="btn btn-link" id="sidebarToggle">
+          <i class="fa fa-lg fa-paper-plane pills"></i>
+        </button>
+      </div>
+    </div>
+    <br>
+    <div class="container">
+      <img src="<%= user.profilePic %>" class="logo">
+      <a class="gram-card-user-name" href="">@<%= user.username %></a>
+      (<%= user.firstname %> <%= user.lastname %>)
+      <br><br>
+        <span class="bio"><%= user.bio %></span>
+      <br><br>
+      <div class="float-right margin-right-10">
+        
+        
+        <button class="btn btn-action btn-sm btn-default" onclick="follow()" ="follow"<% for(var i=0;i<user.followers.length;i++) { %><% if(user.followers[i] == userId) { %> disabled<% } %><% } %>>Follow</button>
+          
+        
+       
+        <a class="btn btn-action btn-sm btn-danger">Talk</a>
+      </div>
+      <br><br><br>
+      
+     
+    </div>
+    <div id="notify_message" class="notify_message-success">
+    	<center>Follow @<%= user.username %>!</center>
+    </div>
+    <%- include('../footer') -%>
+  </body>
+  <script type="text/javascript">
+    const _id = "<%= user._id %>";
+  </script>
+  <script type="text/javascript" src="/javascripts/follow.js"></script>
+</html>
