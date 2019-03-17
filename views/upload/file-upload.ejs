@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+  <div class="container-fluid top-navbar box-shadow">
+      <div class="float-left">
+      <h2>
+        <img src="/images/logo/logo.png" class="logo">
+        leaflet
+      </h2>
+      </div>
+      <div class="float-right margin-top-20">
+        <a href="/" class="btn btn-link">
+          <i class="fa fa-lg fa-igloo pills"></i>
+        </a>
+      </div>
+    </div>
+    <br>
+    <div class="container">
+
+      <form action="/me/upload" method="post" enctype="multipart/form-data">
+        <div class="gram-card">
+    <div class="gram-card-header">
+      <img src="/images/logo/logo.png" class="gram-card-user-image">
+      <a class="gram-card-user-name" href="/u/"><%= user %></a>
+      
+            <div class="dropdown gram-card-time">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="{{ pudding }}"><i class="fa fa-share"></i> View</a></li>
+                
+              </ul>
+              </div>
+              <div class="time"> 20 min ago </div>
+    </div>
+<br>
+<br>
+    <div class="gram-card-image">
+      <center>
+         <div class="upload-btn-wrapper">
+         <button class="btn agradient btn-action whoop" id="post">   <i class="fa fa-lg fa-upload"></i> Upload an image.
+         </button>
+         <input type='file' name='filetoupload' onchange="readURL(this);" id="file" required/>
+        </div>
+
+        <img src="" id="img_{{_id}}" class="img-responsive">
+      </center>
+    </div>
+
+    <div class="gram-card-content">
+     
+      <p><a class="gram-card-content-user" href="/u/undefined_void">undefined_void</a>
+        <input type="text" name="caption" class="form-control">
+     </p>
+
+      <p class="comments">1 comment(s).</p>
+      <br>
+
+      <div id="comment_{{_id}}" class="comments-div">
+      
+      <div>
+        <a class="user-comment" href="/user/{{user}}">
+        javascript_void
+      </a>
+       nice_caption_indeed
+     </div>
+           
+      </div>
+    <hr>
+    </div>  
+
+    <div class="gram-card-footer">
+      
+      <button class="footer-action-icons likes btn btn-link non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="like('{{_id}}')" id="{{_id}}">
+        <i class="glyphicon glyphicon-thumbs-up"></i> 10</button>
+      
+      
+      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
+      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></button>
+    </div>
+
+  </div>
+
+<br>
+<br>
+</div>
+      </form>
+    </div>
+  <div id="notify_message" class=" notify_message-success">
+  	<center>You are now a part of leaflet!</center>
+  </div>
+  <%- include('../footer') -%>
+  </body>
+  <script type="text/javascript">
+    show_notification('Upload something here!','success')
+  </script>
+  <script type="text/javascript">
+       function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                     $('#postBtn')   
+                        .attr('disabled', false)
+                      $('#postDiv')[0].style.background="linear-gradient(120deg,cornflowerblue,deepskyblue)";
+                        $('#postBtn')[0].style.color="white";
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+</html>
