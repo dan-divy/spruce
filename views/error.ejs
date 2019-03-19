@@ -1,3 +1,34 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page not found - 404</title>
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel='stylesheet' href='/stylesheets/flatly.bootstrap.min.css' />
+     <link rel='stylesheet' href='/stylesheets/font/css/all.min.css' />
+     <link href='https://fonts.googleapis.com/css?family=Product+Sans' rel='stylesheet' type='text/css'>
+     <link rel="icon" href="/images/logo/favicon.ico" />
+     <link rel='stylesheet' href='/stylesheets/style.css' />
+     <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+     <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+     <script type="text/javascript" src="/javascripts/dom.js"></script>
+</head>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+  <%- include('navbar')	-%>
+  
+  <div class="container" id="main">
+  	<h2><%= message %></h2>
+  	<%= error.status %>
+ 	<br>
+ 	<p class="container-fluid"> <code> <%= error.stack %> </code></p> 
+  </div>
+  <div id="notify_message" class="notify_message-success">
+  	<center>You are now a part of leaflet!</center>
+  </div>
+  <%- include('footer') -%>
+  </body>
+  <script type="text/javascript">
+    show_notification('Page not found!','danger')
+  </script>
+  
+</html>

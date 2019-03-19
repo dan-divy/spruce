@@ -12,7 +12,8 @@ var userSchema = mongoose.Schema({
     dob: String,
     followers: Array,
     posts:Array,
-    profilePic:String
+    profile_pic:String,
+    lastLogin:String
 });
 
 // methods ======================

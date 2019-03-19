@@ -24,6 +24,7 @@ var cooky = {
   	expires: new Date() * 60 * 60 * 24 * 7,
   	saveUninitialized: true
 }
+
 app.set('trust proxy', 1) // trust first proxy
 app.use(session(cooky))
 app.use(logger('tiny'));

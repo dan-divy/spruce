@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
+var config = require('../config/instagram');
+var httpRequest = require('request');
+var User = require('../utils/models/user')
 
 /* GET signup page. */
 router.get('/new', function(req, res, next) {
@@ -46,8 +49,64 @@ router.post('/getin', formParser, function(req, res, next) {
 		else {
 			req.session._id = result._id;
 			req.session.user = result.username;
-			res.redirect('/');
+			result.lastLogin = new Date();
+			result.save(() => {
+				res.redirect('/');	
+			})
+			
 		}
 	})
+})
+router.get('/oauth', function(req, res, next) {
+	var ig_code = req.query.code;
+	var options = {
+		url: 'https://api.instagram.com/oauth/access_token',
+		method: 'POST',
+		form: {
+			client_id: config.instagram.client_id,
+			client_secret: config.instagram.client_secret,
+			grant_type: 'authorization_code',
+			redirect_uri: config.instagram.redirect_uri,
+			code: ig_code
+		}
+	};
+
+	httpRequest(options, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			db.checkUser({id:r.user.id},(err, exists) => {
+				if(exists) {
+					req.session._id = exists._id;
+					req.session.user = exists.username;
+					res.redirect('/')
+				}
+				else {
+					var r = JSON.parse(body);
+					var newUser = new User({
+						id: r.user.id,
+						username: r.user.username,
+						fistname: r.user.full_name.split(" ")[0],
+						lastname: r.user.full_name.split(" ")[r.user.full_name.split(" ").length - 1],
+						bio: r.user.bio,
+						dob: "not set",
+						//website: r.user.website,
+						profile_pic: r.user.profile_picture,
+						password: r.access_token,
+						posts:[],
+						followers:[]
+					});
+					console.log(newUser)
+					
+	                newUser.save((err, res) => {
+	                	req.session._id = cb._id;
+						req.session.user = cb.username;
+						res.redirect('/');
+	                    
+	                })
+					
+				}
+			})
+			
+		}
+	});
 })
 module.exports = router;
