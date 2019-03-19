@@ -10,6 +10,11 @@
     </h2>
     </div>
     <br>
+    <center>
+    <a href="/api/v1/oauth/instagram" class="btn btn-info btn-action"> Sign in using Instagram</a>
+    <br><br>
+    <p class="text-muted">OR</p>
+    </center>
 <div class="col-sm-6 col-sm-offset-3">
     <!-- show any messages that come back with authentication -->
     <% if (error) { %>
@@ -21,11 +26,11 @@
     <form action="/account/getin" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label class="text-muted">Username</label>
-            <input type="text" placeholder="your_nick_name" class="form-control" name="username">
+            <input type="text" placeholder="your_nick_name" class="form-control" name="username" required>
         </div>
         <div class="form-group">
             <label class="text-muted">Password</label>
-            <input type="password" placeholder="the_secret" class="form-control" name="password">
+            <input type="password" placeholder="the_secret" class="form-control" name="password" required>
         </div>
 
         <button type="submit" class="btn btn-action btn-warning">GET ME IN</button>
@@ -33,5 +38,7 @@
     </form>
 
     <hr>
-    <p class="text-muted">No Account? <a href="/account/new">Get one now!</a></p>    
+    <p class="text-muted">No Account? <a href="/account/new">Get one now!</a></p> 
+    
+    
 </div>

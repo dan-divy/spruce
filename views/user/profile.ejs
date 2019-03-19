@@ -18,11 +18,11 @@
     </div>
     <br>
     <div class="container">
-      <img src="<%= user.profilePic %>" class="logo">
+      <img src="<%= user.profile_pic %>" class="logo">
       <a class="gram-card-user-name" href="">@<%= user.username %></a>
       (<%= user.firstname %> <%= user.lastname %>)
       <br><br>
-        <span class="bio"><%= user.bio %></span>
+        <span class="bio"><%- user.bio %></span>
       <br><br>
       <div class="float-right margin-right-10">
         
@@ -36,6 +36,13 @@
       <br><br><br>
       
      
+    </div>
+    <div class="container">
+      <center>
+      <% for(var x=0;x<user.posts.length;x++) { %>
+        <img src="<%= user.posts[x].static_url %>" class="feed-view-img">
+      <% } %>
+      </center>
     </div>
     <div id="notify_message" class="notify_message-success">
     	<center>Follow @<%= user.username %>!</center>

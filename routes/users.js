@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var db = require('../utils/handlers/user');
-var formParser = require('../utils/form-parser.js');
+var textParser = ('../utils/text-parser')
+var formParser = require('../utils/form-parser');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -16,6 +17,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/:username', function(req, res, next) {
 	db.findOne({username:req.params.username},(err, user) => {
+		
+		user.bio = textParser.parse(user.bio);
 		res.render('user/profile', {
 			title:req.app.conf.name,
 			user:user,

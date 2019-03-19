@@ -48,9 +48,10 @@ function createNew(obj, cb) {
                     lastname:obj.ln,
                     dob:dob,
                     bio:bio,
-                    profilePic:'/images/logo/logo.png',
+                    profile_pic:'/images/logo/logo.png',
                     posts:[],
-                    followers:[]
+                    followers:[],
+                    lastLogin:new Date(),
                 });
                 newUser.password = newUser.generateHash(obj.password)
                 newUser.save((err, res) => {
