@@ -1,15 +1,14 @@
-# leaflet
+[![leaflet-banner](./public/images/logo/banner.png)](http://passportjs.org)
 
-A tiny instagram like social media application made using Node.js, Express, MongoDB and VueJS.
+Leaflet is a 
 
 **Deployed on Amazon EC2-instance [here](http://mygurukulonline.in)**
 
 ## Requirements
-   ------------
+
 * Node.js   
-|-- node_modules
-   |-- expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)	
-   |-- ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)		
+	- expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)	
+	- ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)		
 * MongoDB
 
 ```bash
@@ -18,7 +17,6 @@ $ [sudo] apt install mongodb
 ```
 
 ## Installation
-   ------------
 ```bash
 $ git clone https://github.com/DivySrivastava/leaflet
 $ cd leaflet
@@ -26,7 +24,7 @@ $ npm i
 ```
 
 ## Usage
-   -----
+   
 First start the MongoDB server 
 
 ```bash
