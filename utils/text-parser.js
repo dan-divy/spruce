@@ -25,22 +25,9 @@ function newLineParser(str) {
 	return str;
 }
 
-function parse(str) {
+module.exports = function(str) {
 	str = makeBold(str);
 	str = makeItalic(str);
 	str = newLineParser(str);
 	return str;
-}
-
-module.exports = {
-	boldify:makeBold,
-	italify:makeItalic,
-	parse:parse
-}
-
-/*
-console.log(makeBold(name));
-console.log(makeItalic(name));
-console.log(newLineParser(name));
-*/
-console.log(parse(name));
+};
