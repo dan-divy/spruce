@@ -56,6 +56,11 @@ router.post('/getin', formParser, function(req, res, next) {
 			
 		}
 	})
+});
+router.get('/out', function (req, res, next) {
+	req.session.destroy(() => {
+		res.redirect('/?action=logout');
+	})
 })
 router.get('/oauth', function(req, res, next) {
 	var ig_code = req.query.code;

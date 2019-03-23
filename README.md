@@ -1,22 +1,38 @@
-[![leaflet-banner](./public/images/logo/banner.png)](http://passportjs.org)
+[![leaflet-banner](./public/images/logo/banner.png)](http://mygurukulonline.in)
 
-Leaflet is a 
+Leaflet is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
 
-**Deployed on Amazon EC2-instance [here](http://mygurukulonline.in)**
+_Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
+
+
+## Features
+
+* Sign in using local authentication or using your Instagram account.
+* Search for your other users.
+* All feeds divided into 3 categories -
+	* thoughts (tweets)
+	* events (location can be specified)
+	* moments (personal post)
+* Like and comment on a feed.
+* View your/others profile.
+* Follow a particular user and get notified for his/her activities.
+* Change your profile picture, bio, people who follow you etc.
+* Chat one-one or create a room/group.
+* Some extras (games)
+And a lot more to be added soon...
 
 ## Requirements
 
-* Node.js   
+* [Node.js](https://nodejs.org)  
 	- expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)	
 	- ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)		
-* MongoDB
+* [MongoDB](http://mongodb.org)
 
-```bash
-$ [sudo] apt install nodejs
-$ [sudo] apt install mongodb
-```
 
 ## Installation
+
+Clone the repo locally then install all the dependencies using [NPM](https://npmjs.org/)
+
 ```bash
 $ git clone https://github.com/DivySrivastava/leaflet
 $ cd leaflet
@@ -26,23 +42,16 @@ $ npm i
 ## Usage
    
 First start the MongoDB server 
-
 ```bash
-$ sudo service mongod start 
+$ mongod
 ```
-or 
-```bash
-$ mongod &
-```
-and then start the leaflet server with <code> node.js </code> 
-
+and then start the leaflet server with ```nodejs```
 ```bash
 $ npm start
 ```   
-or
-```bash
-$ node ./bin/www
-```   
+## To know
+
+leaflet uses [mongoose](https://npmjs.org/package/mongoose) as a ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
 
 ## Authors
  - [Divy Srivastava](http://instagram.com/undefined_void)

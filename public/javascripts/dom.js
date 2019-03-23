@@ -22,3 +22,7 @@ function show_notification(msg, type) {
         });
         
 }
+function viewImage(id) {
+    $("#modal_image_view")[0].src = $(`#${id}`)[0].src;
+    
+}

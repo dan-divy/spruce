@@ -10,7 +10,10 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var accountRouter = require('./routes/auth');
 var meRouter = require('./routes/settings')
-var restApi = require('./routes/api/v1/index.js')
+var extraRouter = require('./routes/extras/wordbeater/main');
+var categoryRouter = require('./routes/category');
+var restApi = require('./routes/api/v1/index')
+
 
 var app = express();
 app.conf = require('./config/app')
@@ -38,7 +41,8 @@ app.use('/u', usersRouter);
 app.use('/account', accountRouter);
 app.use('/me', meRouter);
 app.use('/api', restApi);
-
+app.use('/category', categoryRouter);
+app.use('/products', extraRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
