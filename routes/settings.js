@@ -44,6 +44,7 @@ router.post('/upload', formParser,function(req, res, next) {
 					author:req.session.user,
 					static_url:final_location,
 					caption:req.body.caption,
+					category:req.body.type,
 					comments:[],
 					likes:[],
 					type:'image',

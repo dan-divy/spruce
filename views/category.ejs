@@ -1,16 +1,15 @@
-<div class="column col-xs-12 col-sm-9 col-lg-10" id="main">
-
-<ul class="list-group">
-  <li class="list-group-item list-group-item-primary">
-    <img src="/images/logo/logo.png" class="gram-card-user-image">
-     <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> 
-     <span class="label label-info">last login <%= lastSeen %></span>
-   </li>
- </ul>   
+<!DOCTYPE html>
+<html>
+  <%- include('head') -%>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+  <%- include('navbar') -%>
+  <br>
+<div class="container-fluid form-container" id="main">
  <% for(var i=0;i<people.length;i++) { %>
  <% for(var z=0;z<people[i].posts.length;z++) { %>
-
-<div class="gram-card">
+ <% if(people[i].posts[z].category === category)  { %>
+ <div class="gram-card">
     <div class="gram-card-header">
       <img src="<%= people[i].profile_pic %>" class="gram-card-user-image">
       <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].author %>"><%= people[i].posts[z].author %></a>
@@ -71,6 +70,17 @@
 <br>
 <br>
 
+ <% } %>
   <% } %>    
   <% } %>    
   </div>
+  <div id="notify_message" class=" notify_message-success">
+    <center>You are now a part of leaflet!</center>
+  </div>
+  <%- include('footer') -%>
+  </body>
+  <script type="text/javascript">
+    show_notification('See feeds under the category!','success')
+  </script>
+  
+</html>
