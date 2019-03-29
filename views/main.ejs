@@ -3,8 +3,9 @@
 <ul class="list-group">
   <li class="list-group-item list-group-item-primary">
     <img src="/images/logo/logo.png" class="gram-card-user-image">
-     <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> 
-     <span class="label label-info">last login <%= lastSeen %></span>
+     <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> <br>
+     <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
+     <br>
    </li>
  </ul>   
  <% for(var i=0;i<people.length;i++) { %>
@@ -58,17 +59,14 @@
 
     <div class="gram-card-footer">
       
-      <button class="footer-action-icons likes btn btn-link non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="like('{{_id}}')" id="{{_id}}">
+      <button class="footer-action-icons likes btn btn-link non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="likeById();" id="{{_id}}">
         <i class="glyphicon glyphicon-thumbs-up"></i> <%= people[i].posts[z].likes.length %></button>
       
+      <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Comment here..."  />
       
-      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
-      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></button>
     </div>
 
   </div>
-
-<br>
 <br>
 
   <% } %>    

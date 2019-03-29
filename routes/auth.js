@@ -64,6 +64,7 @@ router.get('/out', function (req, res, next) {
 })
 router.get('/oauth', function(req, res, next) {
 	var ig_code = req.query.code;
+	console.log(ig_code)
 	var options = {
 		url: 'https://api.instagram.com/oauth/access_token',
 		method: 'POST',
@@ -77,8 +78,11 @@ router.get('/oauth', function(req, res, next) {
 	};
 
 	httpRequest(options, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
+		//if (!error && response.statusCode == 200) {
+			var r = JSON.parse(body)
+			console.log(r)
 			db.checkUser({id:r.user.id},(err, exists) => {
+				console.log(r)
 				if(exists) {
 					req.session._id = exists._id;
 					req.session.user = exists.username;
@@ -111,7 +115,7 @@ router.get('/oauth', function(req, res, next) {
 				}
 			})
 			
-		}
+		//}
 	});
 })
 module.exports = router;

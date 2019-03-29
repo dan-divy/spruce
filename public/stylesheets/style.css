@@ -16,6 +16,15 @@
     padding-right: 20%;
   }
 }
+.tilted-div {
+  /*background-image: linear-gradient(150deg,#dd27c6 0%,#8805ff 100%);
+    position: absolute;
+    transform: skewY(-1deg);
+    transform-origin: 0;
+    position: relative;*/
+    transform: skewY(-1deg);
+    
+}
 .feed-view-img {
   width:200px;
   height:200px;

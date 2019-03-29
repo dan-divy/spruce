@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html>
   <%- include('head') -%>
+
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+
+<link type="text/css" rel="stylesheet" media="screen" href="/animations/sakura/jquery-sakura.min.css" />
+
   <body>
   <%- include('navbar')	-%>
   <%- include('sidebar') -%>
   <%- include('main') -%>
-  <div id="notify_message" class=" notify_message-success">
-  	<center>You are now a part of leaflet!</center>
-  </div>
   <%- include('footer') -%>
-  </body>
-  <script type="text/javascript">
-    show_notification('Welcome home!','success')
-  </script>
+  <div id="notify_message" class="notify_message-success">
+  	
+  </div>
   
+  </body>
+
+<!-- End of your HTML body -->
+<script src="/animations/sakura/jquery-sakura.min.js"></script>
+<script>
+    // domReady
+    $(function() {
+        $('body').sakura();
+    });
+
+    // windowLoad
+    $(window).load(function() {
+        $('body').sakura();
+    });
+</script>
+  <script type="text/javascript">
+    show_notification('<center>Built with <i class="fa fa-heart"></i> by Divy Srivastava.','success')
+  </script>
+  <script type="text/javascript" src="/javascripts/like.js"></script>
+  <script type="text/javascript" src="/javascripts/comment.js"></script>
 </html>
