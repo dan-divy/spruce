@@ -1,7 +1,12 @@
 {
 	"name":"leaflet",
 	"title":"Leaflet",
+	"commands":{
+		"package":"electron-packager electron.js leaflet --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
+		"build":""
+	},
 	"http": {
+		"host":"localhost",
 		"port":80
 	},
 	"author":"Divy Srivastava",

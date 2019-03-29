@@ -22,7 +22,8 @@ function show_notification(msg, type) {
         });
         
 }
+/** Incomplete pop-up image view feature [TODO]
 function viewImage(id) {
     $("#modal_image_view")[0].src = $(`#${id}`)[0].src;
-    
 }
+**/

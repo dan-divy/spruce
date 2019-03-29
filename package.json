@@ -1,1 +1,69 @@
-{"name":"pudding","version":"2.0.0","private":true,"scripts":{"start":"node ./bin/www"},"dependencies":{"cookie-parser":"~1.4.3","express-session":"^1.15.6","formidable":"^1.2.1","guid":"0.0.12","bcrypt-nodejs":"0.0.3","mongoose":"^5.3.13","debug":"~2.6.9","ejs":"~2.5.7","time-ago":"0.2.1","mv":"2.1.1","lodash":"^4.17.11","express":"~4.16.0","http-errors":"~1.6.2","morgan":"~1.9.0","array-tools":"1.8.6","request":"2.88.0"},"description":"A social media platform written in Node.js (the 5th time)","main":"./bin/www","devDependencies":{},"keywords":["social","media","nodejs","express","mongodb","mongoose","platform"],"author":"Divy Srivastava <dj.srivastava23@gmail.com>","license":"MIT"}
+{
+	"name":"pudding",
+	"version":"2.0.0",
+	"private":true,
+	"scripts":{
+		"start":"node ./bin/www",
+		"build":"build"
+	},
+	"dependencies":{
+		"cookie-parser":"~1.4.3",
+		"express-session":"^1.15.6",
+		"formidable":"^1.2.1",
+		"guid":"0.0.12",
+		"bcrypt-nodejs":"0.0.3",
+		"mongoose":"^5.3.13",
+		"debug":"~2.6.9",
+		"ejs":"~2.5.7",
+		"time-ago":"0.2.1",
+		"mv":"2.1.1",
+		"lodash":"^4.17.11",
+		"express":"~4.16.0",
+		"http-errors":"~1.6.2",
+		"morgan":"~1.9.0",
+		"array-tools":"1.8.6",
+		"request":"2.88.0"
+		
+	},
+  "devDependencies": {
+    "electron":"2.0.12"
+  },
+	"description":"A social media platform written in Node.js (the 5th time)","main":"./bin/www","keywords":["social","media","nodejs","express","mongodb","mongoose","platform"], "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "DivySrivastava",
+        "repo": "leaflet"
+      }
+    ],
+    "appId": "com.divysrivastava.desktop.leaflet",
+    "copyright": "Divy Srivastava 2019",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "publish": "github",
+      "category": "public.app-category.social-networking"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "publish": "github",
+      "publisherName": "DivySrivastava"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "zip",
+        "deb"
+      ],
+      "publish": "github",
+      "maintainer": "Divy Srivastava <dj.srivastava23@gmail.com>"
+    }
+},
+	"author":"Divy Srivastava <dj.srivastava23@gmail.com>",
+	"license":"MIT"
+}
