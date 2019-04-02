@@ -3,7 +3,11 @@ var router = express.Router();
 var user = require('../utils/handlers/user');
 var ta = require('time-ago');
 var array_tools = require("array-tools");
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('a4c4e845fea64f9e9c72541aa354a29e').v2;
 /* GET home page. */
+
+
 router.get('/', function(req, res, next) {
   if(req.session._id && req.session.user) {	
   	user.getAll((err, users) => {
