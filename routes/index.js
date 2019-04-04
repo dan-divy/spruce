@@ -9,7 +9,7 @@ const newsapi = new NewsAPI('a4c4e845fea64f9e9c72541aa354a29e').v2;
 
 
 router.get('/', function(req, res, next) {
-  if(req.session._id && req.session.user) {	
+  if(req.session._id && req.session.user) {
   	user.getAll((err, users) => {
   			for(var i=0;i<users.length;i++) {
 
@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
           }
           */
           var lastSeen = ta.ago(req_user.lastLogin);
-          console.log(posts)
+          //console.log(posts)
           res.render('index', {
             user:req_user,
             title: req.app.conf.name,
@@ -34,19 +34,19 @@ router.get('/', function(req, res, next) {
             people: users,
             posts:true
           });
-        })        
-        	
+        })
+
 		 });
-		
-		} 
+
+		}
   else {
-  	
-  	 res.render('auth/login', { 
+
+  	 res.render('auth/login', {
   		title: req.app.conf.name,
   		error:false
-  	  })	
-  	
-  	
+  	  })
+
+
   }
 });
 

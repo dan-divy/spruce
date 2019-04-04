@@ -24,7 +24,7 @@ And a lot more to be added soon...
 ## Requirements
 
 * [Node.js](https://nodejs.org)  
-	- expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)	
+	- expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)
 	- ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)		
 * [MongoDB](http://mongodb.org)
 
@@ -40,8 +40,8 @@ $ npm i
 ```
 
 ## Usage
-   
-First start the MongoDB server 
+
+First start the MongoDB server
 ```bash
 $ mongod
 ```
@@ -51,7 +51,9 @@ $ npm start
 ```   
 ## To know
 
-leaflet uses [mongoose](https://npmjs.org/package/mongoose) as a ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
+leaflet uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
+
+*This project needs contributors!!*
 
 ## Authors
  - [Divy Srivastava](http://instagram.com/undefined_void)
@@ -80,6 +82,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
- 
- 
