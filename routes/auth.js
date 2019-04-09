@@ -8,7 +8,7 @@ var User = require('../utils/models/user')
 
 /* GET signup page. */
 router.get('/new', function(req, res, next) {
-  res.render('auth/signup', { 
+  res.render('auth/signup', {
   	title: req.app.conf.name ,
   	error:false
   });
@@ -16,7 +16,7 @@ router.get('/new', function(req, res, next) {
 
 /* GET login page. */
 router.get('/getin', function(req, res, next) {
-	res.render('auth/login', { 
+	res.render('auth/login', {
 		title: req.app.conf.name ,
 		error:false
 	});
@@ -51,9 +51,9 @@ router.post('/getin', formParser, function(req, res, next) {
 			req.session.user = result.username;
 			result.lastLogin = new Date();
 			result.save(() => {
-				res.redirect('/');	
+				res.redirect('/');
 			})
-			
+
 		}
 	})
 });
@@ -79,6 +79,7 @@ router.get('/oauth', function(req, res, next) {
 
 	httpRequest(options, function (error, response, body) {
 		//if (!error && response.statusCode == 200) {
+
 			var r = JSON.parse(body)
 			console.log(r)
 			db.checkUser({id:r.user.id},(err, exists) => {
@@ -104,17 +105,17 @@ router.get('/oauth', function(req, res, next) {
 						followers:[]
 					});
 					console.log(newUser)
-					
-	                newUser.save((err, res) => {
+
+	                newUser.save((err, cb) => {
 	                	req.session._id = cb._id;
 						req.session.user = cb.username;
 						res.redirect('/');
-	                    
+
 	                })
-					
+
 				}
 			})
-			
+
 		//}
 	});
 })

@@ -1,9 +1,9 @@
 2.0.2 / 2019-03-27
 ==================
-	
+
   * Updated [README.md](README.md).
   * Added the basic api structure for likes and comments.
-  * New AUTHORS file added. 
+  * New AUTHORS file added.
   * View a post from its category.
   * **NEW** An electron.js file has been added for creating a desktop appilication. See ```release/leaflet-linux-ia32``` for 32bit linux computers.
 
@@ -11,7 +11,7 @@
 
 2.0.1 / 2019-03-22
 ==================
-  
+
   * Disabled instagram oauth-2 api temporarily.
   * Added a README.md.
   * Users can tag a post as thought/events/moments.

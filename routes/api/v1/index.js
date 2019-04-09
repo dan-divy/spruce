@@ -7,43 +7,25 @@ var formParser = require('../../../utils/form-parser.js');
 var ig = require('../../../config/instagram');
 
 router.post('/v1/comment', function(req, res, next) {
-
-	db.findOne({username:req.body.author}, (err, user) => {
-
-			for (var i = 0;i<user.posts.length;i++) {
-				if(user.posts[i]._id == req.body._id) {
-
-				    user.posts[i]["comments"] == user.posts[i]["comments"].push({by:req.session.user,text:req.body.text});
-						console.log(user.posts[i]["comments"])
-					//console.log(user.posts[i]["comments"])
-					 user.save((error,msg) => {
-						console.log(msg.posts[0]["comments"])
-						res.send(true)
-					})
-
-				}
-			}
-			//console.log(user.posts[1].comments)
-
-		})
+	db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
+		if(result) {
+			res.send(true)
+		}
+		else {
+			res.send(false)
+		}
+	})
 })
 
 router.post('/v1/like', function(req, res, next) {
-	console.log(req.body)
-	db.findOne({username:req.body.author}, (err, user) => {
-		console.log(user)
-		for (var i = user.posts.length - 1; i >= 0; i--) {
-			if(user.posts[i]._id == req.body._id) {
-				    user.posts[i].likes.push({
-						by:req.session.user,
-					    id:req.session._id
-					})
-
-				}
-		}
-		user.save((error) => {
-			res.send(true)
-		});
+	console.log(req.body);
+	db.like({username:req.body.author},{by:req.session.user},req.body._id, (err, result) => {
+		if(result) {
+				res.send(true)
+			}
+			else {
+				res.send(false)
+			}
 	})
 });
 

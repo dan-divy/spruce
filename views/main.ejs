@@ -7,7 +7,7 @@
      <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
      <br>
    </li>
- </ul>   
+ </ul>
  <% for(var i=0;i<people.length;i++) { %>
  <% for(var z=0;z<people[i].posts.length;z++) { %>
 
@@ -15,12 +15,12 @@
     <div class="gram-card-header">
       <img src="<%= people[i].profile_pic %>" class="gram-card-user-image">
       <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].author %>"><%= people[i].posts[z].author %></a>
-      
+
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
-                
+
               </ul>
               </div>
               <div class="time"><%= people[i].posts[z].timeago %></div>
@@ -32,43 +32,44 @@
     </div>
 
     <div class="gram-card-content">
-     
+
       <p><a class="gram-card-content-user" href="/u/undefined_void"><%= people[i].posts[z].author %></a>
         <%= people[i].posts[z].caption %>
         <span class="label label-info"><%= people[i].posts[z].category %></span>
-        
+
      </p>
 
       <p class="comments"><%= people[i].posts[z].comments.length %> comment(s).</p>
       <br>
 
       <div class="comments-div">
-      
+
       <div>
         <% for(var c=0;c<people[i].posts[z].comments.length;c++) { %>
         <a class="user-comment" href="/user/<%= people[i].posts[z].comments[c].by %>">
         <%= people[i].posts[z].comments[c].by %>
       </a>
        <%= people[i].posts[z].comments[c].text %>
+       <br>
        <% } %>
      </div>
-           
+
       </div>
     <hr>
-    </div>  
+    </div>
 
     <div class="gram-card-footer">
-      
-      <button class="footer-action-icons likes btn btn-link non-hoverable" {{#if disabled}}disabled="true"{{/if}} onclick="likeById();" id="{{_id}}">
+
+      <button class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="<%= people[i].posts[z].author %>" id="<%= people[i].posts[z]._id %>">
         <i class="glyphicon glyphicon-thumbs-up"></i> <%= people[i].posts[z].likes.length %></button>
-      
+
       <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Comment here..."  />
-      
+
     </div>
 
   </div>
 <br>
 
-  <% } %>    
-  <% } %>    
+  <% } %>
+  <% } %>
   </div>
