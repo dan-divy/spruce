@@ -6,7 +6,7 @@ function makeBold(name){
 			name=name.replace("*","<b>").replace("*","</b>");
 			return makeBold(name);
 		}
-		else 
+		else
 		return name;
 }
 
@@ -17,13 +17,21 @@ function makeItalic(name){
 			name=name.replace("_","<i>").replace("_","</i>");
 			return makeItalic(name);
 		}
-		else 
+		else
 		return name;
 }
 function newLineParser(str) {
 	str = str.replace(/[\n]/g,"<br>");
 	return str;
 }
+
+function emailParser(str) {
+	const regex = /(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/;
+	// Divy Srivastava <dj.srivastava23@gmail.com>
+	str = regex.exec(str)
+	return {inputString:str[0],name:str[1],emailId:str[2]};
+}
+//console.log(emailParser("DivySrivastava <dj@123.com>"));
 
 module.exports = function(str) {
 	str = makeBold(str);

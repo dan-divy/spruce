@@ -13,7 +13,7 @@ function checkSpace(name) {
 }
 
 /*****
-usage: 
+usage:
 	var opt = {
 		username:'my_name',
 		password:'P@sSW0rD',
@@ -58,13 +58,13 @@ function createNew(obj, cb) {
                     return cb(err, res);
                 })
             }
-    
+
         })
     }
 }
 
 /*****
-usage: 
+usage:
 	var opt = {
 		username:'my_name',
 		password:'P@sSW0rD'
@@ -73,7 +73,7 @@ usage:
 		if (!result) return false;
 		// Do something after log in...
 	})
-*****/	
+*****/
 
 function checkUser(obj, cb) {
 		User
@@ -82,7 +82,7 @@ function checkUser(obj, cb) {
             if (err) return cb(err, false);
             if(user) {
                 bcrypt.compare(obj.password, user.password, (err ,bool) => {
-                    if(bool) { 
+                    if(bool) {
                     	return cb(null,  user);
                     }
                     else {
@@ -92,16 +92,16 @@ function checkUser(obj, cb) {
                     }
                 else {
                     return cb(null,  false);
-                }    
-                
-            
-    
+                }
+
+
+
         })
-        
+
 }
 
 /*****
-usage: 
+usage:
     var opt = {
         username:'my_name'
     }
@@ -109,7 +109,7 @@ usage:
         if (!result) return false;
         // Do something after finding...
     })
-*****/  
+*****/
 
 function findOne(obj, cb) {
 
@@ -127,12 +127,12 @@ function findOne(obj, cb) {
 }
 
 /*****
-usage: 
+usage:
    getAll((error, result) => {
         if (!result) return false;
         // Do something after...
     })
-*****/  
+*****/
 
 function getAll(cb) {
     User
@@ -148,10 +148,90 @@ function getAll(cb) {
     })
 }
 
-// Expose all the functions...
+function deleteOne(opt, cb) {
+	 //if(typeof opt !== Object) cb("Must be a javascript object.");
+		User
+		.deleteOne(opt)
+		.exec((err, res) => {
+			if (err) return cb(err, null);
+			else if(res.n == 0) {
+				return cb(null, true);
+			}
+		})
+}
+function comment(user, comment, _id, cb) {
+	User
+	.findOne(user)
+	.exec((err, obj) => {
+		if (!obj) return cb("Does not exist.",null);
+		console.log(obj);
+		for(var i=0;i<obj.posts.length;i++) {
+			if(obj.posts[i]._id == _id) {
+				obj.posts[i].comments.push(comment)
+			}
+		}
+		obj.delete();
+		var newUser = new User({
+				username:obj.username,
+				password:obj.password,
+				firstname:obj.fn,
+				lastname:obj.ln,
+				dob:obj.dob,
+				bio:obj.bio,
+				profile_pic:'/images/logo/logo.png',
+				posts:obj.posts,
+				followers:obj.followers,
+				likes:obj.likes,
+				lastLogin:new Date(),
+		});
+
+		newUser.save((err, res) => {
+				return cb(err, res);
+		})
+
+
+	})
+}
+function like(user, like, _id, cb) {
+	User
+	.findOne(user)
+	.exec((err, obj) => {
+		if (!obj) return cb("Does not exist.",null);
+		console.log(obj);
+		for(var i=0;i<obj.posts.length;i++) {
+			if(obj.posts[i]._id == _id) {
+				obj.posts[i].likes.push(like)
+			}
+		}
+		obj.delete();
+		var newUser = new User({
+				username:obj.username,
+				password:obj.password,
+				firstname:obj.fn,
+				lastname:obj.ln,
+				dob:obj.dob,
+				bio:obj.bio,
+				profile_pic:'/images/logo/logo.png',
+				posts:obj.posts,
+				followers:obj.followers,
+				likes:obj.likes,
+				lastLogin:new Date(),
+		});
+
+		newUser.save((err, res) => {
+				return cb(err, res);
+		})
+
+
+	})
+}
+
+// Expose all the api...
 module.exports = {
     createNew:createNew,
     checkUser:checkUser,
     findOne:findOne,
-    getAll:getAll
+    getAll:getAll,
+		comment:comment,
+		like:like
 }
