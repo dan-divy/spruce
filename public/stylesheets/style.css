@@ -16,6 +16,10 @@
     padding-right: 20%;
   }
 }
+.tab-div {
+  color: white;
+  background: linear-gradient(150deg,#26B99A 0%,lightgreen 100%)
+}
 .tilted-div {
   /*background-image: linear-gradient(150deg,#dd27c6 0%,#8805ff 100%);
     position: absolute;
@@ -23,7 +27,7 @@
     transform-origin: 0;
     position: relative;*/
     transform: skewY(-1deg);
-    
+
 }
 .feed-view-img {
   width:200px;
@@ -43,7 +47,7 @@
   left: 0;
   top: 0;
   opacity: 0;
-}  
+}
 
 .logo {
   border-radius: 50%;
@@ -91,8 +95,8 @@ a {
     z-index: 9999;
     padding-top: 10px;
     height: 50px;
-    bottom: 0px; 
-    width: 100%; 
+    bottom: 0px;
+    width: 100%;
     text-align: center;
     font-size: 22px;
     color: white;

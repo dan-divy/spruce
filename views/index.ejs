@@ -10,6 +10,7 @@
   <%- include('navbar')	-%>
   <%- include('sidebar') -%>
   <%- include('main') -%>
+  <%- include('tabs') -%>
   <%- include('footer') -%>
   <div id="notify_message" class="notify_message-success">
 
@@ -21,14 +22,14 @@
 <script src="/animations/jquery-sakura.min.js"></script>
 <script>
     // domReady
-    $(function() {
+  /*  $(function() {
         $('body').sakura();
     });
 
     // windowLoad
     $(window).load(function() {
         $('body').sakura();
-    });
+    }); */
 </script>
   <script type="text/javascript">
     show_notification('<center>Built with <i class="fa fa-heart"></i> by Divy Srivastava.','success')

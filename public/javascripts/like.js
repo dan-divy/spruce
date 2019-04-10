@@ -12,7 +12,13 @@ function likeById() {
          	 }
     })
     .done(function(data){
-    	show_notification('Liked!','success')
+			if(data.event) {
+					show_notification(data.msg,'success');
+					$(`#${this.id}`)[0].disabled = true;
+			}
+			else {
+				show_notification(data.msg,'danger')
+			}
 
     })
     .fail(function(data){
