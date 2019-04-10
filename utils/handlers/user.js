@@ -1,7 +1,8 @@
 // utils/handlers/user.js
 var mongoose = require('mongoose');
 var User = require("../models/user");
-var bcrypt = require("bcrypt-nodejs")
+var bcrypt = require("bcrypt-nodejs");
+const a = require('array-tools');
 const _ = require('lodash/_arrayIncludes')
 
 mongoose.connect(require('../../config/app').db.connectionUri);
@@ -196,32 +197,35 @@ function like(user, like, _id, cb) {
 	User
 	.findOne(user)
 	.exec((err, obj) => {
-		if (!obj) return cb("Does not exist.",null);
-		console.log(obj);
+	//	if (!obj) return cb("Does not exist.",null);
+		//console.log(obj);
 		for(var i=0;i<obj.posts.length;i++) {
+
 			if(obj.posts[i]._id == _id) {
-				obj.posts[i].likes.push(like)
-			}
-		}
-		obj.delete();
-		var newUser = new User({
-				username:obj.username,
-				password:obj.password,
-				firstname:obj.fn,
-				lastname:obj.ln,
-				dob:obj.dob,
-				bio:obj.bio,
-				profile_pic:'/images/logo/logo.png',
-				posts:obj.posts,
-				followers:obj.followers,
-				likes:obj.likes,
-				lastLogin:new Date(),
-		});
+					obj.posts[i].likes.push(like.by);
+					obj.delete();
+					var newUser = new User({
+							username:obj.username,
+							password:obj.password,
+							firstname:obj.fn,
+							lastname:obj.ln,
+							dob:obj.dob,
+							bio:obj.bio,
+							profile_pic:'/images/logo/logo.png',
+							posts:obj.posts,
+							followers:obj.followers,
+							likes:obj.likes,
+							lastLogin:new Date(),
+					});
 
-		newUser.save((err, res) => {
-				return cb(err, res);
-		})
+					newUser.save((err, res) => {
+							cb(err, true);
+					})
 
+
+
+					}
+				}
 
 	})
 }

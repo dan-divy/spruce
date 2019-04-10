@@ -18,13 +18,14 @@ router.post('/v1/comment', function(req, res, next) {
 })
 
 router.post('/v1/like', function(req, res, next) {
-	console.log(req.body);
+	//console.log(req.body);
 	db.like({username:req.body.author},{by:req.session.user},req.body._id, (err, result) => {
 		if(result) {
-				res.send(true)
+				res.send({event:true,msg:"Liked!"})
+			//	console.log(result)
 			}
 			else {
-				res.send(false)
+				res.send({event:false,msg:"Already liked."})
 			}
 	})
 });
