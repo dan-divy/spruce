@@ -10,6 +10,8 @@
     </div>
     <br>
     <div class="container">
+    <input type="text" class="form-control" onkeyup="updateList(this.value);" placeholder="Search here..." />
+    <br>
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary">Top Users</li>
       <% for(var i=0;i<list.length;i++) { %>
@@ -19,14 +21,14 @@
          </li>
       <% } %>
    </ul>
-   
+
     <div id="notify_message" class=" notify_message-success">
     	<center>Search for people on leaflet...</center>
     </div>
-
+    <%- include('../tabs') -%>
     <%- include('../footer') -%>
   </body>
-  
-  <script type="text/javascript" src="/javascripts/dom.js"></script>
+   <script type="text/javascript" src="/javascripts/dom.js"></script>
+   <script type="text/javascript" src="/javascripts/search.js"></script>
 
 </html>

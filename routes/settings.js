@@ -14,16 +14,29 @@ router.get('/', function(req, res, next) {
   		user: user
   	});
   })
-  	
+
 });
 
+router.get('/posts/:action/:query', function(req, res, next) {
+  switch (req.params.action) {
+    case "edit":
+      res.render('index');
+      break;
+    case "delete":
+      res.render('index');
+      break;
+    default:res.send("hi")
+
+  }
+})
+
 router.get('/upload', function(req, res, next) {
-	
+
 		res.render('upload/file-upload', {
 			title:req.app.conf.name,
 			user: req.session.user
 		})
-	
+
 })
 router.post('/upload', formParser,function(req, res, next) {
 			// Generate a random id
@@ -49,13 +62,13 @@ router.post('/upload', formParser,function(req, res, next) {
 					likes:[],
 					type:'image',
 					createdAt:new Date(),
-					lastEditedAt:new Date() 
+					lastEditedAt:new Date()
 				})
 				u.save(err => {
 					if (err) throw err;
 					console.log('Post saved')
 					// Redirect back after the job is done.
-					res.redirect('/')	
+					res.redirect('/')
 				})
 			})
 		})

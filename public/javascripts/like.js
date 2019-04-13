@@ -1,4 +1,5 @@
 $(".like-button-box").on("click",likeById);
+$(".post").dblclick(likeById);
 
 function likeById() {
 	console.log(this.id)
