@@ -1,0 +1,2 @@
+ssh -i /home/divy/LinuxKeyPair_2019.pem ec2-user@3.18.76.112
+
