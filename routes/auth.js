@@ -63,6 +63,7 @@ router.get('/out', function (req, res, next) {
 	})
 })
 router.get('/oauth', function(req, res, next) {
+	
 	var ig_code = req.query.code;
 	console.log(ig_code)
 	var options = {
@@ -106,16 +107,13 @@ router.get('/oauth', function(req, res, next) {
 					});
 					console.log(newUser)
 
-	                newUser.save((err, cb) => {
-	                	req.session._id = cb._id;
+					newUser.save((err, cb) => {
+						req.session._id = cb._id;
 						req.session.user = cb.username;
 						res.redirect('/');
-
-	                })
-
+					})
 				}
 			})
-
 		//}
 	});
 })
