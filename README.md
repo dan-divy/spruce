@@ -91,7 +91,8 @@ leaflet uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for perfor
 **This project needs contributors!!**
 
 ## Authors
- - [Divy Srivastava](http://instagram.com/undefined_void)
+ - [Divy Srivastava](http://github.com/DivySrivastava)
+ - [Dan](https://github.com/MayorChano)
 
 ## License
 
