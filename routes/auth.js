@@ -63,65 +63,63 @@ router.get('/out', function (req, res, next) {
 		res.redirect('/?action=logout');
 	})
 })
-router.get('/oauth', function(req, res, next) {
-	var ig_code = req.query.code;
-	console.log(ig_code)
-	var options = {
-		url: 'https://api.instagram.com/oauth/access_token',
-		method: 'POST',
-		form: {
-			client_id: config.instagram.client_id,
-			client_secret: config.instagram.client_secret,
-			grant_type: 'authorization_code',
-			redirect_uri: config.instagram.redirect_uri,
-			code: ig_code
-		}
-	};
+router.get('/oauth/:service', function(req, res, next) {
 
-	httpRequest(options, function (error, response, body) {
-		//if (!error && response.statusCode == 200) {
+	if(req.params.service == 'instagram') {
+		var ig_code = req.query.code;
+		console.log(ig_code)
+		var options = {
+			url: 'https://api.instagram.com/oauth/access_token',
+			method: 'POST',
+			form: {
+				client_id: config.instagram.client_id,
+				client_secret: config.instagram.client_secret,
+				grant_type: 'authorization_code',
+				redirect_uri: config.instagram.redirect_uri,
+				code: ig_code
+			}
+		};
 
-			var r = JSON.parse(body)
-			console.log(r)
-			db.checkUser({username:r.user.username},(err, exists) => {
+		httpRequest(options, function (error, response, body) {
+			//if (!error && response.statusCode == 200) {
+
+				var r = JSON.parse(body)
 				console.log(r)
-				if(exists) {
-					req.session._id = exists._id;
-					req.session.user = exists.username;
-          exists.password = r.access_token;
-          exists.save(() => {
-            res.redirect('/')
-          })
+				db.findOne({username:r.user.username},(err, exists) => {
+					console.log(r)
+					if(exists) {
+						req.session._id = exists._id;
+						req.session.user = exists.username;
+						res.redirect('/')
+					}
+					else {
+						var r = JSON.parse(body);
+						var newUser = new User({
+							id: r.user.id,
+							username: r.user.username,
+							fistname: r.user.full_name.split(" ")[0],
+							lastname: r.user.full_name.split(" ")[r.user.full_name.split(" ").length - 1],
+							bio: r.user.bio,
+							dob: "not set",
+							profile_pic: r.user.profile_picture,
+							password: r.access_token,
+							posts:[],
+							followers:[]
+						});
+						console.log(newUser)
 
-				}
-				else {
-					var r = JSON.parse(body);
-					var newUser = new User({
-						id: r.user.id,
-						username: r.user.username,
-						fistname: r.user.full_name.split(" ")[0],
-						lastname: r.user.full_name.split(" ")[r.user.full_name.split(" ").length - 1],
-						bio: r.user.bio,
-						dob: "not set",
-						//website: r.user.website,
-						profile_pic: r.user.profile_picture,
-						password: r.access_token,
-						posts:[],
-						followers:[]
-					});
-					console.log(newUser)
-
-	                newUser.save((err, cb) => {
-	                	req.session._id = cb._id;
-						req.session.user = cb.username;
-						res.redirect('/');
-
-	                })
-
-				}
-			})
-
-		//}
-	});
+						newUser.save((err, cb) => {
+							req.session._id = cb._id;
+							req.session.user = cb.username;
+							res.redirect('/');
+						})
+					}
+				})
+			//}
+		});
+	}
+	if(req.params.service == 'google') {
+    // ToDo
+	}
 })
 module.exports = router;
