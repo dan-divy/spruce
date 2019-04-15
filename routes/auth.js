@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
-var config = require('../config/instagram');
+/** REPLACE INSTAGRAM CONFIG PATH HERE **/
+var config = require('../../leaflet-private/config/config.js');
 var httpRequest = require('request');
 var User = require('../utils/models/user')
 
@@ -82,12 +83,16 @@ router.get('/oauth', function(req, res, next) {
 
 			var r = JSON.parse(body)
 			console.log(r)
-			db.checkUser({id:r.user.id},(err, exists) => {
+			db.checkUser({username:r.user.username},(err, exists) => {
 				console.log(r)
 				if(exists) {
 					req.session._id = exists._id;
 					req.session.user = exists.username;
-					res.redirect('/')
+          exists.password = r.access_token;
+          exists.save(() => {
+            res.redirect('/')
+          })
+
 				}
 				else {
 					var r = JSON.parse(body);
