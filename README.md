@@ -17,9 +17,15 @@ _Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
 * View your/others profile.
 * Follow a particular user and get notified for his/her activities.
 * Change your profile picture, bio, people who follow you etc.
-* Chat one-one or create a room/group.
 * Some extras (games)
+
 And a lot more to be added soon...
+
+## To Do's
+* Change the name (Issue #3)
+* Activity feature for user to see follow requests and his/her daily activity.
+* Sign in using FaceBook, Twitter and Google accounts.
+* Chat one-one or create a room/group.
 
 ## Requirements
 
@@ -34,18 +40,47 @@ And a lot more to be added soon...
 Clone the repo locally then install all the dependencies using [NPM](https://npmjs.org/)
 
 ```bash
-$ git clone https://github.com/DivySrivastava/leaflet
+$ git clone https://github.com/DivySrivastava/leaflet.git
 $ cd leaflet
 $ npm i
 ```
 
-## Usage
+## Local Development
+Before running, we need to add the Instgram API Credentials to the project.
+Under the `config` directory of the repo, you will find `instagram.js`.
+We need to add the `<CLIENT_ID>`, `<CLIENT_SECRET>` and `<host>:<port>` with our own API credentials
 
-First start the MongoDB server
+```js
+/** REPLACE YOUR API CREDENTIALS HERE **/
+var in_client_id = 'XXXXXXXXXXXXXXXXXX', // <CLIENT_ID>
+	in_client_secret = 'XXXXXXXXXXXXXXXXXXXX', // <CLIENT_SECRET>
+```
+
+Now Replace the `<host>` & `<port>` with the redirect uri specified in the [Instgram API Dashboard](https://www.instagram.com/developer).
+Default is `http://localhost:80/account/oauth`.
+```js
+var in_redirect_uri = 'http://localhost:80/account/oauth'
+```
+
+One last thing is to specify the instagram config file in our authentication router and API.
+Under the file `routes/auth.js` and `routes/api/v1/index.js` change the `config` file path to `instagram.js`.
+
+```js
+// routes/auth.js
+/** REPLACE INSTAGRAM CONFIG PATH HERE **/
+var config = require('../config/instagram.js');
+```
+```js
+// routes/api/v1/index.js
+/** SET YOUR instagram config path over here **/
+var ig = require('../config/instagram.js');
+```
+
+Finally start the MongoDB server
 ```bash
 $ mongod
 ```
-and then start the leaflet server with ```nodejs```
+and then start the leaflet server via `npm`.
 ```bash
 $ npm start
 ```   
@@ -53,7 +88,7 @@ $ npm start
 
 leaflet uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
 
-*This project needs contributors!!*
+**This project needs contributors!!**
 
 ## Authors
  - [Divy Srivastava](http://instagram.com/undefined_void)

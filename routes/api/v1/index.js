@@ -4,7 +4,8 @@ var path = require('path');
 var tool = require('array-tools')
 var db = require('../../../utils/handlers/user');
 var formParser = require('../../../utils/form-parser.js');
-var ig = require('../../../config/instagram');
+/** SET YOUR instagram config path over here **/
+var ig = require('../../../../leaflet-private/config/config.js');
 
 router.post('/v1/comment', function(req, res, next) {
 	db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
