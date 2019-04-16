@@ -2,11 +2,17 @@ var express = require('express');
 var router = express.Router();
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
-/** REPLACE INSTAGRAM CONFIG PATH HERE **/
-var config = require('../../leaflet-private/config/config.js');
+var instagramConf = require('../config/instagram');
+var googleConf = require('../config/google');
+const {google} = require('googleapis');
+const oauth2Client = new google.auth.OAuth2(
+  googleConf.client_id,
+  googleConf.client_secret,
+  googleConf.redirect_uri
+);
+
 var httpRequest = require('request');
 var User = require('../utils/models/user')
-
 /* GET signup page. */
 router.get('/new', function(req, res, next) {
   res.render('auth/signup', {
@@ -63,8 +69,7 @@ router.get('/out', function (req, res, next) {
 		res.redirect('/?action=logout');
 	})
 })
-router.get('/oauth/:service', function(req, res, next) {
-
+router.get('/oauth/:service', async function(req, res, next) {
 	if(req.params.service == 'instagram') {
 		var ig_code = req.query.code;
 		console.log(ig_code)
@@ -72,10 +77,10 @@ router.get('/oauth/:service', function(req, res, next) {
 			url: 'https://api.instagram.com/oauth/access_token',
 			method: 'POST',
 			form: {
-				client_id: config.instagram.client_id,
-				client_secret: config.instagram.client_secret,
+				client_id: instagramConf.client_id,
+				client_secret: instagramConf.client_secret,
 				grant_type: 'authorization_code',
-				redirect_uri: config.instagram.redirect_uri,
+				redirect_uri: instagramConf.redirect_uri,
 				code: ig_code
 			}
 		};
@@ -85,7 +90,7 @@ router.get('/oauth/:service', function(req, res, next) {
 
 				var r = JSON.parse(body)
 				console.log(r)
-				db.findOne({username:r.user.username},(err, exists) => {
+				db.checkUser({id:r.user.id},(err, exists) => {
 					console.log(r)
 					if(exists) {
 						req.session._id = exists._id;
@@ -101,6 +106,7 @@ router.get('/oauth/:service', function(req, res, next) {
 							lastname: r.user.full_name.split(" ")[r.user.full_name.split(" ").length - 1],
 							bio: r.user.bio,
 							dob: "not set",
+							//website: r.user.website,
 							profile_pic: r.user.profile_picture,
 							password: r.access_token,
 							posts:[],
@@ -118,8 +124,47 @@ router.get('/oauth/:service', function(req, res, next) {
 			//}
 		});
 	}
+	
 	if(req.params.service == 'google') {
-    // ToDo
+		const {tokens} = await oauth2Client.getToken(req.query.code)
+		oauth2Client.setCredentials(tokens);
+		const { access_token } = oauth2Client.credentials;
+		httpRequest('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + access_token, function (error, response, body) {
+			let user = JSON.parse(response.body);
+			db.checkUser({id:user.sub},(err, exists) => {
+				if(exists) {
+					req.session._id = exists._id;
+					req.session.user = exists.username;
+					res.redirect('/')
+				}
+				else {
+					var newUser = new User({
+						id: user.sub,
+						username: user.name,
+						fistname: user.given_name,
+						lastname: user.family_name,
+						bio: "not set", //Is this correct?
+						dob: "not set",
+						//website: r.user.website,
+						profile_pic: user.picture,
+						password: user.credentials.access_token,
+						posts:[],
+						followers:[]
+					});
+					console.log(newUser)
+
+					newUser.save((err, cb) => {
+						req.session._id = cb._id;
+						req.session.user = cb.username;
+						res.redirect('/');
+					})
+				}
+			})
+		})
 	}
 })
+
+
+
+
 module.exports = router;
