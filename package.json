@@ -15,6 +15,7 @@
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "formidable": "^1.2.1",
+    "googleapis": "^39.2.0",
     "guid": "0.0.12",
     "http-errors": "~1.6.2",
     "lodash": "^4.17.11",
