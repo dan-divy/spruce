@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
-var instagramConf = require('../config/instagram');
+var instagramConf = require('.../config/instagram');
 var googleConf = require('../config/google');
 const {google} = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
@@ -90,7 +90,7 @@ router.get('/oauth/:service', async function(req, res, next) {
 
 				var r = JSON.parse(body)
 				console.log(r)
-				db.checkUser({id:r.user.id},(err, exists) => {
+				db.findOne({username:r.user.username},(err, exists) => {
 					console.log(r)
 					if(exists) {
 						req.session._id = exists._id;
@@ -124,14 +124,14 @@ router.get('/oauth/:service', async function(req, res, next) {
 			//}
 		});
 	}
-	
+
 	if(req.params.service == 'google') {
 		const {tokens} = await oauth2Client.getToken(req.query.code)
 		oauth2Client.setCredentials(tokens);
 		const { access_token } = oauth2Client.credentials;
 		httpRequest('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + access_token, function (error, response, body) {
 			let user = JSON.parse(response.body);
-			db.checkUser({id:user.sub},(err, exists) => {
+			db.findOne({username:user.name},(err, exists) => {
 				if(exists) {
 					req.session._id = exists._id;
 					req.session.user = exists.username;
@@ -162,6 +162,9 @@ router.get('/oauth/:service', async function(req, res, next) {
 			})
 		})
 	}
+  if (req.params.service == 'twitter') {
+
+  }
 })
 
 
