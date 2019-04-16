@@ -16,6 +16,30 @@
     padding-right: 20%;
   }
 }
+.insta-default {
+  margin: auto;
+}
+.insta-default a {
+  padding: 15px 30px;
+  display: block;
+  background-color: #E33E5C;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+  color: #FFF;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.insta-default a:hover {
+  box-shadow: 0 0 4px 3px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+.insta-default a i {
+  color: #FFF;
+  font-size: 18px;
+}
+
 .tab-div {
   color: white;
   background: linear-gradient(150deg,#26B99A 10%,rgb(38, 183, 110) 90%); */
