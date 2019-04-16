@@ -4,8 +4,8 @@ var path = require('path');
 var tool = require('array-tools')
 var db = require('../../../utils/handlers/user');
 var formParser = require('../../../utils/form-parser.js');
-/** SET YOUR instagram config path over here **/
-var ig = require('../../../../leaflet-private/config/config.js');
+var ig = require('../../../config/instagram');
+var g = require('../../../config/google');
 
 router.post('/v1/comment', function(req, res, next) {
 	db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
@@ -57,8 +57,9 @@ router.post('/v1/follow', function(req, res, next) {
   })
 });
 
-router.get('/v1/oauth/instagram', function(req, res, next) {
-	res.redirect(ig.instagram.auth_url)
+router.get('/v1/oauth/:service', function(req, res, next) {
+	if(req.params.service == 'instagram') res.redirect(ig.instagram.auth_url);
+	if(req.params.service == 'google') res.redirect(g.auth_url);
 });
 
 module.exports = router;
