@@ -12,7 +12,6 @@ function checkSpace(name) {
     //console.log(charSplit)
 	return _(charSplit, ' ');
 }
-
 /*****
 usage:
 	var opt = {
