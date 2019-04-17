@@ -7,7 +7,8 @@ function follow(){
          	 }
     })
     .done(function(data){
-    	show_notification('Following','success')
+      show_notification('Following user!','success')
+      setTimeout(()=> {window.location.reload()}, 1000)
 
     })
     .fail(function(data){
