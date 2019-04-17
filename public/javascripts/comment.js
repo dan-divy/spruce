@@ -24,7 +24,8 @@ function commentById(key) {
         }
     })
     .done(function(data){
-      show_notification('Comment added!','success')
+      show_notification('Adding comment!','success')
+      setTimeout(()=> {window.location.reload()}, 1000)
 
     })
     .fail(function(data){
