@@ -50,7 +50,7 @@
 
       <div>
         <% for(var c=0;c<people[i].posts[z].comments.length;c++) { %>
-        <a class="user-comment" href="/user/<%= people[i].posts[z].comments[c].by %>">
+        <a class="user-comment" href="/u/<%= people[i].posts[z].comments[c].by %>">
         <%= people[i].posts[z].comments[c].by %>
       </a>
        <%= people[i].posts[z].comments[c].text %>
