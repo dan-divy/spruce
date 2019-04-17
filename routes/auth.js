@@ -90,7 +90,7 @@ router.get('/oauth/:service', async function(req, res, next) {
 
 				var r = JSON.parse(body)
 				console.log(r)
-				db.checkUser({id:r.user.id},(err, exists) => {
+				db.findOne({id:r.user.id},(err, exists) => {
 					console.log(r)
 					if(exists) {
 						req.session._id = exists._id;
@@ -128,7 +128,7 @@ router.get('/oauth/:service', async function(req, res, next) {
 		const {tokens} = await oauth2Client.getToken(req.query.code)
 		httpRequest('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + tokens.access_token, function (error, response, body) {
 			let user = JSON.parse(response.body);
-			db.findOne({_id: user.sub},(err, exists) => {
+			db.findOne({id: user.sub},(err, exists) => {
 				if(exists) {
 					req.session._id = exists._id;
 					req.session.user = exists.username;
