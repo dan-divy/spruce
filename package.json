@@ -45,10 +45,10 @@
       {
         "provider": "github",
         "owner": "DivySrivastava",
-        "repo": "leaflet"
+        "repo": "spruce"
       }
     ],
-    "appId": "com.divysrivastava.desktop.leaflet",
+    "appId": "com.divysrivastava.desktop.spruce",
     "copyright": "Divy Srivastava 2019",
     "mac": {
       "target": [

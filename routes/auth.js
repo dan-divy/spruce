@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
-var instagramConf = require('.../config/instagram');
-var googleConf = require('../config/google');
+var globConf = require('../config/index');
+var instagramConf = globConf.instagram;
+var googleConf = globConf.google;
 const {google} = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
   googleConf.client_id,
@@ -143,11 +144,11 @@ router.get('/oauth/:service', async function(req, res, next) {
 						username: user.name,
 						fistname: user.given_name,
 						lastname: user.family_name,
-						bio: "not set", //Is this correct?
+						bio: "Hey!", //Is this correct?
 						dob: "not set",
 						//website: r.user.website,
 						profile_pic: user.picture,
-						password: user.credentials.access_token,
+						password: access_token,//user.credentials.access_token,
 						posts:[],
 						followers:[]
 					});

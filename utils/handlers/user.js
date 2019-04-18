@@ -127,6 +127,20 @@ function findOne(obj, cb) {
     })
 }
 
+function search(opt, cb) {
+	User
+	.find({username:{$gt:opt}})
+	.exec((err, results) => {
+			if (err) return cb(err, false);
+			if(results) {
+					return cb(err, results);
+			}
+			else {
+					return cb(null, false)
+			}
+	})
+}
+
 /*****
 usage:
    getAll((error, result) => {
@@ -237,5 +251,6 @@ module.exports = {
     findOne:findOne,
     getAll:getAll,
 		comment:comment,
-		like:like
+		like:like,
+		search:search
 }

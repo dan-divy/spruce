@@ -1,8 +1,8 @@
 {
-	"name":"leaflet",
-	"title":"Leaflet",
+	"name":"spruce",
+	"title":"spruce",
 	"commands":{
-		"package":"electron-packager electron.js leaflet --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
+		"package":"electron-packager electron.js spruce --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
 		"build":""
 	},
 	"http": {
