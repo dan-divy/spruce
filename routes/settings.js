@@ -5,7 +5,7 @@ var guid = require('guid');
 var mv = require('mv');
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
-
+const fs = require('file-system');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   db.findOne({username:req.session.user}, (err, user) => {
@@ -17,13 +17,24 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.get('/posts/:action/:query', function(req, res, next) {
+router.get('/post/:action/:query', function(req, res, next) {
   switch (req.params.action) {
     case "edit":
       res.render('index');
       break;
-    case "delete":
-      res.render('index');
+    case "delete": {
+			db.findOne({username:req.session.user}, (err, u) => {
+				let id = req.params.query
+				console.log(u);
+				fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
+				u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
+				u.save(err => {
+					if (err) throw err;
+					console.log('Post deleted');
+					res.redirect('/')
+				})
+			});
+		}
       break;
     default:res.send("hi")
 
