@@ -77,7 +77,7 @@ var config = require('../config/instagram.js');
 var ig = require('../config/instagram.js');
 ```
 
-Finally start the MongoDB server
+Finally start the MongoDB server in a seperate bash/pm2
 ```bash
 $ mongod
 ```
