@@ -12,7 +12,6 @@ function checkSpace(name) {
     //console.log(charSplit)
 	return _(charSplit, ' ');
 }
-
 /*****
 usage:
 	var opt = {
@@ -78,8 +77,9 @@ usage:
 
 function checkUser(obj, cb) {
 		User
-        .findOne({username:obj.username})
+		.findOne({username:obj.username})
         .exec((err, user) => {
+			console.log(user)
             if (err) return cb(err, false);
             if(user) {
                 bcrypt.compare(obj.password, user.password, (err ,bool) => {
@@ -125,6 +125,20 @@ function findOne(obj, cb) {
             return cb(null, false)
         }
     })
+}
+
+function search(opt, cb) {
+	User
+	.find({username:{$gt:opt}})
+	.exec((err, results) => {
+			if (err) return cb(err, false);
+			if(results) {
+					return cb(err, results);
+			}
+			else {
+					return cb(null, false)
+			}
+	})
 }
 
 /*****
@@ -237,5 +251,6 @@ module.exports = {
     findOne:findOne,
     getAll:getAll,
 		comment:comment,
-		like:like
+		like:like,
+		search:search
 }

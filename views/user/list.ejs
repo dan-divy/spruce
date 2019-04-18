@@ -3,10 +3,12 @@
   <%- include('../head') -%>
   <body ng-app="">
     <div class="container-fluid">
-    <h2>
-        <img src="/images/logo/logo.png" class="logo">
-            leaflet
-    </h2>
+      <a href="/" class="float-left">
+        <h2>
+  	    	<img src="/images/logo/logo.png" class="logo">
+  	    	spruce
+  	    </h2>
+  </a>
     </div>
     <br>
     <div class="container">
@@ -21,16 +23,18 @@
    </ul>
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary">Top Users</li>
+      <div id="user-list">
       <% for(var i=0;i<list.length;i++) { %>
          <li class="list-group-item">
             <img src="<%= list[i].profile_pic %>" class="logo">
-            <b><a href="/u/<%= list[i].username %>"><%= list[i].username %></a></b>
+            <b><a href="/u/<%= list[i].username %>" id="list-username"><%= list[i].username %></a></b>
          </li>
       <% } %>
+    </div>
    </ul>
 
     <div id="notify_message" class=" notify_message-success">
-    	<center>Search for people on leaflet...</center>
+    	<center>Search for people on spruce...</center>
     </div>
     <%- include('../tabs') -%>
     <%- include('../footer') -%>

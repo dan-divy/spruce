@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "mongod; node ./bin/www",
+    "start": "node ./bin/www",
     "build": "build"
   },
   "dependencies": {
@@ -14,6 +14,7 @@
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
+    "file-system": "^2.2.2",
     "formidable": "^1.2.1",
     "googleapis": "^39.2.0",
     "guid": "0.0.12",
@@ -45,10 +46,10 @@
       {
         "provider": "github",
         "owner": "DivySrivastava",
-        "repo": "leaflet"
+        "repo": "spruce"
       }
     ],
-    "appId": "com.divysrivastava.desktop.leaflet",
+    "appId": "com.divysrivastava.desktop.spruce",
     "copyright": "Divy Srivastava 2019",
     "mac": {
       "target": [

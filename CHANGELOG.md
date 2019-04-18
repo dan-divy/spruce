@@ -5,7 +5,7 @@
   * Added the basic api structure for likes and comments.
   * New AUTHORS file added.
   * View a post from its category.
-  * **NEW** An electron.js file has been added for creating a desktop appilication. See ```release/leaflet-linux-ia32``` for 32bit linux computers.
+  * **NEW** An electron.js file has been added for creating a desktop appilication. See ```release/spruce-linux-ia32``` for 32bit linux computers.
 
   Note: _Instagram OAuth2 is still disabled._
 
