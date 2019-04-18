@@ -1,6 +1,6 @@
 [![spruce-banner](./public/images/logo/banner.png)](http://mygurukulonline.in)
 
-spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
+Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
 
 _Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
 
