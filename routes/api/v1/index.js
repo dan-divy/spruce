@@ -57,6 +57,12 @@ router.post('/v1/follow', function(req, res, next) {
   })
 });
 
+router.get('/v1/search', function(req, res, next) {
+	db.search(req.query.q, (err, results) => {
+		res.send(results);
+	})
+});
+
 router.get('/v1/oauth/:service', function(req, res, next) {
 	if(req.params.service == 'instagram') res.redirect(ig.instagram.auth_url);
 	if(req.params.service == 'google') res.redirect(g.auth_url);

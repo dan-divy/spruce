@@ -1,9 +1,10 @@
-[![leaflet-banner](./public/images/logo/banner.png)](http://mygurukulonline.in)
+[![spruce-banner](./public/images/logo/banner.png)](http://mygurukulonline.in)
 
-Leaflet is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
+spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
 
 _Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
 
+Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
 ## Features
 
@@ -40,8 +41,8 @@ And a lot more to be added soon...
 Clone the repo locally then install all the dependencies using [NPM](https://npmjs.org/)
 
 ```bash
-$ git clone https://github.com/DivySrivastava/leaflet.git
-$ cd leaflet
+$ git clone https://github.com/DivySrivastava/spruce.git
+$ cd spruce
 $ npm i
 ```
 
@@ -76,17 +77,17 @@ var config = require('../config/instagram.js');
 var ig = require('../config/instagram.js');
 ```
 
-Finally start the MongoDB server
+Finally start the MongoDB server in a seperate bash/pm2
 ```bash
 $ mongod
 ```
-and then start the leaflet server via `npm`.
+and then start the spruce server via `npm`.
 ```bash
 $ npm start
 ```   
 ## To know
 
-leaflet uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
+spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
 
 **This project needs contributors!!**
 

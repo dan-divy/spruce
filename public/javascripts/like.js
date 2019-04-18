@@ -15,6 +15,9 @@ function likeById() {
     .done(function(data){
 			if(data.event) {
 					show_notification(data.msg,'success');
+					setTimeout(()=> {
+						window.location.reload();
+					}, 1000)
 					$(`#${this.id}`)[0].disabled = true;
 			}
 			else {

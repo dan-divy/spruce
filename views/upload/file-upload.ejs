@@ -4,12 +4,12 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
   <body>
   <div class="container-fluid top-navbar box-shadow">
-      <div class="float-left">
+      <a href="/" class="float-left">
       <h2>
         <img src="/images/logo/logo.png" class="logo">
-        leaflet
+        spruce
       </h2>
-      </div>
+      </a>
       <div class="float-right margin-top-20">
         <a href="/" class="btn btn-link">
           <i class="fa fa-lg fa-igloo pills"></i>
@@ -32,7 +32,7 @@
                 
               </ul>
               </div>
-              <div class="time"> 20 min ago </div>
+              <div class="time"></div>
     </div>
 <br>
 <br>
@@ -49,9 +49,8 @@
     </div>
 
     <div class="gram-card-content">
-     
-      <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a>
-        <input type="text" name="caption" placeholder="a_cool_caption" class="form-control">
+      <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a><br><br>
+        <input type="text" name="caption" placeholder="a_cool_caption" class="form-control"><br><br>
         <select class="form-control" name="type">
           <option>thoughts</option>
           <option>moments</option>
@@ -59,30 +58,19 @@
         </select>
      </p>
 
-      <p class="comments">1 comment(s).</p>
       <br>
 
-      <div class="comments-div">
-      
-      <div>
-        <a class="user-comment">
-        your_friend
-      </a>
-       a_cool_caption_indeed
-     </div>
-           
-      </div>
     <hr>
     </div>  
 
     <div class="gram-card-footer">
       
-      <button class="footer-action-icons likes btn btn-link non-hoverable" onclick="like('{{_id}}')" id="{{_id}}">
+      <button class="footer-action-icons likes btn btn-link non-hoverable" disabled onclick="like('{{_id}}')" id="{{_id}}">
         <i class="glyphicon glyphicon-thumbs-up"></i> 10</button>
       
       
-      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
-      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i></button>
+      <input class="comments-input" id="input_{{_id}}" type="text" disabled placeholder="Comment here..."/>
+      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i> Post/Upload</button>
     </div>
 
   </div>
@@ -93,7 +81,7 @@
       </form>
     </div>
   <div id="notify_message" class=" notify_message-success">
-  	<center>You are now a part of leaflet!</center>
+  	<center>You are now a part of spruce!</center>
   </div>
   <%- include('../footer') -%>
   </body>
