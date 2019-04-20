@@ -6,6 +6,8 @@ _Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
+![](./public/images/intro.gif)
+
 ## Features
 
 * Sign in using local authentication or using your Instagram account.
