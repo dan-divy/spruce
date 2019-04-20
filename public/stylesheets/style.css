@@ -110,6 +110,10 @@ h1,h2,h3,h4,h5,h6,a,p,body,html,div,span,form,input {
 	border-bottom-color: black;
 	border-bottom-width: 10px;
 }
+.top-navbar h2,
+.container-fluid h2 {
+  color:#2c3e50;
+}
 .box-shadow {
 	border:1px solid #f2f2f2;
 
