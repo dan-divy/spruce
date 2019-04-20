@@ -4,7 +4,7 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
   <body>
   <div class="container-fluid top-navbar box-shadow">
-      <a href="/" class="float-left">
+      <a href="/" class="float-left black">
       <h2>
         <img src="/images/logo/logo.png" class="logo">
         spruce
@@ -24,12 +24,12 @@
     <div class="gram-card-header">
       <img src="/images/logo/logo.png" class="gram-card-user-image">
       <a class="gram-card-user-name" href="/u/"><%= user %></a>
-      
+
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a disabled><i class="fa fa-share"></i> View</a></li>
-                
+
               </ul>
               </div>
               <div class="time"></div>
@@ -49,8 +49,8 @@
     </div>
 
     <div class="gram-card-content">
-      <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a><br><br>
-        <input type="text" name="caption" placeholder="a_cool_caption" class="form-control"><br><br>
+      <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a><br>
+        <input type="text" name="caption" placeholder="a_cool_caption" class="form-control">
         <select class="form-control" name="type">
           <option>thoughts</option>
           <option>moments</option>
@@ -61,16 +61,16 @@
       <br>
 
     <hr>
-    </div>  
+    </div>
 
     <div class="gram-card-footer">
-      
+
       <button class="footer-action-icons likes btn btn-link non-hoverable" disabled onclick="like('{{_id}}')" id="{{_id}}">
         <i class="glyphicon glyphicon-thumbs-up"></i> 10</button>
-      
-      
-      <input class="comments-input" id="input_{{_id}}" type="text" disabled placeholder="Comment here..."/>
-      <button class="footer-action-icons btn btn-link" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-comment"></i> Post/Upload</button>
+
+
+      <input class="comments-input" id="input_{{_id}}" type="text" placeholder="Comment here..."/>
+      <button class="footer-action-icons btn btn-primary" onclick="comment('{{_id}}')"><i class="glyphicon glyphicon-file-invoice"></i> Post</button>
     </div>
 
   </div>
@@ -96,7 +96,7 @@
                 reader.onload = function (e) {
                     $('#blah')
                         .attr('src', e.target.result);
-                    /* $('#postBtn')   
+                    /* $('#postBtn')
                         .attr('disabled', false)
                       $('#postDiv')[0].style.background="linear-gradient(120deg,cornflowerblue,deepskyblue)";
                         $('#postBtn')[0].style.color="white";*/

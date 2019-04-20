@@ -87,10 +87,10 @@ router.get('/oauth/:service', async function(req, res, next) {
 
 		httpRequest(options, function (error, response, body) {
 			//if (!error && response.statusCode == 200) {
-
+        if (error) res.redirect('/?err=instagram')
 				var r = JSON.parse(body)
 				console.log(r)
-				db.findOne({id:r.user.id},(err, exists) => {
+				db.findOne({username:r.user.username},(err, exists) => {
 					console.log(r)
 					if(exists) {
 						req.session._id = exists._id;
