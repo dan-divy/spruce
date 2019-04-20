@@ -6,6 +6,8 @@ _Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
+![](./public/images/intro.gif)
+
 ## Features
 
 * Sign in using local authentication or using your Instagram account.
@@ -47,34 +49,20 @@ $ npm i
 ```
 
 ## Local Development
-Before running, we need to add the Instgram API Credentials to the project.
-Under the `config` directory of the repo, you will find `instagram.js`.
+Before running, we need to add the Instgram and Google API Credentials to the project.
+Under the `config` directory of the repo, you will find `instagram.js` and `google.js`.
 We need to add the `<CLIENT_ID>`, `<CLIENT_SECRET>` and `<host>:<port>` with our own API credentials
 
 ```js
 /** REPLACE YOUR API CREDENTIALS HERE **/
 var in_client_id = 'XXXXXXXXXXXXXXXXXX', // <CLIENT_ID>
-	in_client_secret = 'XXXXXXXXXXXXXXXXXXXX', // <CLIENT_SECRET>
+    in_client_secret = 'XXXXXXXXXXXXXXXXXXXX', // <CLIENT_SECRET>
 ```
 
-Now Replace the `<host>` & `<port>` with the redirect uri specified in the [Instgram API Dashboard](https://www.instagram.com/developer).
+Now Replace the `<host>` & `<port>` with the redirect uri specified in the [Instagram API Dashboard](https://www.instagram.com/developer) and [Google API Dashboard](https://developers.google.com).
 Default is `http://localhost:80/account/oauth`.
 ```js
-var in_redirect_uri = 'http://localhost:80/account/oauth'
-```
-
-One last thing is to specify the instagram config file in our authentication router and API.
-Under the file `routes/auth.js` and `routes/api/v1/index.js` change the `config` file path to `instagram.js`.
-
-```js
-// routes/auth.js
-/** REPLACE INSTAGRAM CONFIG PATH HERE **/
-var config = require('../config/instagram.js');
-```
-```js
-// routes/api/v1/index.js
-/** SET YOUR instagram config path over here **/
-var ig = require('../config/instagram.js');
+var in_redirect_uri = 'http://localhost:80/account/oauth/:service'
 ```
 
 Finally start the MongoDB server in a seperate bash/pm2
