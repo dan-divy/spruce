@@ -2,8 +2,8 @@
             <div id="sidebar" class="column no-side-pad hidden-xs col-xs-12 col-sm-3 col-lg-2 sidebar-offcanvas">
                 <div class="row">
                     <div class="col-lg-12 no-pad-left no-pad-right">
-                        <div class="navTitle"> 
-                            
+                        <div class="navTitle">
+
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                                 <li class="list-group-item">
                                 	<i class="fa fa-brain"></i>&nbsp;
                                 	<a href="/category/thoughts">thoughts</a>
-                                </li>                                     
+                                </li>
                         </ul>
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-primary">
@@ -60,14 +60,14 @@
                             <li class="list-group-item list-group-item-primary">
                                 People you might know
                             </li>
-                            <% for(var i=0;i<people.length;i++) { %>
+                            <% for(var i=0;i<(people.length/2);i++) { %>
                                 <li class="list-group-item">
                                     <img src="<%= people[i].profile_pic %>" class="logo">
                                     <a href="/u/<%= people[i].username %>"><%= people[i].username %></a>
                                 </li>
-                            <% } %>    
+                            <% } %>
                         </ul>
-                        
+
                     </div>
                 </div>
             </div>
