@@ -4,12 +4,8 @@ var in_client_id = '7f1419930e724ffea8642d1f4cc70a12',
 	in_auth_url = 'https://api.instagram.com/oauth/authorize/?client_id=' + in_client_id + '&redirect_uri=' + in_redirect_uri + '&response_type=code'
 
 module.exports = {
-
-	instagram: {
 		client_id: in_client_id,
 		client_secret: in_client_secret,
 		auth_url: in_auth_url,
 		redirect_uri: in_redirect_uri
-	}
-
 };
