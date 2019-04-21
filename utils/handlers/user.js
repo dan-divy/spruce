@@ -217,30 +217,10 @@ function like(user, like, _id, cb) {
 
 			if(obj.posts[i]._id == _id) {
 					obj.posts[i].likes.push(like.by);
-					obj.delete();
-					var newUser = new User({
-							username:obj.username,
-							password:obj.password,
-							firstname:obj.fn,
-							lastname:obj.ln,
-							dob:obj.dob,
-							bio:obj.bio,
-							profile_pic:obj.profile_pic,
-							posts:obj.posts,
-							followers:obj.followers,
-							likes:obj.likes,
-							lastLogin:new Date(),
-					});
-
-					newUser.save((err, res) => {
-							cb(err, true);
-					})
-
-
-
-					}
+					obj = new User(obj);
+					obj.save((err) => {cb(err, true)})
 				}
-
+			}
 	})
 }
 
