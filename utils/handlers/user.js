@@ -182,29 +182,15 @@ function comment(user, comment, _id, cb) {
 		console.log(obj);
 		for(var i=0;i<obj.posts.length;i++) {
 			if(obj.posts[i]._id == _id) {
-				obj.posts[i].comments.push(comment)
+				obj.posts[i].comments.push(comment);
+				obj = new User(obj);
+				obj.save((err, res) => {
+					return cb(err, res);
+				})
+
 			}
 		}
-		obj.delete();
-		var newUser = new User({
-				username:obj.username,
-				password:obj.password,
-				firstname:obj.fn,
-				lastname:obj.ln,
-				dob:obj.dob,
-				bio:obj.bio,
-				profile_pic:obj.profile_pic,
-				posts:obj.posts,
-				followers:obj.followers,
-				likes:obj.likes,
-				lastLogin:new Date(),
-		});
-
-		newUser.save((err, res) => {
-				return cb(err, res);
-		})
-
-
+		
 	})
 }
 function like(user, like, _id, cb) {
@@ -218,7 +204,9 @@ function like(user, like, _id, cb) {
 			if(obj.posts[i]._id == _id) {
 					obj.posts[i].likes.push(like.by);
 					obj = new User(obj);
-					obj.save((err) => {cb(err, true)})
+					obj.save((err) => {
+						cb(err, true)
+					})
 				}
 			}
 	})
