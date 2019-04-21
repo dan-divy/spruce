@@ -1,5 +1,5 @@
-var in_client_id = '7f1419930e724ffea8642d1f4cc70a12',
-	in_client_secret = '944ac21b95704d68a77d638873bd1622',
+var in_client_id = '<CLIENT_ID>',
+	in_client_secret = '<CLIENT_SECRET>',
 	in_redirect_uri = 'http://localhost/account/oauth/instagram', // Check your port...
 	in_auth_url = 'https://api.instagram.com/oauth/authorize/?client_id=' + in_client_id + '&redirect_uri=' + in_redirect_uri + '&response_type=code'
 
