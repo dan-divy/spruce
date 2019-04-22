@@ -58,13 +58,25 @@ router.post('/v1/follow', function(req, res, next) {
 });
 
 router.get('/v1/search', function(req, res, next) {
-	db.search(req.query.q, (err, results) => {
-		res.send(results);
-	})
+	let q = req.query.q.toLowerCase()
+	db.getAll((err, all) => {
+		if(!q) return res.send(all);
+		all = all.filter(x => 
+			x.firstname && 
+			x.username && 
+			x.lastname && 
+			(x.firstname.toLowerCase().startsWith(q) || 
+			x.firstname.toLowerCase().endsWith(q) || 
+			x.lastname.toLowerCase().startsWith(q) || 
+			x.lastname.toLowerCase().endsWith(q) || 
+			x.username.toLowerCase().startsWith(q) || 
+			x.username.toLowerCase().endsWith(q)))
+		return res.send(all);
+	});
 });
 
 router.get('/v1/oauth/:service', function(req, res, next) {
-	if(req.params.service == 'instagram') res.redirect(ig.auth_url);
+	if(req.params.service == 'instagram') res.redirect(ig.instagram.auth_url);
 	if(req.params.service == 'google') res.redirect(g.auth_url);
 });
 
