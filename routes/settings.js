@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var guid = require('guid');
 var mv = require('mv');
+const mime = require('mime-types')
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
 const fs = require('file-system');
@@ -58,9 +59,12 @@ router.post('/upload', formParser,function(req, res, next) {
 		    var final_location = `/feeds/${req.session.user}_${random_id}${req.files.filetoupload.name}`;
 
 		    console.log(`${oldpath} - OldPath\n ${newpath} - Newpath\n ${final_location} - DiskLocation\n`)
-		    // Finally upload the file to disk and save the feed to users profile
+		    // Finally upload the file to disk and save the feed to users profile.
+        var type = mime.lookup(req.files.filetoupload.name).split("/")[1]
+
 			mv(oldpath, newpath, function (err) {
-				console.log('moving files')
+				console.log('moving files');
+
 			db.findOne({username:req.session.user}, (err, u) => {
 				console.log(u)
 				u.posts.push({
@@ -71,7 +75,7 @@ router.post('/upload', formParser,function(req, res, next) {
 					category:req.body.type,
 					comments:[],
 					likes:[],
-					type:'image',
+					type:type,
 					createdAt:new Date(),
 					lastEditedAt:new Date()
 				})
