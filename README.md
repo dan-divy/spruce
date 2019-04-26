@@ -2,7 +2,7 @@
 
 Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
 
-_Deployed on an Amazon EC2 instance [here](http://mygurukulonline.in)_
+_Deployed on an Amazon EC2 instance [here](http://spruce.divy.work)_
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
