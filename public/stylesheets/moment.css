@@ -55,7 +55,8 @@
   padding: 20px;
 }
 .img-responsive {
-  max-height: 100%;
+  height: 350px;
+  width: 350px;
   align-self: center;
   align-content:center;
 }
