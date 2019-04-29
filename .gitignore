@@ -62,3 +62,4 @@ typings/
 .next
 
 #testing images
+.vscode/sftp.json
