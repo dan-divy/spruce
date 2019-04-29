@@ -5,7 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Release builds
 release/
+release-builds/
+
 # Runtime data
 pids
 *.pid
@@ -61,4 +64,6 @@ typings/
 # next.js build output
 .next
 
-#testing images
+# local uploads
+public/feeds/
+
