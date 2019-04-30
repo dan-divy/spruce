@@ -32,7 +32,14 @@
 <br>
 <br>
     <div class="gram-card-image">
-      <center><img author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive"></center>
+      <center>
+          <% if(people[i].posts[z].type == "image") { %>
+        <img author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive">
+        <% } %>
+        <% if(people[i].posts[z].type == "mp4") { %>
+      <video author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive" controls></video>
+      <% } %>
+      </center>
     </div>
 
     <div class="gram-card-content">

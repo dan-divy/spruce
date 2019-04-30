@@ -94,6 +94,7 @@
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
+                  console.log(e)
                     $('#blah')
                         .attr('src', e.target.result);
                     /* $('#postBtn')
