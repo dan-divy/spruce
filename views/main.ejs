@@ -70,7 +70,7 @@
     </div>
 
     <div class="gram-card-footer">
-      <button <% if(people[i].posts[z].likes.includes(people[i].posts[z].author)) { %> disabled <% } %>onclick="this.innerHTML =  '<i class=\'glyphicon glyphicon-thumbs-up\'></i> ' + (parseInt(<%= people[i].posts[z].likes.length %>) + 1); this.disabled = true;" class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="<%= people[i].posts[z].author %>" id="<%= people[i].posts[z]._id %>-like">
+      <button data="people[i].posts[z].likes" <% if(people[i].posts[z].likes.includes(user.username)) { %> disabled <% } %>onclick="this.innerHTML =  '<i class=\'glyphicon glyphicon-thumbs-up\'></i> ' + (parseInt(<%= people[i].posts[z].likes.length %>) + 1); this.disabled = true;" class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="<%= people[i].posts[z].author %>" id="<%= people[i].posts[z]._id %>-like">
         <i class="glyphicon glyphicon-thumbs-up"></i> <%= people[i].posts[z].likes.length %></button>
 
       <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Click enter to comment here..."/>

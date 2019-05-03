@@ -3,19 +3,7 @@
   <%- include('../head') -%>
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
   <body>
-    <div class="container-fluid top-navbar box-shadow">
-      <a href="/" class="float-left">
-      <h2>
-        <img src="/images/logo/logo.png" class="logo">
-        leaflet
-      </h2>
-      </a>
-      <div class="float-right margin-top-20">
-        <button type="button" class="btn btn-link" id="sidebarToggle">
-          <i class="fa fa-lg fa-paper-plane pills"></i>
-        </button>
-      </div>
-    </div>
+  <%- include('../navbar')	-%>
     <br>
     <div class="container">
       <img src="<%= user.profile_pic %>" class="logo">
@@ -47,6 +35,7 @@
     <div id="notify_message" class="notify_message-success">
     	<center>Follow @<%= user.username %>!</center>
     </div>
+    <%- include('../tabs') %>
     <%- include('../footer') -%>
   </body>
   <script type="text/javascript">
