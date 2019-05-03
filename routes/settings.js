@@ -7,6 +7,9 @@ const mime = require('mime-types')
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
 const fs = require('file-system');
+
+var image_types = ["png","jpeg","gif"];
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   db.findOne({username:req.session.user}, (err, user) => {
@@ -61,10 +64,12 @@ router.post('/upload', formParser,function(req, res, next) {
 		    console.log(`${oldpath} - OldPath\n ${newpath} - Newpath\n ${final_location} - DiskLocation\n`)
 		    // Finally upload the file to disk and save the feed to users profile.
         var type = mime.lookup(req.files.filetoupload.name).split("/")[1]
-
+	if(image_types.includes(type)) {
+		type = "image";	
+	}
 			mv(oldpath, newpath, function (err) {
 				console.log('moving files');
-
+			console.log(type)
 			db.findOne({username:req.session.user}, (err, u) => {
 				console.log(u)
 				u.posts.push({
