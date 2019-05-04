@@ -7,7 +7,7 @@
 	},
 	"http": {
 		"host":"localhost",
-		"port":80
+		"port":8080
 	},
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
