@@ -43,7 +43,9 @@
          </button>
          <input type='file' name='filetoupload' onchange="readURL(this);" id="file" required/>
         </div>
+        <div id="video-priview">
 
+        </div>
         <img src="" id="blah" class="img-responsive">
       </center>
     </div>
@@ -94,14 +96,15 @@
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                  console.log(e)
+                  console.log(e);
+                  var typeRegex = e.target.result.match(RegExp("data:video*"));
+                  if(typeRegex) {
+                    console.log("video");
+                    // TODO: Add a video preview for the user
+                  }
                     $('#blah')
                         .attr('src', e.target.result);
-                    /* $('#postBtn')
-                        .attr('disabled', false)
-                      $('#postDiv')[0].style.background="linear-gradient(120deg,cornflowerblue,deepskyblue)";
-                        $('#postBtn')[0].style.color="white";*/
-                };
+                      };
 
                 reader.readAsDataURL(input.files[0]);
             }
