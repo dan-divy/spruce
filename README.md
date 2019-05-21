@@ -12,9 +12,9 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 
 ## Features
 
-* Sign in using local authentication or using your Instagram account.
+* Sign in using local authentication, Instagram or Google.
 * Search for your other users.
-* All feeds divided into 3 categories -
+* All feeds divided into 3 categories 
 	* thoughts (tweets)
 	* events (location can be specified)
 	* moments (personal post)
@@ -29,8 +29,8 @@ And a lot more to be added soon...
 ## To Do's
 * Change the name (Issue #3)
 * Activity feature for user to see follow requests and his/her daily activity.
-* Sign in using FaceBook, Twitter and Google accounts.
 * Chat one-one or create a room/group.
+* Notifications
 
 ## Requirements
 
