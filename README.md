@@ -5,6 +5,7 @@ Spruce is a tiny but powerful open-source social networking platform made with N
 [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DivySrivastava/spruce&amp;utm_campaign=Badge_Grade)
 ![](https://img.shields.io/badge/liscense-MIT-brightgreen.svg)
+![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
 
 _Deployed on an Amazon EC2 instance [here](http://spruce.divy.work)_
 
