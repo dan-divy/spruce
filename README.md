@@ -1,7 +1,12 @@
 [![spruce-banner](./public/images/logo/banner.png)](http://mygurukulonline.in)
 
-Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB
+Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB.
+
 [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DivySrivastava/spruce&amp;utm_campaign=Badge_Grade)
+![](https://img.shields.io/badge/liscense-MIT-brightgreen.svg)
+![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
+
 _Deployed on an Amazon EC2 instance [here](http://spruce.divy.work)_
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
@@ -10,9 +15,9 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 
 ## Features
 
-* Sign in using local authentication or using your Instagram account.
+* Sign in using local authentication, Instagram or Google.
 * Search for your other users.
-* All feeds divided into 3 categories -
+* All feeds divided into 3 categories 
 	* thoughts (tweets)
 	* events (location can be specified)
 	* moments (personal post)
@@ -27,8 +32,8 @@ And a lot more to be added soon...
 ## To Do's
 * Change the name (Issue #3)
 * Activity feature for user to see follow requests and his/her daily activity.
-* Sign in using FaceBook, Twitter and Google accounts.
 * Chat one-one or create a room/group.
+* Notifications
 
 ## Requirements
 

@@ -7,6 +7,9 @@ const mime = require('mime-types')
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
 const fs = require('file-system');
+
+var image_types = ["png","jpeg","gif"];
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   db.findOne({username:req.session.user}, (err, user) => {
