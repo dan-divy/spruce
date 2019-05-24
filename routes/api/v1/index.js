@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var tool = require('array-tools')
 var db = require('../../../utils/handlers/user');
+var User = require('../../../utils/models/user');
 var formParser = require('../../../utils/form-parser.js');
 var ig = require('../../../config/instagram');
 var g = require('../../../config/google');
@@ -73,25 +74,20 @@ router.post('/v1/user', function(req, res, next) {
 });
 
 router.get('/v1/search', function(req, res, next) {
-	let q = req.query.q.toLowerCase()
-	db.getAll((err, all) => {
-		if(!q) return res.send(all);
-		all = all.filter(x => 
-			x.firstname && 
-			x.username && 
-			x.lastname && 
-			(x.firstname.toLowerCase().startsWith(q) || 
-			x.firstname.toLowerCase().endsWith(q) || 
-			x.lastname.toLowerCase().startsWith(q) || 
-			x.lastname.toLowerCase().endsWith(q) || 
-			x.username.toLowerCase().startsWith(q) || 
-			x.username.toLowerCase().endsWith(q)))
+	var regx = '^'+req.query.q+'.*';
+	User
+	.find({$or:[
+		    {username:{$regex:regx}},
+    		    {firstname:{$regex:regx}},
+    		    {lastname:{$regex:regx}}
+	]})
+	.exec((err, all) => {
 		return res.send(all);
 	});
 });
 
 router.get('/v1/oauth/:service', function(req, res, next) {
-	if(req.params.service == 'instagram') res.redirect(ig.instagram.auth_url);
+	if(req.params.service == 'instagram') res.redirect(ig.auth_url);
 	if(req.params.service == 'google') res.redirect(g.auth_url);
 });
 
