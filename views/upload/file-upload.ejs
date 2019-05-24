@@ -41,7 +41,7 @@
          <div class="upload-btn-wrapper">
          <button class="btn agradient btn-action whoop" id="post">   <i class="fa fa-lg fa-upload"></i> Upload an image.
          </button>
-         <input type='file' name='filetoupload' onchange="readURL(this);" id="file" required/>
+         <input type='file' name='filetoupload' onchange="readURL(this);" id="file"/>
         </div>
 
         <img src="" id="blah" class="img-responsive">
@@ -50,7 +50,7 @@
 
     <div class="gram-card-content">
       <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a><br>
-        <input type="text" name="caption" placeholder="a_cool_caption" class="form-control">
+        <input type="text" name="caption" placeholder="some_cool_text" class="form-control">
         <select class="form-control" name="type">
           <option>thoughts</option>
           <option>moments</option>
