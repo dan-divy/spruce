@@ -15,7 +15,15 @@ router.get('/', function(req, res, next) {
   		user: user
   	});
   })
+});
 
+router.get('/settings', function(req, res, next) {
+  db.findOne({username:req.session.user}, (err, user) => {
+  	res.render('me/settings', {
+  		title: req.app.conf.name,
+  		user: user
+  	});
+  })
 });
 
 router.get('/post/:action/:query', function(req, res, next) {
