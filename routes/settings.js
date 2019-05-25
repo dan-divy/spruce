@@ -18,7 +18,15 @@ router.get('/', function(req, res, next) {
   		user: user
   	});
   })
+});
 
+router.get('/settings', function(req, res, next) {
+  db.findOne({username:req.session.user}, (err, user) => {
+  	res.render('me/settings', {
+  		title: req.app.conf.name,
+  		user: user
+  	});
+  })
 });
 
 router.get('/post/:action/:query', function(req, res, next) {
@@ -55,6 +63,7 @@ router.get('/upload', function(req, res, next) {
 })
 router.post('/upload', formParser,function(req, res, next) {
 			// Generate a random id
+			if(req.files.filetoupload.name) {
 			var random_id = guid.raw();
 			// Assign static_url path
 			var oldpath = req.files.filetoupload.path;
@@ -64,12 +73,12 @@ router.post('/upload', formParser,function(req, res, next) {
 		    console.log(`${oldpath} - OldPath\n ${newpath} - Newpath\n ${final_location} - DiskLocation\n`)
 		    // Finally upload the file to disk and save the feed to users profile.
         var type = mime.lookup(req.files.filetoupload.name).split("/")[1]
-	if(image_types.includes(type)) {
-		type = "image";	
-	}
 			mv(oldpath, newpath, function (err) {
 				console.log('moving files');
-			console.log(type)
+			})
+		} else {
+			final_location = null;
+		}
 			db.findOne({username:req.session.user}, (err, u) => {
 				console.log(u)
 				u.posts.push({
@@ -90,7 +99,7 @@ router.post('/upload', formParser,function(req, res, next) {
 					// Redirect back after the job is done.
 					res.redirect('/')
 				})
-			})
+			
 		})
 })
 module.exports = router;

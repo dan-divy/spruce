@@ -58,6 +58,21 @@ router.post('/v1/follow', function(req, res, next) {
   })
 });
 
+router.post('/v1/user', function(req, res, next) {
+	db.findOne({_id: req.body._id}, (err, user) => {
+		if(err) return res.end(err);
+		if(!user) return res.sendStatus(404);
+		user[req.body.key] = req.body.value;
+		/*user.save(function(err) {
+			if(err) console.error(err);
+			return res.sendStatus(200);
+		})*/
+		user.save((err) => {
+			res.status(200).send('done')
+		})
+	})
+});
+
 router.get('/v1/search', function(req, res, next) {
 	var regx = '^'+req.query.q+'.*';
 	User

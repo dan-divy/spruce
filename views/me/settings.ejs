@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <body>
+  <%- include('../navbar')	-%>
+    <br>
+
+    <div class="container">
+        <h1>Settings for <%= user.username %></h1><br>
+        <input type="text" onchange="change(this.value, 'Username')" class="form-control" value="<%= user.username %>">
+    </div>
+
+
+    <%- include('../tabs') %>
+    <%- include('../footer') -%>
+  </body>
+  <script type="text/javascript">
+    const _id = "<%= user._id %>";
+  </script>
+  <script>
+
+    function change(value, key) {
+        $.ajax({
+            method: 'POST',
+            url: '/api/v1/user',
+            data: {
+                "_id":_id,
+                key: key.toLowerCase(),
+                value
+            }
+        })
+        .done(function(data){
+            show_notification(key + ' changed!','success')
+        })
+        .fail(function(data){
+            console.log(data)  
+        });
+    }
+
+  </script>
+  <script type="text/javascript" src="/javascripts/follow.js"></script>
+</html>
