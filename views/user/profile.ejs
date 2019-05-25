@@ -40,7 +40,7 @@
     <div class="container">
       <center>
       <% for(var x=0;x<user.posts.length;x++) { %>
-        <img src="<%= user.posts[x].static_url %>" class="feed-view-img">
+        <img src="<% if(user.posts[x].static_url) { %><%= user.posts[x].static_url %><% } else {%>/images/logo/logo.png<% } %>" class="feed-view-img">
       <% } %>
       </center>
     </div>
