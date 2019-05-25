@@ -6,10 +6,13 @@
   <%- include('../navbar')	-%>
     <br>
 
-    <div class="container">
+    <div class="container" style="margin-bottom: 15%">
         <h1>Your settings</h1><br>
-        <img style="display: inline; border-radius: 50%; width: 20%" src="<%= user.profile_pic %>"><input style="margin-top: 5%;margin-bottom: 5%;width: 70%;display: inline;margin-left: 10%;" type="file" name="file" class="form-control">
-        <input type="text" onchange="change(this.value, 'Username')" class="form-control" style="margin-top: 5%" value="<%= user.username %>">
+        <img style="display: inline; border-radius: 50%; width: 20%" src="<%= user.profile_pic %>?cache=<%= Math.random() %>" id="pfp"><input id="fileUpload" onchange="upload(this.id)" style="margin-top: 5%;margin-bottom: 5%;width: 70%;display: inline;margin-left: 10%;" type="file" name="file" class="form-control">
+        <input type="text" onchange="change(this.value, 'Username')" class="form-control" style="margin-top: 5%" value="<%= user.username %>"  placeholder="Username">
+        <input type="text" onchange="change(this.value, 'First Name')" class="form-control" style="margin-top: 5%; width: 49.5%; display: inline" value="<%= user.firstname %>" placeholder="First name">
+        <input type="text" onchange="change(this.value, 'Last Name')" class="form-control" style="margin-top: 5%; width: 50%; display: inline" value="<%= user.lastname %>"  placeholder="Last name">
+        <input type="text" onchange="change(this.value, 'Bio')" class="form-control" style="margin-top: 5%" value="<%= user.bio %>" placeholder="Bio">
     </div>
 
 
@@ -23,19 +26,39 @@
 
   </div>
   <script>
-    
+    function upload(id) {
+      var data = new FormData();
+      $.each($(`#${id}`)[0].files, function(i, file) {
+        data.append('file-'+i, file);
+      });
+      $.ajax({
+            method: 'POST',
+            url: '/api/v1/user/picture?id=' + _id,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+      .done(function(data) {
+        document.getElementById('pfp').src = data + '?cache=' + Math.random();
+          show_notification('Profile picture updated!', 'success')
+      })
+      .fail(function(data){
+          console.log(data)  
+      });
+    }
     function change(value, key) {
         $.ajax({
             method: 'POST',
-            url: '/api/v1/user',
+            url: '/api/v1/user/set',
             data: {
                 "_id":_id,
-                key: key.toLowerCase(),
+                key: key.toLowerCase().replace(' ', ''),
                 value
             }
         })
         .done(function(data){
-            show_notification(key + ' changed to ' + value, 'success')
+            show_notification(key + ' changed to ' + value.toString().slice(0, 80), 'success')
         })
         .fail(function(data){
             console.log(data)  
