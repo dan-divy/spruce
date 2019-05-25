@@ -67,8 +67,11 @@ router.post('/v1/user', function(req, res, next) {
 			if(err) console.error(err);
 			return res.sendStatus(200);
 		})*/
-		user.save((err) => {
-			res.status(200).send('done')
+		user.save((err, profile) => {
+				delete req.session.user;
+				req.session.user =  profile.username;
+				res.status(200).send('done')
+			
 		})
 	})
 });
