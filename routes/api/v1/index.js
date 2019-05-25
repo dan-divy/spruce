@@ -65,19 +65,27 @@ router.post('/v1/user/:mode', function(req, res, next) {
 	if(req.params.mode == 'picture') {
 		db.findOne({_id: req.query.id}, (err, user) => {
 		if(!user) return res.sendStatus(404);
+		var image_types = ["png","jpeg","gif"];
 		var form = new formidable.IncomingForm();
 
 			form.parse(req);
 
 		
 			form.on('fileBegin', function (name, file){
+				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
+					return res.status(404).send('Unsupported file type!');
+				}
 				if(fs.existsSync((__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1]))) {
 					fs.unlinkSync(__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1])
 				}
 				file.path = __dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1];
+			
 			});
 			
 			form.on('file', function (name, file){
+				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
+					return;
+				}
 				user['profile_pic'] = "/images/profile_pictures/" + user.username + '.' + file.name.split('.')[1];
 				user.save((err, profile) => {
 					delete req.session.user;
