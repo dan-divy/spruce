@@ -7,8 +7,9 @@
     <br>
 
     <div class="container">
-        <h1>Settings for <%= user.username %></h1><br>
-        <input type="text" onchange="change(this.value, 'Username')" class="form-control" value="<%= user.username %>">
+        <h1>Your settings</h1><br>
+        <img style="display: inline; border-radius: 50%; width: 20%" src="<%= user.profile_pic %>"><input style="margin-top: 5%;margin-bottom: 5%;width: 70%;display: inline;margin-left: 10%;" type="file" name="file" class="form-control">
+        <input type="text" onchange="change(this.value, 'Username')" class="form-control" style="margin-top: 5%" value="<%= user.username %>">
     </div>
 
 
@@ -18,8 +19,11 @@
   <script type="text/javascript">
     const _id = "<%= user._id %>";
   </script>
-  <script>
+    <div id="notify_message" class="notify_message-success">
 
+  </div>
+  <script>
+    
     function change(value, key) {
         $.ajax({
             method: 'POST',
@@ -31,7 +35,7 @@
             }
         })
         .done(function(data){
-            show_notification(key + ' changed!','success')
+            show_notification(key + ' changed to ' + value, 'success')
         })
         .fail(function(data){
             console.log(data)  
