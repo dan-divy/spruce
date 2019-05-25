@@ -16,11 +16,8 @@
       <div class="float-right margin-right-10">
         
         
-        <button class="btn btn-action btn-sm btn-default" onclick="follow()" ="follow"<% for(var i=0;i<user.followers.length;i++) { %><% if(user.followers[i] == user.id) { %> disabled<% } %><% } %>>Follow</button>
+        <a class="btn btn-action btn-sm btn-default" href="/me/settings">Settings</a>
           
-        
-       
-        <a class="btn btn-action btn-sm btn-danger">Talk</a>
       </div>
       <br><br><br>
       
@@ -34,7 +31,7 @@
       </center>
     </div>
     <div id="notify_message" class="notify_message-success">
-    	<center>Follow @<%= user.username %>!</center>
+    	<center>Settings</center>
     </div>
     <%- include('../tabs') %>
     <%- include('../footer') -%>
