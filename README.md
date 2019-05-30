@@ -7,7 +7,7 @@ Spruce is a tiny but powerful open-source social networking platform made with N
 ![](https://img.shields.io/badge/license-MIT-green.svg)
 ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
 
-_Deployed on an Amazon EC2 instance [here](http://spruce.divy.work)_
+_Deployed on an Amazon EC2 instance [here](http://spruce.dancodes.online)_
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
