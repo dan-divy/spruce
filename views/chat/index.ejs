@@ -20,12 +20,5 @@
     <%- include('../tabs') %>
     <%- include('../footer') -%>
   </body>
-  <script src="/javascripts/socket.io.js" charset="utf-8"></script>
-  <script type="text/javascript">
-    var socket = io.connect('/');
-    socket.on('connect', function (data) {
-      console.log('Connected')
-      socket.emit('my other event', { my: 'data' });
-    });
-  </script>
+  
 </html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../head') -%>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+    <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
+  <body>
+  <%- include('../navbar')	-%>
+    <br>
+    <div class="container">
+      <ul class="list-group">
+  <% for(var i=0;i<room.chats.length;i++) { %>
+    <li class="list-group-item <% if(room.chats[i].by == session.user) { %>active<% } %>">
+
+        <%= room.chats[i].txt %> - <%= room.chats[i].by %>
+
+    </li>
+  <% } %>
+</ul>
+    </div>
+    <div class="container navbar-fixed-bottom" style="padding-bottom:100px;">
+      <input type="text" class="form-control" id="msg" placeholder="Type something...">
+    </div>
+    <%- include('../tabs') %>
+    <%- include('../footer') -%>
+  </body>
+  <script src="/javascripts/socket.io.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    var socket = io.connect('/');
+    var roomId = "<%= room.id %>";
+    var user = "<%= session.user %>";
+    var _id = "<%= session._id %>";
+    socket.on('connect', function (data) {
+      console.log('Connected')
+      socket.emit('online', { _id: _id });
+    });
+    socket.on('msg', function (data) {
+      console.log(data);
+    });
+    socket.on('typing', function (data) {
+      console.log(data);
+    });
+    function trySendingMsg(e) {
+      if(e.keyCode == 13) {
+        socket.emit('msg', {
+          txt:e.target.value,
+          by:user,
+          time:new Date(),
+          roomId: roomId
+        })
+        $("#msg").val('');
+      }
+      else {
+        socket.emit('typing', {
+          who:user
+        });
+      }
+    }
+
+    $("#msg").on("keydown", trySendingMsg);
+
+  </script>
+</html>

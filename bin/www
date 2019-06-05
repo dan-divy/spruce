@@ -8,6 +8,9 @@ var app = require('../app');
 var debug = require('debug')('v2.0.0:server');
 var http = require('http');
 
+var Room = require('../utils/models/room');
+var User = require('../utils/models/user');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -29,10 +32,27 @@ var io = require('socket.io')(server);
 
 io.on('connection', (client) => {
   client.on('typing', function (data) {
-    // ToDo
+    client.emit('typing', {
+      who:data.who
+    })
   });
-  client.on('send', function (data) {
-    // ToDo
+  client.on('msg', function (data) {
+    Room
+    .findOne({id: data.roomId})
+    .exec((err, room) => {
+      room.chats.push({
+        txt:data.txt,
+        by:data.by,
+        time:new Date()
+      })
+      room = Room(room);
+      room.save((err, success) => {
+        io.sockets.emit('msg', {
+          txt:data.txt,
+          by:data.by
+        })
+      })
+    })
   });
 });
 
