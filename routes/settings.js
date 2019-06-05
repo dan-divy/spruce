@@ -12,7 +12,7 @@ var image_types = ["png","jpeg","gif"];
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  db.findOne({username:req.session.user}, (err, user) => {
+  db.findOne({_id:req.session._id}, (err, user) => {
   	res.render('me/index', {
   		title: req.app.conf.name,
   		user: user
@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/settings', function(req, res, next) {
-  db.findOne({username:req.session.user}, (err, user) => {
+  db.findOne({_id:req.session._id}, (err, user) => {
   	res.render('me/settings', {
   		title: req.app.conf.name,
   		user: user
@@ -38,7 +38,7 @@ router.get('/post/:action/:query', function(req, res, next) {
 			db.findOne({username:req.session.user}, (err, u) => {
 				let id = req.params.query
 				console.log(u);
-				fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
+				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url) fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
 				u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
 				u.save(err => {
 					if (err) throw err;
@@ -63,8 +63,8 @@ router.get('/upload', function(req, res, next) {
 })
 router.post('/upload', formParser,function(req, res, next) {
 			// Generate a random id
-			if(req.files.filetoupload.name) {
 			var random_id = guid.raw();
+			if(req.files.filetoupload.name) {
 			// Assign static_url path
 			var oldpath = req.files.filetoupload.path;
 		    var newpath = path.join(__dirname, `../public/feeds/${req.session.user}_${random_id}${req.files.filetoupload.name}`);
@@ -84,6 +84,7 @@ router.post('/upload', formParser,function(req, res, next) {
 				u.posts.push({
 					_id:random_id,
 					author:req.session.user,
+					authorID: req.session._id,
 					static_url:final_location,
 					caption:req.body.caption,
 					category:req.body.type,
