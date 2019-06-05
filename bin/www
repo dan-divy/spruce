@@ -22,6 +22,20 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
+  * Create websocket server
+  */
+var io = require('socket.io')(server);
+
+io.on('connection', (client) => {
+  client.on('typing', function (data) {
+    // ToDo
+  })
+  client.on('send', function (data) {
+    // ToDo
+  })
+})
+
+/**
  * Listen on provided port, on all network interfaces.
  */
 
