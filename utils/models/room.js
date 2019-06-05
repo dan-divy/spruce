@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 // define the schema for our user model
 var chatSchema = mongoose.Schema({
-    users:String,
-    chats:Array
+    users:Array, // ["John", "Doe"]
+    chats:Array // {txt:"Hi", by:"john", time:"10:35pm"}
 });
 
 
