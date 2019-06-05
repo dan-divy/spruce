@@ -31,7 +31,8 @@ router.get('/:user', function(req, res, next) {
       if(chatRoom) {
         res.render('chat/room', {
           title: req.app.conf.name,
-          room: chatRoom
+          room: chatRoom,
+          session:req.session
         })
       }
       else {
@@ -46,7 +47,8 @@ router.get('/:user', function(req, res, next) {
         newChatRoom.save((err, done) => {
           res.render('chat/room', {
             title: req.app.conf.name,
-            room: done
+            room: done,
+            session:req.session
           })
         })
       }
