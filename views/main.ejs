@@ -3,7 +3,7 @@
 
 <ul class="list-group">
   <li class="list-group-item list-group-item-primary">
-    <img src="<%= user.profile_pic %>" class="gram-card-user-image">
+    <img src="<%= user.profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
      <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> <br>
      <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
      <br>
@@ -14,8 +14,8 @@
 
 <div class="gram-card">
     <div class="gram-card-header">
-      <img src="<%= people[i].profile_pic %>" class="gram-card-user-image">
-      <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].author %>"><%= people[i].posts[z].author %></a>
+      <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
+      <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].authorID %>"><%= people[i].posts[z].author %></a>
 
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
@@ -31,18 +31,17 @@
     </div>
 <br>
 <br>
-<% if(people[i].posts[z].static_url) { %>
     <div class="gram-card-image">
+      <% if(people[i].posts[z].static_url) { %>
+      <% if(people[i].posts[z].type == 'png' || people[i].posts[z].type == 'jpg') { %>
       <center>
-          <% if(people[i].posts[z].type == "image") { %>
         <img author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive">
-        <% } %>
-        <% if(people[i].posts[z].type == "mp4") { %>
+      <% } else { %>
       <video author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive" controls></video>
       <% } %>
       </center>
+      <% } %>
     </div>
-<% } %>
     <div class="gram-card-content">
 
       <p><a class="gram-card-content-user" href="/u/undefined_void"><%= people[i].posts[z].author %></a>
