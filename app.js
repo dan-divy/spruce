@@ -16,6 +16,8 @@ var categoryRouter = require('./routes/category');
 var restApi = require('./routes/api/v1/index')
 var chatRouter = require('./routes/chat');
 
+var chatSocket = require('./utils/handlers/socket');
+
 var app = express();
 app.conf = require('./config/app')
 // view engine setup
@@ -29,8 +31,10 @@ var cooky = {
   	saveUninitialized: true
 }
 
+app.sessionMiddleware = session(cooky);
+
 app.set('trust proxy', 1) // trust first proxy
-app.use(session(cooky))
+app.use(app.sessionMiddleware);
 app.use(logger('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -61,5 +65,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 console.log(process.env)
 module.exports = app;
