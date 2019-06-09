@@ -24,37 +24,6 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-/**
-  * Create websocket server
-  */
-
-var io = require('socket.io')(server);
-
-io.on('connection', (client) => {
-  client.on('typing', function (data) {
-    client.emit('typing', {
-      who:data.who
-    })
-  });
-  client.on('msg', function (data) {
-    Room
-    .findOne({id: data.roomId})
-    .exec((err, room) => {
-      room.chats.push({
-        txt:data.txt,
-        by:data.by,
-        time:new Date()
-      })
-      room = Room(room);
-      room.save((err, success) => {
-        io.sockets.emit('msg', {
-          txt:data.txt,
-          by:data.by
-        })
-      })
-    })
-  });
-});
 
 /**
  * Listen on provided port, on all network interfaces.
