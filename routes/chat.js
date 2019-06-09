@@ -19,9 +19,9 @@ router.get('/', function(req, res, next) {
   })
 });
 
-router.get('/:user', function(req, res, next) {
+router.get('/:userid', function(req, res, next) {
   User
-  .findOne({username:req.params.user})
+  .findOne({_id:req.params.userid})
   .exec((error, user) => {
     var possibleRoomId = user._id+req.session._id;
     console.log(possibleRoomId);
