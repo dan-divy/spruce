@@ -65,7 +65,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
 	if(req.params.mode == 'picture') {
 		db.findOne({_id: req.query.id}, (err, user) => {
 		if(!user) return res.sendStatus(404);
-		var image_types = ["png","jpeg","gif"];
+		var image_types = ["png","jpeg","gif", "jpg"];
 		var form = new formidable.IncomingForm();
 
 			form.parse(req);
