@@ -9,9 +9,6 @@ var io = require('socket.io');
 var debug = require('debug')('v2.0.0:server');
 var http = require('http');
 
-var Room = require('../utils/models/room');
-var User = require('../utils/models/user');
-
 /**
  * Get port from environment and store in Express.
  */
@@ -94,4 +91,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-module.exports.sio = sio;
+
+module.exports = { sio };

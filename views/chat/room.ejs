@@ -26,14 +26,10 @@
   <script src="/javascripts/socket.io.js" charset="utf-8"></script>
   <script type="text/javascript">
     var socket = io();
-    var roomId = "<%= room.id %>";
-    var user = "<%= session.user %>";
-    var _id = "<%= session._id %>";
     socket.on('connect', function (data) {
       console.log('Connected')
-      socket.emit('online', { _id: _id });
     });
-    socket.on('msg', function (data) {
+    socket.on('new msg', function (data) {
       console.log(data);
     });
     socket.on('typing', function (data) {
@@ -43,15 +39,12 @@
       if(e.keyCode == 13) {
         socket.emit('msg', {
           txt:e.target.value,
-          by:user,
-          time:new Date(),
-          roomId: roomId
+          time:new Date()
         })
         $("#msg").val('');
       }
       else {
         socket.emit('typing', {
-          who:user
         });
       }
     }

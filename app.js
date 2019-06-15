@@ -16,8 +16,6 @@ var categoryRouter = require('./routes/category');
 var restApi = require('./routes/api/v1/index')
 var chatRouter = require('./routes/chat');
 
-var chatSocket = require('./utils/handlers/socket');
-
 var app = express();
 app.conf = require('./config/app')
 // view engine setup
