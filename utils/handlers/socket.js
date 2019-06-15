@@ -1,5 +1,6 @@
 const io = require('socket.io');
 const express = require('express');
+var User = require('../models/user');
 var Room = require("../models/room");
 const sio = require('../../bin/www').sio; 
 const sessionMiddleware = require('../../app').sessionMiddleware;
@@ -16,21 +17,25 @@ function sendMsg(socket, chat) {
     if(!room.chats) {
         room.chats = [];
     }
-    room.chats.push({txt:chat.txt, by: socket.session.user._id, time})
-    room.save((err,obj) => {
-        socket.broadcast.emit("new msg", {
-            txt:chat.txt,
-            by:socket.session.user._id,
-            time
+    User.findOne({_id: socket.session._id})
+        .exec(function(err, user) {
+        room.chats.push({txt:chat.txt, by: user, time})
+        console.log({txt:chat.txt, by: user, time})
+        room.save((err,obj) => {
+            socket.broadcast.emit("new msg", {
+                txt:chat.txt,
+                by:user,
+                time
+            });
         });
-    });
+    })
 };
 
 sio.on("connection", function(socket) {
     const session = socket.request.session
     socket.session = session;
     Room
-    .findOne({id: session.socket.room}, function (err, room) {
+    .findOne({_id: session.socket.room}, function (err, room) {
         if(!room) {
             return socket.disconnect('unauthorized');
         }
