@@ -46,7 +46,7 @@ function timeSince(date) {
         </div>
       <% } %>
   <% for(var i=0;i<room.chats.length;i++) {
-    if(room.chats[i].by.profile_pic) { %>
+    if(room.chats[i].by && room.chats[i].by.profile_pic) { %>
     <div class="row" style="margin:5px">
       <div class="col-md-2">
         <li class="list-group-item" style="display:inline-block">
