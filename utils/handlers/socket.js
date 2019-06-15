@@ -11,6 +11,13 @@ sio.use(function(socket, next) {
     sessionMiddleware(socket.request, socket.request.res, next);
 });
 
+function type(socket) {
+    User.findOne({_id: socket.session._id})
+                .exec(function(err, u) {
+                    socket.to(socket.session.socket.room).emit("typing", {username: u.username});
+                });
+}
+
 function sendMsg(socket, chat) {
     var time = new Date();
     var room = socket.room;
@@ -18,11 +25,12 @@ function sendMsg(socket, chat) {
         room.chats = [];
     }
     User.findOne({_id: socket.session._id})
-        .exec(function(err, user) {
+        .exec(function(err, u) {
+        const user = {username: u.username, profile_pic: u.profile_pic, _id: u._id} //hide stuff like password
         room.chats.push({txt:chat.txt, by: user, time})
         console.log({txt:chat.txt, by: user, time})
         room.save((err,obj) => {
-            socket.to(socket.session.socket.room).emit("new msg", {
+            sio.to(socket.session.socket.room).emit("new msg", {
                 txt:chat.txt,
                 by:user,
                 time
@@ -45,6 +53,9 @@ sio.on("connection", function(socket) {
     socket.on('msg', function(data) {
         sendMsg(socket, data);        
     });
+    socket.on('typing', function(data) {
+        type(socket);
+    })
 });
 
 module.exports = io;
