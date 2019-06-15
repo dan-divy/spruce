@@ -22,7 +22,7 @@ function sendMsg(socket, chat) {
         room.chats.push({txt:chat.txt, by: user, time})
         console.log({txt:chat.txt, by: user, time})
         room.save((err,obj) => {
-            socket.broadcast.emit("new msg", {
+            socket.to(socket.session.socket.room).emit("new msg", {
                 txt:chat.txt,
                 by:user,
                 time
@@ -34,6 +34,7 @@ function sendMsg(socket, chat) {
 sio.on("connection", function(socket) {
     const session = socket.request.session
     socket.session = session;
+    socket.join(session.socket.room);
     Room
     .findOne({_id: session.socket.room}, function (err, room) {
         if(!room) {
