@@ -8,8 +8,10 @@
 
   <body>
   <%- include('navbar')	-%>
-  <%- include('sidebar') -%>
-  <%- include('main') -%>
+  <div id="mainPage">
+    <%- include('sidebar') -%>
+    <%- include('main') -%>
+  </div>
   <%- include('tabs') -%>
   <%- include('footer') -%>
   <div id="notify_message" class="notify_message-success">

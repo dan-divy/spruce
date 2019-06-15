@@ -1,3 +1,6 @@
+html {
+  word-break: break-word
+}
 @media (min-width: 768px) and (max-width: 991px) {
   .form-container {
     padding-left: 20%;
@@ -289,4 +292,7 @@ a {
   .modal-content {
     width: 100%;
   }
+}
+#mainPage {
+  margin-top:9rem
 }
