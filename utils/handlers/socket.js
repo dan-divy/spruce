@@ -1,8 +1,10 @@
 const io = require('socket.io');
 const express = require('express');
 var Room = require("../models/room");
-const {sio} = require('../../bin/www'); 
+const sio = require('../../bin/www').sio; 
 const sessionMiddleware = require('../../app').sessionMiddleware;
+
+
 
 sio.use(function(socket, next) {
     sessionMiddleware(socket.request, socket.request.res, next);
@@ -11,20 +13,24 @@ sio.use(function(socket, next) {
 function sendMsg(socket, chat) {
     var time = new Date();
     var room = socket.room;
-    room.chats.push({txt:chat.txt, by: socket.request.session.user._id, time})
+    if(!room.chats) {
+        room.chats = [];
+    }
+    room.chats.push({txt:chat.txt, by: socket.session.user._id, time})
     room.save((err,obj) => {
-        return true;
         socket.broadcast.emit("new msg", {
             txt:chat.txt,
-            by:socket.request.session.user.username,
-            time   
+            by:socket.session.user._id,
+            time
         });
     });
 };
 
 sio.on("connection", function(socket) {
+    const session = socket.request.session
+    socket.session = session;
     Room
-    .find({room: socket.request.session.socket.room}, function (err, room) {
+    .findOne({id: session.socket.room}, function (err, room) {
         if(!room) {
             return socket.disconnect('unauthorized');
         }
@@ -35,7 +41,4 @@ sio.on("connection", function(socket) {
     });
 });
 
-/**
- * Pushpushpushpushpush
- */
 module.exports = io;

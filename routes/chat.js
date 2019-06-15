@@ -20,10 +20,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:userid', function(req, res, next) {
+  require('../utils/handlers/socket');
   User
   .findOne({_id:req.params.userid})
   .exec((error, user) => {
     var possibleRoomId = user._id+req.session._id;
+    req.session.socket = {};
     req.session.socket.room = possibleRoomId;
     Room
     .findOne({id:possibleRoomId})
