@@ -1,3 +1,33 @@
+<% 
+function timeSince(date) {
+
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
+%>
+
 <!DOCTYPE html>
 <html>
   <%- include('../head') -%>
@@ -6,19 +36,33 @@
   <body>
   <%- include('../navbar')	-%>
     <br>
-    <div class="container">
+    <div class="container" id="mainPage">
       <ul class="list-group">
-  <% for(var i=0;i<room.chats.length;i++) { %>
-    <li class="list-group-item">
-
-        <img style="height:5%; width:5%; border-radius: 50%; margin-right: 1rem" src="<%= room.chats[i].by.profile_pic %>">  
-        <%= room.chats[i].txt %>
-
-    </li>
-  <% } %>
+      <% if(room.chats.length < 1) { %>
+        <div class="row">
+          <div class="col-md-12">
+            Send a message below!
+          </div>
+        </div>
+      <% } %>
+  <% for(var i=0;i<room.chats.length;i++) {
+    if(room.chats[i].by.profile_pic) { %>
+    <div class="row" style="margin:5px">
+      <div class="col-md-2">
+        <li class="list-group-item" style="display:inline-block">
+          <img class="img-responsive" style="height:100%; width:100%; border-radius: 50%; margin-right: 1rem;" src="<%= room.chats[i].by.profile_pic %>">  
+        </li>
+      </div>
+      <div class="col-md-8">
+        <li class="list-group-item" style="float:right;height:100%; width:100%"> 
+            <a style="text-decoration: underline" href="/u/<%= room.chats[i].by._id %>"><b><%= room.chats[i].by.username %></b></a> - <%= timeSince(new Date(room.chats[i].time)) %><br> <%= room.chats[i].txt %>
+        </li>
+      </div>
+    </div>
+  <% }} %>
 </ul>
     </div>
-    <div class="container navbar-fixed-bottom" style="padding-bottom:100px;">
+       <div class="container" style="padding-bottom:100px; float:bottom">
       <input type="text" class="form-control" id="msg" placeholder="Type something...">
     </div>
     <%- include('../tabs') %>
