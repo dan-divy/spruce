@@ -24,7 +24,7 @@ router.get('/:userid', function(req, res, next) {
   .findOne({_id:req.params.userid})
   .exec((error, user) => {
     var possibleRoomId = user._id+req.session._id;
-    console.log(possibleRoomId);
+    req.session.socket.room = possibleRoomId;
     Room
     .findOne({id:possibleRoomId})
     .exec((err, chatRoom) => {
