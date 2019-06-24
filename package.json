@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "socket.io":"",
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "cookie-parser": "~1.4.3",
