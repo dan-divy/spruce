@@ -3,8 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "build": "build"
+    "start": "dbHost=localhost node ./bin/www"
   },
   "dependencies": {
     "array-tools": "1.8.6",
