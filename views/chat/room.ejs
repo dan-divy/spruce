@@ -19,18 +19,25 @@
       <% } %>
   <% for(var i=0;i<room.chats.length;i++) {
     if(room.chats[i].by && room.chats[i].by.profile_pic) { %>
-    <div class="row" style="margin:5px">
-      <div class="col-md-2">
+      <!--<div class="col-md-4">
         <li class="list-group-item" style="display:inline-block">
-          <img class="img-responsive" style="height:100%; width:100%; border-radius: 50%; margin-right: 1rem;" src="<%= room.chats[i].by.profile_pic %>">  
+          <img class="logo" style=" border-radius: 50%;" src="<%= room.chats[i].by.profile_pic %>">  
         </li>
       </div>
-      <div class="col-md-8">
-        <li class="list-group-item" style="float:right;height:100%; width:100%"> 
+      <div class="col-md-6">
+        <li class="list-group-item" style="height:100%; width:100%"> 
             <a style="text-decoration: underline" href="/u/<%= room.chats[i].by._id %>"><b><%= room.chats[i].by.username %></b></a> - <span data-time="<%= room.chats[i].time %>" class="timeSince"><%= timeSince(new Date(room.chats[i].time)) %></span><br> <%= room.chats[i].txt %>
         </li>
-      </div>
-    </div>
+      </div>-->
+    
+    <ul class="list-group">
+      <li class="list-group-item">
+        <img class="logo" style="height: 30px;width: 30px;" src="<%= room.chats[i].by.profile_pic %>">
+        <a href="/u/<%= room.chats[i].by._id %>"><b><%= room.chats[i].by.username %></b></a><span data-time="<%= room.chats[i].time %>" class="timeSince float-right"><%= timeSince(new Date(room.chats[i].time)) %></span>
+        <br><br> <span class="msg"><%= room.chats[i].txt %></span> 
+        
+      </li>
+    </ul>
   <% }} %>
 </ul>
   <div style="display:none" id="typing" class="row">
@@ -47,9 +54,15 @@
   </body>
   <script src="/javascripts/socket.io.js" charset="utf-8"></script>
   <script type="text/javascript">
+  scrollingElement = (document.scrollingElement || document.body);
+  function scrollSmoothToBottom (id) {
+   $(scrollingElement).animate({
+      scrollTop: document.body.scrollHeight
+   }, 500);
+  }
+
   function timeSince(o){var t=Math.floor((new Date-o)/1e3),r=Math.floor(t/31536e3);return r>1?r+" years":(r=Math.floor(t/2592e3))>1?r+" months":(r=Math.floor(t/86400))>1?r+" days":(r=Math.floor(t/3600))>1?r+" hours":(r=Math.floor(t/60))>1?r+" minutes":Math.floor(t)+" seconds"}
-    
-    setInterval(() => {
+      setInterval(() => {
       Array.from($('.timeSince')).forEach(t => {
         var date = new Date($(t).attr('data-time'));
         var since = timeSince(date);
@@ -63,21 +76,15 @@
       const list = $('.list-group')[0];
       showTyping(null, true)
       console.log(data)
-      list.innerHTML += `
-        <div class="row" style="margin:5px">
-          <div class="col-md-2">
-            <li class="list-group-item" style="display:inline-block">
-              <img class="img-responsive" style="height:100%; width:100%; border-radius: 50%; margin-right: 1rem;" src="${data.by.profile_pic}">  
-            </li>
-          </div>
-          <div class="col-md-8">
-            <li class="list-group-item" style="float:right;height:100%; width:100%"> 
-                <a style="text-decoration: underline" href="/u/${data.by._id}"><b>${data.by.username}</b></a> - <span data-time="${data.time}" class="timeSince">${timeSince(new Date(data.time))}</span><br> ${data.txt}
-            </li>
-          </div>
-        </div>
-      `;
-      window.scrollTo(0,document.body.scrollHeight);
+      list.innerHTML += `<ul class="list-group">
+        <li class="list-group-item">
+          <img class="logo" style="height: 30px;width: 30px;" src="${data.by.profile_pic}">
+          <a href="/u/${data.by._id}"><b>${data.by.username}</b></a><span data-time="${data.time}" class="timeSince float-right">${timeSince(new Date(data.time))}</span>
+          <br><br> <span class="msg">${data.txt}</span> 
+        </li>
+      </ul>`;
+      scrollSmoothToBottom();
+      // window.scrollTo(0,document.body.scrollHeight);
     }
     var timeLeft = 0;
     var i;
@@ -137,6 +144,6 @@
     }
 
     $("#msg").on("keydown", trySendingMsg);
-
+    scrollSmoothToBottom();
   </script>
 </html>
