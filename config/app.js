@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"name":"spruce",
 	"title":"spruce",
 	"commands":{
@@ -12,7 +12,7 @@
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
 	"db": {
-		"connectionUri":"mongodb://localhost:27017/spruce",
+		"connectionUri":"mongodb://"+process.env.dbHost+":27017/spruce",
 		"params": {},
 		"collections": [
 			"moment",
