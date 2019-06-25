@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "start": "dbHost=localhost; node ./bin/www"
+    "start": "dbHost=localhost node ./bin/www"
   },
   "dependencies": {
     "socket.io":"",

@@ -33,7 +33,7 @@
     <ul class="list-group">
       <li class="list-group-item">
         <img class="logo" style="height: 30px;width: 30px;" src="<%= room.chats[i].by.profile_pic %>">
-        <a href="/u/<%= room.chats[i].by._id %>"><b><%= room.chats[i].by.username %></b></a><span data-time="<%= room.chats[i].time %>" class="timeSince float-right"><%= timeSince(new Date(room.chats[i].time)) %></span>
+        <a href="/u/<%= room.chats[i].by.username %>"><b><%= room.chats[i].by.username %></b></a><span data-time="<%= room.chats[i].time %>" class="timeSince float-right"><%= timeSince(new Date(room.chats[i].time)) %></span>
         <br><br> <span class="msg"><%= room.chats[i].txt %></span> 
         
       </li>
