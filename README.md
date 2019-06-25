@@ -30,10 +30,9 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 And a lot more to be added soon...
 
 ## To Do's
-* Change the name (Issue #3)
 * Activity feature for user to see follow requests and his/her daily activity.
-* Chat one-one or create a room/group.
 * Notifications
+* New API
 
 ## Requirements
 
