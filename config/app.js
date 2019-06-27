@@ -1,3 +1,4 @@
+var dbHost = process.env.dbHost || "localhost";
 module.exports = {
 	"name":"spruce",
 	"title":"spruce",
@@ -12,7 +13,7 @@ module.exports = {
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
 	"db": {
-		"connectionUri":"mongodb://"+process.env.dbHost+":27017/spruce",
+		"connectionUri":"mongodb://"+dbHost+":27017/spruce",
 		"params": {},
 		"collections": [
 			"moment",

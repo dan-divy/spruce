@@ -29,6 +29,15 @@ router.get('/settings', function(req, res, next) {
   })
 });
 
+router.get('/activity', function(req, res, next) {
+  db.findOne({_id:req.session._id}, (err, user) => {
+  	res.render('me/activity', {
+  		title: req.app.conf.name,
+  		activity: user.notifications
+  	});
+  })
+});
+
 router.get('/post/:action/:query', function(req, res, next) {
   switch (req.params.action) {
     case "edit":

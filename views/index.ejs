@@ -27,8 +27,19 @@
 <script src="javascripts/classie.js"></script>
 <script src="javascripts/notificationFx.js"></script>
   <script type="text/javascript">
-    show_new_notification({msg:'<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!'},'success')
+    // show_new_notification({msg:'<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!'},'success')
+      $(function() {
+        $.ajax({
+          method:"GET",
+          url:"/api/v1/notifications"
+        }).done(function(data) {
+          for(var i=0;i<data.length;i++) {
+            show_new_notification({msg:`${data[i].msg}`},'success')
+          }        
+        })
+      });
   </script>
   <script type="text/javascript" src="/javascripts/like.js"></script>
   <script type="text/javascript" src="/javascripts/comment.js"></script>
+  
 </html>
