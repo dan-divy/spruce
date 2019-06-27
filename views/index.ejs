@@ -5,7 +5,9 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
 
 <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
-
+<link rel="stylesheet" type="text/css" href="stylesheets/ns-default.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/ns-style-other.css" />
+    <script src="javascripts/modernizr.custom.js"></script>
   <body>
   <%- include('navbar')	-%>
   <div id="mainPage">
@@ -22,19 +24,10 @@
 
 <!-- End of your HTML body -->
 <script src="/animations/jquery-sakura.min.js"></script>
-<script>
-    // domReady
-  /*  $(function() {
-        $('body').sakura();
-    });
-
-    // windowLoad
-    $(window).load(function() {
-        $('body').sakura();
-    }); */
-</script>
+<script src="javascripts/classie.js"></script>
+<script src="javascripts/notificationFx.js"></script>
   <script type="text/javascript">
-    show_notification('<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!','success')
+    show_new_notification({msg:'<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!'},'success')
   </script>
   <script type="text/javascript" src="/javascripts/like.js"></script>
   <script type="text/javascript" src="/javascripts/comment.js"></script>

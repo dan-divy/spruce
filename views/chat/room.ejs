@@ -6,7 +6,17 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
     <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
   <body>
-  <%- include('../navbar')	-%>
+    	<div class="container-fluid navbar-fixed-top box-shadow" style="background-color:#fff; margin-bottom:2rem">
+        <br>  
+        <center>
+          <b>
+            <img src="<%= reciever.profile_pic %>" class="logo">
+            <%= reciever.username %>
+          </b>
+          </center>
+          <br>
+      </div>
+      
     <br>
     <div class="container" id="mainPage">
       <ul class="list-group">

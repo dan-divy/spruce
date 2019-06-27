@@ -43,7 +43,8 @@ router.get('/:userid', function(req, res, next) {
         res.render('chat/room', {
           title: req.app.conf.name,
           room: chatRoom,
-          session:req.session
+          session:req.session,
+          reciever:user
         })
       }
       else {
@@ -61,7 +62,8 @@ router.get('/:userid', function(req, res, next) {
           res.render('chat/room', {
             title: req.app.conf.name,
             room: done,
-            session:req.session
+            session:req.session,
+            reciever:user
           })
         })
       }
