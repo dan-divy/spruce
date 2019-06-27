@@ -6,7 +6,7 @@
     "start": "dbHost=localhost node ./bin/www"
   },
   "dependencies": {
-    "socket.io":"",
+    "socket.io":"^2.2.0",
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "cookie-parser": "~1.4.3",
@@ -27,7 +27,6 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
     "request": "2.88.0",
-    "socket.io": "^2.2.0",
     "time-ago": "0.2.1"
   },
   "devDependencies": {
