@@ -20,6 +20,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:userid', function(req, res, next) {
+  if(req.session._id == req.params.userid) return res.render("error",{
+    message:"Can't chat with yourself...",
+    error:{
+      status:400,
+      stack:"Can't chat with yourself."
+    }
+  });
   require('../utils/handlers/socket');
   User
   .findOne({_id:req.params.userid})
