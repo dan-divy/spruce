@@ -6,8 +6,12 @@
   <%- include('../navbar')	-%>
   <br>
  
-  <div class="container-fluid" id="mainPage">
+  <div class="container-fluid jumbotron" id="mainPage">
+        <form action="/api/v1/notifications/markAsRead" class="float-right" method="post">
+            <button type="submit" class="btn btn-sm btn-success"> Mark as read </button>
+        </form>  <br><br><br>   
         <% if(activity.length==0) { %>
+            
     <center><i class="fa fa-bell"></i> No new notifications, right now!</center>
             <% } %>
         <ul class="list-group">

@@ -29,18 +29,14 @@
 <script src="javascripts/classie.js"></script>
 <script src="javascripts/notificationFx.js"></script>
   <script type="text/javascript">
-    // show_new_notification({msg:'<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!'},'success')
-      $(function() {
-        //const observer = lozad();
-        //observer.observe();
+    $(function() {
         $.ajax({
           method:"GET",
           url:"/api/v1/notifications"
         }).done(function(data) {
-          for(var i=0;i<data.length;i++) {
-           // show_new_notification({msg:`${data[i].msg}`},'success')
-           show_new_notifications({msg:`You have ${i} new notification(s).`}, 'notice');
-          }
+          if(data != 0) {
+            show_new_notification({msg:`You have ${data} new notification(s).`}, 'notice');
+          }           
         })
       });
   </script>
