@@ -9,6 +9,8 @@ Spruce is a tiny but powerful open-source social networking platform made with N
 
 _Deployed [here](http://spruce.dancodes.online)_
 
+[**DONATE**](https://gum.co/spruce).
+
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
 ![](./public/images/intro.gif)
