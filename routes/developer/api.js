@@ -8,6 +8,42 @@ var formParser = require('../../utils/form-parser.js');
 var User = require('../../utils/models/user');
 var Keys = require('../../utils/models/keys');
 
+var secure_dev_key;
+genAPIKey(function(key) {
+    console.log("Developer key: " + key.apiKey + '\nVerify your account in /me with this key');
+    // /me will have an input to hit this api with a key and make them developer
+    // /developer/verify/keynehsnevsjebsueke
+    secure_dev_key = key.apiKey;
+})
+
+router.get('/verify/:key', function(req, res, next) {
+    if(req.params.key == secure_dev_key) {
+        User
+        .findOne({_id:req.session._id})
+        .exec((err, userSchema) => {
+            userSchema.developer = true;
+            userSchema.save((err, result) => {
+                res.redirect('/developer');
+                Keys
+                .findOne({apiKey: req.params.key})
+                .exec((err, success) => {
+                    if(success) return res.send({error:"Invalid API KEY"});
+                    var newKeySchema = new Keys({
+                        apiKey:req.params.key,
+                        invokes:0,
+                        stats:[]
+                    })
+                    newKeySchema.save((err, keySaveResult) => {
+                        res.redirect('/developer');
+                    });
+                })
+            });
+        })
+    } else {
+        res.status(405).send('Incorrect key! Check the console on startup!'); 
+     }
+    });
+
 router.use(function(req, res, next) {
     console.log(req.url);
     if(req.url == '/') return next();
@@ -61,6 +97,7 @@ router.post('/generate', function(req, res, next) {
         res.send({apikey:status.apiKey});
     })
 });
+
 
 function genAPIKey(cb) {
     var key = apiKeyGen();

@@ -11,13 +11,13 @@
       <a class="gram-card-user-name" href="">@<%= user.username %></a>
       (<%= user.firstname %> <%= user.lastname %>)
       <br><br>
-        <span class="bio"><%- user.bio %></span>
+        <span class="bio"><%- user.bio %></span><br><br>
+        <span class="bio">Enter developer key to verify your account: <form onsubmit="window.location.href = '/developer/verify/' + this.getElementsByTagName('input')[0].value; return false"><input class="form-control"></form></span>
       <br><br>
       <div class="float-right margin-right-10">
         
         
         <a class="btn btn-action btn-sm btn-default" href="/me/settings">Settings</a>
-          
       </div>
       <br><br><br>
       
