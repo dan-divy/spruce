@@ -11,24 +11,23 @@ var Keys = require('../../utils/models/keys');
 router.use(function(req, res, next) {
     console.log(req.url);
     if(req.url == '/') return next();
-    if(!req.query.apiKey) return res.send({error:"API KEY not provided."});
+    if(!req.query.apiKey) return res.status(405).send({error:"API KEY not provided."});
     Keys
     .findOne({apiKey:req.query.apiKey})
     .exec((err, key) => {
-        if(!key) return res.send({error:"Invalid API KEY provided."});
+        if(!key) return res.status(405).send({error:"Invalid API KEY provided."});
         key.invokes++;
         key.stats.push({
             time:new Date(),
             request:req
-        })
+        });
         key.save((err, done) => {
-            if(err) return res.send({error:"Some internal error."});
+            if(err) return res.status(500).send({text:"Internal error.", err});
             req.apiKey = key;
             next();
         })
     })
 });
-
 router.get('/', function(req, res, next) {
 	res.render('dev/index', {
 		title: req.app.conf.name,

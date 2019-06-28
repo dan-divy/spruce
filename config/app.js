@@ -8,7 +8,7 @@ module.exports = {
 	},
 	"http": {
 		"host":"localhost",
-		"port":8080
+		"port":8000
 	},
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
