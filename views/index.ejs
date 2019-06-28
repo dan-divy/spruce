@@ -7,7 +7,9 @@
 <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
 <link rel="stylesheet" type="text/css" href="stylesheets/ns-default.css" />
     <link rel="stylesheet" type="text/css" href="stylesheets/ns-style-other.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/progressive-image.css" />
     <script src="javascripts/modernizr.custom.js"></script>
+    <script src="javascripts/progressive-image.js"></script>
   <body>
   <%- include('navbar')	-%>
   <div id="mainPage">
@@ -29,13 +31,16 @@
   <script type="text/javascript">
     // show_new_notification({msg:'<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!'},'success')
       $(function() {
+        //const observer = lozad();
+        //observer.observe();
         $.ajax({
           method:"GET",
           url:"/api/v1/notifications"
         }).done(function(data) {
           for(var i=0;i<data.length;i++) {
-            show_new_notification({msg:`${data[i].msg}`},'success')
-          }        
+           // show_new_notification({msg:`${data[i].msg}`},'success')
+           show_new_notifications({msg:`You have ${i} new notification(s).`}, 'notice');
+          }
         })
       });
   </script>

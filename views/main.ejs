@@ -14,7 +14,7 @@
 
 <div class="gram-card">
     <div class="gram-card-header">
-      <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
+      <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image lozad">
       <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].authorID %>"><%= people[i].posts[z].author %></a>
 
             <div class="dropdown gram-card-time">
@@ -35,7 +35,9 @@
       <% if(people[i].posts[z].static_url) { %>
       <% if(people[i].posts[z].type == 'png' || people[i].posts[z].type == 'jpg' || people[i].posts[z].type == 'jpeg') { %>
       <center>
-        <img author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive">
+        <a href="<%= people[i].posts[z].static_url %>" class="progressive replace">
+            <img author="<%= people[i].posts[z].author %>" src="/images/load.gif" id="<%= people[i].posts[z]._id %>" class="post img-responsive lozad preview">
+        </a>        
       <% } else { %>
       <video author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive" controls></video>
       <% } %>
