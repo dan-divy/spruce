@@ -145,10 +145,19 @@ router.get('/v1/notifications', function(req, res, next) {
 	User
 	.findOne({_id:req.session._id})
 	.exec((err, userData) => {
-		res.send(userData.notifications);
-		userData.notifications = [];
-		userData.save();
+		res.send(new String(userData.notifications.length));
 	});
+});
+
+router.post('/v1/notifications/markAsRead', function(req, res, next) {
+	User
+	.findOne({_id:req.session._id})
+	.exec((err, userData) => {
+		userData.notifications = [];
+		userData.save((err, response) => {
+			res.redirect("/me/activity");
+		});
+	})
 });
 
 module.exports = router;
