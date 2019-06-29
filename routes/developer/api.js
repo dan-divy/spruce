@@ -8,11 +8,10 @@ var formParser = require('../../utils/form-parser.js');
 var User = require('../../utils/models/user');
 var Keys = require('../../utils/models/keys');
 
+var verified = false;
 var secure_dev_key;
 genAPIKey(function(key) {
     console.log("Developer key: " + key.apiKey + '\nVerify your account in /me with this key');
-    // /me will have an input to hit this api with a key and make them developer
-    // /developer/verify/keynehsnevsjebsueke
     secure_dev_key = key.apiKey;
 })
 
@@ -23,7 +22,6 @@ router.get('/verify/:key', function(req, res, next) {
         .exec((err, userSchema) => {
             userSchema.developer = true;
             userSchema.save((err, result) => {
-                res.redirect('/developer');
                 Keys
                 .findOne({apiKey: req.params.key})
                 .exec((err, success) => {
@@ -34,6 +32,7 @@ router.get('/verify/:key', function(req, res, next) {
                         stats:[]
                     })
                     newKeySchema.save((err, keySaveResult) => {
+                        verified = true;
                         res.redirect('/developer');
                     });
                 })
@@ -45,29 +44,35 @@ router.get('/verify/:key', function(req, res, next) {
     });
 
 router.use(function(req, res, next) {
-    console.log(req.url);
-    if(req.url == '/') return next();
+    console.log(req.query)
+    if(req.url == '/') {
+        if(verified) return next();
+        else return res.redirect('/');
+    }
     if(!req.query.apiKey) return res.status(405).send({error:"API KEY not provided."});
-    Keys
-    .findOne({apiKey:req.query.apiKey})
-    .exec((err, key) => {
-        if(!key) return res.status(405).send({error:"Invalid API KEY provided."});
-        key.invokes++;
-        key.stats.push({
-            time:new Date(),
-            request:req
-        });
-        key.save((err, done) => {
-            if(err) return res.status(500).send({text:"Internal error.", err});
-            req.apiKey = key;
-            next();
+    if(req.query.apiKey == secure_dev_key) {
+        Keys
+        .findOne({apiKey:req.query.apiKey})
+        .exec((err, key) => {
+            if(!key) return res.status(405).send({error:"Invalid API KEY provided."});
+            key.invokes++;
+            key.stats.push({
+                time:new Date(),
+                request:req
+            });
+            key.save((err, done) => {
+                req.apiKey = key;
+                next();
+            })
         })
-    })
+    }
+   
 });
 router.get('/', function(req, res, next) {
 	res.render('dev/index', {
 		title: req.app.conf.name,
-		error:false
+        error:false,
+        key:secure_dev_key
 	});
 })
 
@@ -101,8 +106,10 @@ router.post('/generate', function(req, res, next) {
 
 function genAPIKey(cb) {
     var key = apiKeyGen();
-    console.log(key);
-    Keys.findOne({apiKey:key}).exec((err, dbKey) => {
+    cb({
+        apiKey:key
+    });
+   /** Keys.findOne({apiKey:key}).exec((err, dbKey) => {
         if(dbKey) return cb(false);
         var newKey = new Keys({
             apiKey:key,
@@ -112,6 +119,6 @@ function genAPIKey(cb) {
         newKey.save((err, done) => {
             cb(done);
         })
-    })
+    })  */
 }
 module.exports = router;
