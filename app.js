@@ -34,7 +34,7 @@ app.sessionMiddleware = session(cooky);
 
 app.set('trust proxy', 1) // trust first proxy
 app.use(app.sessionMiddleware);
-app.use(logger('tiny'));
+//app.use(logger('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -66,5 +66,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-console.log(process.env)
 module.exports = app;
