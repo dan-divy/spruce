@@ -23,6 +23,10 @@
                                     <i class="fa fa-paper-plane"></i>&nbsp;
                                     <a href="/chat">chat</a>
                                 </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-heart"></i>&nbsp;
+                                    <a href="/me/activity">activity</a>
+                                </li>
                         </ul>
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-primary">Categories</li>
@@ -67,7 +71,7 @@
                             <% for(var i=0;i<(people.length/2);i++) { %>
                                 <li class="list-group-item">
                                     <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="logo">
-                                    <a href="/u/<%= people[i].id %>"><%= people[i].username %></a>
+                                    <a href="/u/<%= people[i].username %>"><%= people[i].username %></a>
                                 </li>
                             <% } %>
                         </ul>

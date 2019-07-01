@@ -14,7 +14,9 @@ var userSchema = mongoose.Schema({
     posts:Array, 
     profile_pic:String, // /public/profile_pic/username/user.png
     chat_rooms:Array, // ["1234", "3456"]
-    lastLogin:String // 10 min ago
+    lastLogin:String, // 10 min ago
+    notifications:Array, // [{msg:"New message from @user", link:"/chat/user"}]
+    developer:Boolean // true or false
 });
 
 // methods ======================

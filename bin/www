@@ -5,11 +5,9 @@
  */
 
 var app = require('../app');
+var io = require('socket.io');
 var debug = require('debug')('v2.0.0:server');
 var http = require('http');
-
-var Room = require('../utils/models/room');
-var User = require('../utils/models/user');
 
 /**
  * Get port from environment and store in Express.
@@ -23,7 +21,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
+var sio = io(server); 
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -93,4 +91,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-module.exports = server;
+
+module.exports = { sio };

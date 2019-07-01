@@ -1,4 +1,5 @@
-{
+var dbHost = process.env.dbHost || "localhost";
+module.exports = {
 	"name":"spruce",
 	"title":"spruce",
 	"commands":{
@@ -7,12 +8,12 @@
 	},
 	"http": {
 		"host":"localhost",
-		"port":8080
+		"port":8000
 	},
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
 	"db": {
-		"connectionUri":"mongodb://localhost:27017/spruce",
+		"connectionUri":"mongodb://"+dbHost+":27017/spruce",
 		"params": {},
 		"collections": [
 			"moment",
