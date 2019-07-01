@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<% function timeSince(o){var t=Math.floor((new Date-o)/1e3),r=Math.floor(t/31536e3);return r>1?r+" years":(r=Math.floor(t/2592e3))>1?r+" months":(r=Math.floor(t/86400))>1?r+" days":(r=Math.floor(t/3600))>1?r+" hours":(r=Math.floor(t/60))>1?r+" minutes":Math.floor(t)+" seconds"}%>
+<html>
+  <%- include('../head') -%>
+  <body>
+  <%- include('../navbar')	-%>
+  <br>
+ 
+  <div class="container-fluid jumbotron" id="mainPage">
+        <form action="/api/v1/notifications/markAsRead" class="float-right" method="post">
+            <button type="submit" class="btn btn-sm btn-success"> Mark as read </button>
+        </form>  <br><br><br>   
+        <% if(activity.length==0) { %>
+            
+    <center><i class="fa fa-bell"></i> No new notifications, right now!</center>
+            <% } %>
+        <ul class="list-group">
+            <% for(var i=0;i<activity.length;i++) { %>
+                <li class="list-group-item"><%= activity[i].msg %> - <b><%= timeSince(new Date(activity[i].time)) %> ago</b><br></li>
+            <% } %>    
+         </ul>
+  </div>
+  
+  <%- include('../tabs') -%>
+  <%- include('../footer') -%>  
+</html>
