@@ -1,7 +1,6 @@
 {
   "name": "pudding",
-  "version": "3.0.0",
-  "private": true,
+  "version": "4.0.0",
   "scripts": {
     "start": "dbHost=localhost node ./bin/www"
   },
