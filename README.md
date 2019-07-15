@@ -1,9 +1,3 @@
----
-description: >-
-  Spruce is a social networking platform made using
-  Node.js/ExpressJs/MongoDb(Mongoose)/JQuery by DanCodes and DivySrivastava
----
-
 # Welcome
 
 ![](.gitbook/assets/banner.png)
