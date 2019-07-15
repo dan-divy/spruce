@@ -16,15 +16,16 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 
 * Sign in using local authentication, Instagram or Google.
 * Search for your other users.
+* Chat with your friends in realtime.
 * All feeds divided into 3 categories 
   * thoughts \(tweets\)
   * events \(location can be specified\)
   * moments \(personal post\)
 * Like and comment on a feed.
+* API for developers
 * View your/others profile.
 * Follow a particular user and get notified for his/her activities.
 * Change your profile picture, bio, people who follow you etc.
-* Some extras \(games\)
 
 And a lot more to be added soon...
 
@@ -32,7 +33,6 @@ And a lot more to be added soon...
 
 * Activity feature for user to see follow requests and his/her daily activity.
 * Notifications
-* New API
 
 ## Requirements
 
@@ -46,7 +46,7 @@ And a lot more to be added soon...
 Clone the repo locally then install all the dependencies using [NPM](https://npmjs.org/)
 
 ```bash
-$ git clone https://github.com/DivySrivastava/spruce.git
+$ git clone https://github.com/dan-divy/spruce.git
 $ cd spruce
 $ npm i
 ```
@@ -88,7 +88,7 @@ spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for perform
 ## Authors
 
 * [Divy Srivastava](http://github.com/DivySrivastava)
-* [Dan](https://github.com/MayorChano)
+* [Dan](https://github.com/dan-online)
 
 ## License
 
