@@ -1,3 +1,20 @@
+3.0.0 / 2019-06-27
+==================
+
+  * New features and some bug fixes
+  * **NEW** One-One chat between users, Real-time notifications, User profile edit page.
+  * More advance search and fast-communication using web-sockets.
+  * Re-written for better code quality.
+  * Both Instagram and Google OAuth working.
+  * NEW Releases for MAC, Windows, Linux and Android devices.
+  * Demo website changed to https://spruce.dancodes.online.
+  * MongoDB host to be declared as env variable when not using on localhost. 
+    `dbHost=host.com node ./bin/www`
+  * A brand new developer API for officially accessing spruce from within.
+  * Code of Conduct adopted.
+  * Ownership transfered to the Dan-Divy Organisation [@dan-divy](https://github.com/dan-divy).
+  * Sponsors and Backers are most welcome to support this growing project.  
+
 2.0.2 / 2019-03-27
 ==================
 
