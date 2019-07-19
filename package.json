@@ -2,7 +2,7 @@
   "name": "pudding",
   "version": "4.0.0",
   "scripts": {
-    "start": "dbHost=localhost node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
