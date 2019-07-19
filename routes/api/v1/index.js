@@ -49,7 +49,13 @@ router.post('/v1/follow', function(req, res, next) {
  		res.status(200).send('disabled')
  	}
  	else {
- 		user.followers.push(req.session._id);
+		 user.followers.push(req.session._id);
+		 user.notifications.push({
+			 msg:`${req.session.user} started following you.`,
+			 link:`/u/${req.session.user}`,
+			 time:new Date()
+		 });
+		user = User(user);
  		user.save((err) => {
  			res.status(200).send('done')
  		})
@@ -65,7 +71,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
 	if(req.params.mode == 'picture') {
 		db.findOne({_id: req.query.id}, (err, user) => {
 		if(!user) return res.sendStatus(404);
-		var image_types = ["png","jpeg","gif"];
+		var image_types = ["png","jpeg","gif", "jpg"];
 		var form = new formidable.IncomingForm();
 
 			form.parse(req);
@@ -133,6 +139,25 @@ router.get('/v1/search', function(req, res, next) {
 router.get('/v1/oauth/:service', function(req, res, next) {
 	if(req.params.service == 'instagram') res.redirect(ig.auth_url);
 	if(req.params.service == 'google') res.redirect(g.auth_url);
+});
+
+router.get('/v1/notifications', function(req, res, next) {
+	User
+	.findOne({_id:req.session._id})
+	.exec((err, userData) => {
+		res.send(new String(userData.notifications.length));
+	});
+});
+
+router.post('/v1/notifications/markAsRead', function(req, res, next) {
+	User
+	.findOne({_id:req.session._id})
+	.exec((err, userData) => {
+		userData.notifications = [];
+		userData.save((err, response) => {
+			res.redirect("/me/activity");
+		});
+	})
 });
 
 module.exports = router;

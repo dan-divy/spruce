@@ -12,7 +12,7 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 var httpRequest = require('request');
-var User = require('../utils/models/user')
+var User = require('../utils/models/user');
 /* GET signup page. */
 router.get('/new', function(req, res, next) {
   res.render('auth/signup', {

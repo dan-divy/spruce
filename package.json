@@ -1,12 +1,11 @@
 {
   "name": "pudding",
-  "version": "2.0.0",
-  "private": true,
+  "version": "4.0.0",
   "scripts": {
-    "start": "node ./bin/www",
-    "build": "build"
+    "start": "dbHost=localhost node ./bin/www"
   },
   "dependencies": {
+    "apikeygen": "^1.1.0",
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "cookie-parser": "~1.4.3",
@@ -19,7 +18,7 @@
     "googleapis": "^39.2.0",
     "guid": "0.0.12",
     "http-errors": "~1.6.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "mongoose": "^5.3.13",
     "morgan": "~1.9.0",
     "mv": "2.1.1",
@@ -27,6 +26,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
     "request": "2.88.0",
+    "socket.io": "^2.2.0",
     "time-ago": "0.2.1"
   },
   "devDependencies": {

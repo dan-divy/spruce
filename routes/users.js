@@ -15,8 +15,8 @@ router.get('/', function(req, res, next) {
   });  
 });
 
-router.get('/:id', function(req, res, next) {
-	db.findOne({_id:req.params.id},(err, user) => {
+router.get('/:username', function(req, res, next) {
+	db.findOne({username:req.params.username},(err, user) => {
 		if(!user) return res.status(404).send('No user found');
 		user.bio = textParser(user.bio);
 		res.render('user/profile', {

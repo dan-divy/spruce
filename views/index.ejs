@@ -5,11 +5,17 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
 
 <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
-
+<link rel="stylesheet" type="text/css" href="stylesheets/ns-default.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/ns-style-other.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/progressive-image.css" />
+    <script src="javascripts/modernizr.custom.js"></script>
+    <script src="javascripts/progressive-image.js"></script>
   <body>
   <%- include('navbar')	-%>
-  <%- include('sidebar') -%>
-  <%- include('main') -%>
+  <div id="mainPage">
+    <%- include('sidebar') -%>
+    <%- include('main') -%>
+  </div>
   <%- include('tabs') -%>
   <%- include('footer') -%>
   <div id="notify_message" class="notify_message-success">
@@ -20,20 +26,21 @@
 
 <!-- End of your HTML body -->
 <script src="/animations/jquery-sakura.min.js"></script>
-<script>
-    // domReady
-  /*  $(function() {
-        $('body').sakura();
-    });
-
-    // windowLoad
-    $(window).load(function() {
-        $('body').sakura();
-    }); */
-</script>
+<script src="javascripts/classie.js"></script>
+<script src="javascripts/notificationFx.js"></script>
   <script type="text/javascript">
-    show_notification('<center>Built with <i class="fa fa-heart"></i> by Divy and Dan!','success')
+    $(function() {
+        $.ajax({
+          method:"GET",
+          url:"/api/v1/notifications"
+        }).done(function(data) {
+          if(data != 0) {
+            show_new_notification({msg:`You have ${data} new notification(s).`}, 'notice');
+          }           
+        })
+      });
   </script>
   <script type="text/javascript" src="/javascripts/like.js"></script>
   <script type="text/javascript" src="/javascripts/comment.js"></script>
+  
 </html>
