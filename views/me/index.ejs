@@ -9,11 +9,10 @@
     <div class="container" id="mainPage">
       <img src="<%= user.profile_pic %>" class="logo">
       <a class="gram-card-user-name" href="">@<%= user.username %></a>
-      (<%= user.firstname %> <%= user.lastname %>)
-      <br><br>
-        <span class="bio"><%- user.bio %></span><br><br>
-        <span class="bio">Enter developer key to verify your account: <form onsubmit="window.location.href = '/developer/verify/' + this.getElementsByTagName('input')[0].value; return false"><input class="form-control"></form></span>
-      <br><br>
+      (<%= user.firstname %> <%= user.lastname %>) 
+     
+      <br><br><span class="bio"><%- user.bio %></span><br><br>
+     
       <div class="float-right margin-right-10">
         
         
@@ -23,6 +22,7 @@
       
      
     </div>
+    
     <div class="container">
       <center>
       <% for(var x=0;x<user.posts.length;x++) { %>
@@ -30,6 +30,13 @@
       <% } %>
       </center>
     </div>
+    <div class="container">
+      <br><br>
+      Developer mode : <input type="checkbox" name="dev-mode" id="dev-mode"><br>
+                <span class="bio" id="dev-key" style="display: none;">Enter developer key to verify your account: <form onsubmit="window.location.href = '/developer/verify/' + this.getElementsByTagName('input')[0].value; return false"><input class="form-control"></form></span>
+              <br><br>
+              </div>
+   
     <div id="notify_message" class="notify_message-success">
     	<center>Settings</center>
     </div>
@@ -38,6 +45,15 @@
   </body>
   <script type="text/javascript">
     const _id = "<%= user._id %>";
+    $("#dev-mode").on("click",function(e) {
+      console.info(e.target.checked);
+      if(e.target.checked) {
+        $("#dev-key")[0].style.display = "inherit";
+      }
+      else {
+        $("#dev-key")[0].style.display = "none";
+      }
+    })
   </script>
   <script type="text/javascript" src="/javascripts/follow.js"></script>
 </html>
