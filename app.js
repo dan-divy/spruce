@@ -34,6 +34,7 @@ const NODE_ENV = process.env.NODE_ENV || app.conf.env || 'development';
 const isDev = NODE_ENV === 'development';
 
 // Setup session environment
+var session;
 if (isDev) {
   console.log('Operating in DEVELOPMENT mode.');
   const morgan = require('morgan');
@@ -41,18 +42,18 @@ if (isDev) {
   // SESSION - Use FileStore in development mode.
   const fileStore = require('session-file-store')(expressSession);
   const redisClient = redis.createClient();
-  app.use(expressSession ({
+  session = expressSession ({
     resave: app.conf.cookie.resave,
     saveUninitialized: app.conf.cookie.saveUninitialized,
     secret: app.conf.cookie.secret,
     expires: app.conf.cookie.expiresIn,
     store: new fileStore(),
-  }));
+  });
 } else {
   // SESSION - Use RedisStore in production mode.
   const redisStore = require('connect-redis')(expressSession);
   const redisClient = redis.createClient();
-  app.use(expressSession({
+  session = expressSession({
     resave: app.conf.cookie.resave,
     saveUninitialized: app.conf.cookie.saveUninitialized,
     secret: app.conf.cookie.secret,
@@ -62,10 +63,13 @@ if (isDev) {
       port: app.conf.redis.port,
       client: redisClient
     }),
-  }));
+  });
   app.use(compression());
   app.use(helmet());
-} // Session setup
+} 
+app.use(session);
+app.sessionMiddleware = session;
+// End Session setup
 
 app.set('trust proxy', 1); 
 app.use(bodyParser.json());
