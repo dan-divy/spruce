@@ -1,4 +1,15 @@
 var dbHost = process.env.dbHost || "localhost";
+
+const dbAuth = false;
+var dbUsername = "";
+var dbPassword = "";
+var dbCredentials = "";
+if (dbAuth) {
+	dbUsername = process.env.dbUsername || "sheldon";
+	dbPassword = process.env.dbPassword || "supersecret";
+	dbCredentials = dbUsername + ":" + dbPassword +"@";
+}
+
 module.exports = {
 	"name":"oak",
 	"title":"oak",
@@ -13,7 +24,7 @@ module.exports = {
 	"author":"Robert Burckner",
 	"version":"0.1.0",
 	"db": {
-		"connectionUri":"mongodb://"+dbHost+":27017/oak",
+		"connectionUri":"mongodb://" + dbCredentials + dbHost + ":27017/oak",
 		"params": {},
 		"collections": [
 			"moment",
