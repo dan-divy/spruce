@@ -23,10 +23,10 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 var cooky = {
-  secret: "work hard",
-  resave: true,
-  expires: new Date() * 60 * 60 * 24 * 7,
-  saveUninitialized: true
+  secret: app.conf.cookie.secret,
+  resave: app.conf.cookie.resave,
+  expires: app.conf.cookie.expiresIn,
+  saveUninitialized: app.conf.cookie.saveUninitialized
 };
 
 app.sessionMiddleware = session(cooky);

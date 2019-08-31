@@ -21,5 +21,11 @@ module.exports = {
 			"feeling",
 			"ask"
 		]
+	},
+	"cookie": {
+		"resave": true,
+	  "secret": "<app secret>",
+	  "expiresIn": new Date() * 60 * 60 * 24 * 7,
+	  "saveUninitialized": true
 	}
 }
