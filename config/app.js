@@ -7,7 +7,7 @@ var dbCredentials = "";
 if (dbAuth) {
 	dbUsername = process.env.dbUsername || "sheldon";
 	dbPassword = process.env.dbPassword || "supersecret";
-	dbCredentials = dbUsername + ":" + dbPassword +"@";
+	dbCredentials = dbUsername + ":" + dbPassword + "@";
 }
 
 module.exports = {
