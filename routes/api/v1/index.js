@@ -127,9 +127,9 @@ router.get('/v1/search', function(req, res, next) {
 	var regx = '^'+req.query.q+'.*';
 	User
 	.find({$or:[
-		    {username:{$regex:regx}},
-    		    {firstname:{$regex:regx}},
-    		    {lastname:{$regex:regx}}
+		    {username:{$regex:regx, $options: 'i'}},
+    		    {firstname:{$regex:regx, $options: 'i'}},
+    		    {lastname:{$regex:regx, $options: 'i'}}
 	]})
 	.exec((err, all) => {
 		return res.send(all);
