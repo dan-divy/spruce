@@ -12,7 +12,7 @@ if (dbAuth) {
 const appSecret = process.env.appSecret || "appSecret";
 
 module.exports = {
-	"env": "development",
+	"env": "development", // production or development
 	"name":"oak",
 	"title":"oak",
 	"commands":{

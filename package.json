@@ -3,16 +3,17 @@
   "version": "0.1.2",
   "scripts": {
     "dev": "nodemon --ignore './sessions' bin/www",
-    "start": "node ./bin/www",
-    "test":"mocha && node ./bin/www"
+    "start": "NODE_ENV=production node ./bin/www",
+    "test": "mocha && node ./bin/www"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "chai": "^4.2.0",
+    "compression": "^1.7.4",
+    "connect-redis": "^4.0.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
@@ -20,6 +21,7 @@
     "formidable": "^1.2.1",
     "googleapis": "^39.2.0",
     "guid": "0.0.12",
+    "helmet": "^3.20.1",
     "http-errors": "~1.6.2",
     "lodash": "^4.17.13",
     "mocha": "^6.2.0",
@@ -29,12 +31,14 @@
     "newsapi": "^2.4.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "redis": "^2.8.0",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
     "time-ago": "0.2.1"
   },
   "devDependencies": {
-    "electron": "2.0.12"
+    "electron": "2.0.12",
+    "session-file-store": "^1.3.1"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",
@@ -46,43 +50,5 @@
     "mongodb",
     "mongoose",
     "platform"
-  ],
-  "build": {
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "DivySrivastava",
-        "repo": "spruce"
-      }
-    ],
-    "appId": "com.divysrivastava.desktop.spruce",
-    "copyright": "Divy Srivastava 2019",
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "publish": "github",
-      "category": "public.app-category.social-networking"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ],
-      "publish": "github",
-      "publisherName": "DivySrivastava"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "zip",
-        "deb"
-      ],
-      "publish": "github",
-      "maintainer": "Divy Srivastava <dj.srivastava23@gmail.com>"
-    }
-  },
-  "author": "Divy Srivastava <dj.srivastava23@gmail.com>",
-  "license": "MIT"
+  ]
 }
