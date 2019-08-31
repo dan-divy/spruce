@@ -11,6 +11,7 @@ if (dbAuth) {
 }
 
 module.exports = {
+	"env": "development",
 	"name":"oak",
 	"title":"oak",
 	"commands":{
@@ -38,5 +39,9 @@ module.exports = {
 	  "secret": "<app secret>",
 	  "expiresIn": new Date() * 60 * 60 * 24 * 7,
 	  "saveUninitialized": true
-	}
+	},
+	"redis": {
+  	"host": "localhost",
+  	"port": 6379
+  }
 }

@@ -2,6 +2,7 @@
   "name": "oak",
   "version": "0.1.0",
   "scripts": {
+    "dev": "nodemon --ignore './sessions' bin/www",
     "start": "node ./bin/www",
     "test":"mocha && node ./bin/www"
   },

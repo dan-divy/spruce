@@ -1,11 +1,10 @@
 var createError = require("http-errors");
-const compression = require('compression');
 var express = require("express");
-const helmet = require('helmet');
 var path = require("path");
-var expressSession = require("express-session");
+var session = require("express-session");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
+var logger = require("morgan");
 
 const protection = require('./utils/middleware/protection');
 
@@ -24,7 +23,7 @@ app.conf = require("./config/app");
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-/*
+
 var cooky = {
   secret: app.conf.cookie.secret,
   resave: app.conf.cookie.resave,
@@ -32,46 +31,11 @@ var cooky = {
   saveUninitialized: app.conf.cookie.saveUninitialized
 };
 
-app.sessionMiddleware = expressSession(cooky);*/
+app.sessionMiddleware = session(cooky);
 
 app.set("trust proxy", 1); // trust first proxy
-//app.use(app.sessionMiddleware);
-
-const NODE_ENV = process.env.NODE_ENV || app.conf.env || 'development';
-const isDev = NODE_ENV === 'development';
-
-// Setup session environment
-if (isDev) {
-  var morgan = require("morgan");
-  app.use(morgan('dev'));
-  // SESSION - Use FileStore in development mode.
-  const FileStore = require('session-file-store')(expressSession);
-  app.use(expressSession ({
-    resave: app.conf.cookie.resave,
-    saveUninitialized: app.conf.cookie.saveUninitialized,
-    secret: app.conf.cookie.secret,
-    expires: app.conf.cookie.expiresIn,
-    store: new FileStore(),
-  }));
-} else {
-  // SESSION - Use RedisStore in production mode.
-  const RedisStore = require('connect-redis')(expressSession);
-  app.use(expressSession({
-    resave: app.conf.cookie.resave,
-    saveUninitialized: app.conf.cookie.saveUninitialized,
-    secret: app.conf.cookie.secret,
-    expires: app.conf.cookie.expiresIn,
-    store: new RedisStore({
-      host: app.config.redis.host,
-      port: app.config.redis.port,
-    }),
-  }));
-  app.use(compression());
-  app.use(helmet());
-  // APP - render from static
-  server.use(express.static('dist'));
-}
-//app.use(morgan("tiny"));
+app.use(app.sessionMiddleware);
+app.use(logger("tiny"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
