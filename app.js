@@ -8,6 +8,7 @@ const expressSession = require("express-session");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
+const pkg = require('./package.json');
 const protection = require('./utils/middleware/protection');
 
 const indexRouter = require("./routes/index");
@@ -22,24 +23,14 @@ const chatRouter = require("./routes/chat");
 
 const app = express();
 app.conf = require("./config/app");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-/*
-var cooky = {
-  secret: app.conf.cookie.secret,
-  resave: app.conf.cookie.resave,
-  expires: app.conf.cookie.expiresIn,
-  saveUninitialized: app.conf.cookie.saveUninitialized
-};
 
-app.sessionMiddleware = expressSession(cooky);*/
-
-// trust first proxy
-//app.use(app.sessionMiddleware);
-
-const NODE_ENV = process.env.NODE_ENV || app.conf.env || 'development';
-const isDev = NODE_ENV === 'development';
+// Define environment
+app.node_env = process.env.NODE_ENV || app.conf.env || 'development';
+const isDev = app.node_env === 'development';
 
 // Setup session environment
 if (isDev) {
@@ -76,6 +67,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+// Routes
+app.get('/version', (req, res) => {
+  res.status(200).json({ 
+    version: pkg.version,
+    mode: app.node_env,
+  });
+});
 
 app.use("/", indexRouter);
 app.use("/account", accountRouter);

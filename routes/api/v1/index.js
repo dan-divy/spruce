@@ -1,14 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-var tool = require('array-tools')
-var db = require('../../../utils/handlers/user');
-var User = require('../../../utils/models/user');
-var formParser = require('../../../utils/form-parser.js');
-var ig = require('../../../config/instagram');
-var g = require('../../../config/google');
-var formidable = require("formidable");
-var fs = require("file-system");
+'use strict';
+const express = require('express');
+const formidable = require("formidable");
+const fs = require("file-system");
+const path = require('path');
+const router = express.Router();
+const tool = require('array-tools')
+
+const db = require(path.join(__dirname, '../../../', 'utils/handlers/user'));
+const User = require(path.join(__dirname, '../../../', 'utils/models/user'));
+const formParser = require(path.join(__dirname, '../../../','utils/form-parser.js'));
+const ig = require(path.join(__dirname, '../../../', 'config/instagram'));
+const g = require(path.join(__dirname, '../../../', 'config/google'));
 
 router.post('/v1/comment', function(req, res, next) {
   db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
