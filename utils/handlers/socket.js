@@ -1,7 +1,9 @@
+'use strict';
 const io = require('socket.io');
 const express = require('express');
-var User = require('../models/user');
-var Room = require("../models/room");
+const User = require('../models/user');
+const Room = require("../models/room");
+
 const sio = require('../../bin/www').sio; 
 const sessionMiddleware = require('../../app').sessionMiddleware;
 

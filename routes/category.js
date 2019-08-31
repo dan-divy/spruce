@@ -8,16 +8,12 @@ const formParser = require('../utils/form-parser');
 
 
 router.get('/:category', function(req, res, next) {
-
-	console.log(req.params.category);
-
-	
   db.getAll((err, users) => {
-  	res.render('category', {
-  		title: req.app.conf.name,
-  		people: users,
-  		category:req.params.category
-  	});
+    res.render('category', {
+      title: req.app.conf.name,
+      people: users,
+      category:req.params.category
+    });
   });  
 });
 
