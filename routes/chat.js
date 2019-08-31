@@ -10,7 +10,7 @@ var Room = require('../utils/models/room');
 
 router.get('/', function(req, res, next) {
   User
-  .find({})
+  .find({ _id: { $ne: req.session._id } })
   .exec((error, users) => {
     res.render('chat/index', {
       title: req.app.conf.name,
@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:userid', function(req, res, next) {
   if(req.session._id == req.params.userid) return res.render("error",{
+    title: req.app.conf.name,
     message:"Can't chat with yourself...",
     error:{
       status:400,
