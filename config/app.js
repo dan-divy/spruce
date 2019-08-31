@@ -1,6 +1,6 @@
-var dbHost = process.env.dbHost || "localhost";
+const dbHost = process.env.dbHost || "localhost";
 
-const dbAuth = false;
+const dbAuth = process.env.abAuth || false;
 var dbUsername = "";
 var dbPassword = "";
 var dbCredentials = "";
@@ -9,6 +9,7 @@ if (dbAuth) {
 	dbPassword = process.env.dbPassword || "supersecret";
 	dbCredentials = dbUsername + ":" + dbPassword + "@";
 }
+const appSecret = process.env.appSecret || "appSecret";
 
 module.exports = {
 	"env": "development",
@@ -36,7 +37,7 @@ module.exports = {
 	},
 	"cookie": {
 		"resave": true,
-	  "secret": "<app secret>",
+	  "secret": appSecret,
 	  "expiresIn": new Date() * 60 * 60 * 24 * 7,
 	  "saveUninitialized": true
 	},

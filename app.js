@@ -1,25 +1,26 @@
-var createError = require("http-errors");
+'use strict';
+const createError = require("http-errors");
 const compression = require('compression');
-var express = require("express");
+const express = require("express");
 const helmet = require('helmet');
-var path = require("path");
-var expressSession = require("express-session");
-var bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
+const path = require("path");
+const expressSession = require("express-session");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 const protection = require('./utils/middleware/protection');
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var accountRouter = require("./routes/auth");
-var meRouter = require("./routes/settings");
-var extraRouter = require("./routes/extras/wordbeater/main");
-var categoryRouter = require("./routes/category");
-var restApi = require("./routes/api/v1/index");
-var publicApiRouter = require("./routes/developer/api");
-var chatRouter = require("./routes/chat");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const accountRouter = require("./routes/auth");
+const meRouter = require("./routes/settings");
+const extraRouter = require("./routes/extras/wordbeater/main");
+const categoryRouter = require("./routes/category");
+const restApi = require("./routes/api/v1/index");
+const publicApiRouter = require("./routes/developer/api");
+const chatRouter = require("./routes/chat");
 
-var app = express();
+const app = express();
 app.conf = require("./config/app");
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -34,7 +35,7 @@ var cooky = {
 
 app.sessionMiddleware = expressSession(cooky);*/
 
-app.set("trust proxy", 1); // trust first proxy
+// trust first proxy
 //app.use(app.sessionMiddleware);
 
 const NODE_ENV = process.env.NODE_ENV || app.conf.env || 'development';
@@ -42,36 +43,35 @@ const isDev = NODE_ENV === 'development';
 
 // Setup session environment
 if (isDev) {
-  var morgan = require("morgan");
+  const morgan = require("morgan");
   app.use(morgan('dev'));
   // SESSION - Use FileStore in development mode.
-  const FileStore = require('session-file-store')(expressSession);
+  const fileStore = require('session-file-store')(expressSession);
   app.use(expressSession ({
     resave: app.conf.cookie.resave,
     saveUninitialized: app.conf.cookie.saveUninitialized,
     secret: app.conf.cookie.secret,
     expires: app.conf.cookie.expiresIn,
-    store: new FileStore(),
+    store: new fileStore(),
   }));
 } else {
   // SESSION - Use RedisStore in production mode.
-  const RedisStore = require('connect-redis')(expressSession);
+  const redisStore = require('connect-redis')(expressSession);
   app.use(expressSession({
     resave: app.conf.cookie.resave,
     saveUninitialized: app.conf.cookie.saveUninitialized,
     secret: app.conf.cookie.secret,
     expires: app.conf.cookie.expiresIn,
-    store: new RedisStore({
+    store: new redisStore({
       host: app.config.redis.host,
       port: app.config.redis.port,
     }),
   }));
   app.use(compression());
   app.use(helmet());
-  // APP - render from static
-  server.use(express.static('dist'));
-}
-//app.use(morgan("tiny"));
+} // Session setup
+
+app.set("trust proxy", 1); 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
