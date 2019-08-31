@@ -26,18 +26,19 @@ function show_new_notification(obj, type) {
        // domReady
   $(function() {
     var notification = new NotificationFx({
-							message : `<div class="ns-thumb"></div><div class="ns-content" style="border:1px solid #f2f2f2;border-radius:5px;"><p>${obj.msg}</p></div>`,
-							layout : 'other',
-							ttl : 8000,
-							effect : 'thumbslider',
-							type : type, // notice, warning, error or success
-							onClose : function() {
-								//bttn.disabled = false;
-							}
-						});
+        //wrapper : document.getElementById("notify_message"), //TODO find a better spot for this
+        message : `<div class="ns-thumb"></div><div class="ns-content" style="border:1px solid #f2f2f2;border-radius:5px;"><p>${obj.msg}</p></div>`,
+        layout : 'other',
+        ttl : 8000,
+        effect : 'thumbslider',
+        type : type, // notice, warning, error or success
+        onClose : function() {
+          //bttn.disabled = false;
+        }
+      });
 
-						// show the notification
-						notification.show();
+      // show the notification
+      notification.show();
     });
     // create the notification
 }

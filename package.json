@@ -1,6 +1,6 @@
 {
-  "name": "pudding",
-  "version": "4.0.0",
+  "name": "oak",
+  "version": "0.1.0",
   "scripts": {
     "start": "node ./bin/www",
     "test":"mocha && node ./bin/www"
