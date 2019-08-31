@@ -76,7 +76,6 @@ usage:
 
 function checkUser(obj, cb) {
   User.findOne({ username: obj.username }).exec((err, user) => {
-    console.log(user);
     if (err) return cb(err, false);
     if (user) {
       bcrypt.compare(obj.password, user.password, (err, bool) => {
