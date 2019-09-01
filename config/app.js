@@ -13,20 +13,21 @@ const appSecret = process.env.appSecret || "appSecret";
 
 module.exports = {
 	"env": "development", // production or development
-	"name":"oak",
-	"title":"oak",
-	"commands":{
-		"package":"electron-packager electron.js oak --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
-		"build":""
+	"name": "oak",
+	"title": "oak",
+	"privateFiles": "files",
+	"commands": {
+		"package": "electron-packager electron.js oak --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
+		"build": ""
 	},
 	"http": {
-		"host":"localhost",
-		"port":8080
+		"host": "localhost",
+		"port": 8080
 	},
-	"author":"Robert Burckner",
-	"version":"0.1.0",
-	"db": {
-		"connectionUri":"mongodb://" + dbCredentials + dbHost + ":27017/oak",
+	"author": "Robert Burckner",
+	"version": "0.1.4",
+	"db":  {
+		"connectionUri": "mongodb://" + dbCredentials + dbHost + ":27017/oak",
 		"params": {},
 		"collections": [
 			"moment",

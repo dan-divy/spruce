@@ -12,15 +12,17 @@ const redis = require('redis')
 const pkg = require('./package.json');
 const protection = require('./utils/middleware/protection');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const accountRouter = require('./routes/auth');
-const meRouter = require('./routes/settings');
-const extraRouter = require('./routes/extras/wordbeater/main');
 const categoryRouter = require('./routes/category');
-const restApi = require('./routes/api/v1/index');
-const publicApiRouter = require('./routes/developer/api');
 const chatRouter = require('./routes/chat');
+const extraRouter = require('./routes/extras/wordbeater/main');
+const indexRouter = require('./routes/index');
+const meRouter = require('./routes/settings');
+const usersRouter = require('./routes/users');
+
+const publicApiRouter = require('./routes/developer/api');
+const restApiV1index = require('./routes/api/v1/index');
+const restApiV1file = require('./routes/api/v1/file');
 
 const app = express();
 app.conf = require('./config/app');
@@ -31,6 +33,7 @@ app.set('view engine', 'ejs');
 
 // Define environment
 const NODE_ENV = process.env.NODE_ENV || app.conf.env || 'development';
+app.set('env', NODE_ENV);
 const isDev = NODE_ENV === 'development';
 
 // Setup session environment
@@ -91,10 +94,12 @@ app.use('/account', accountRouter);
 app.use(protection.isAuthenticated);
 app.use('/u', usersRouter);
 app.use('/me', meRouter);
-app.use('/api', restApi);
 app.use('/category', categoryRouter);
 app.use('/products', extraRouter);
 app.use('/chat', chatRouter);
+
+app.use('/api/v1', restApiV1index);
+app.use('/api/v1/file', restApiV1file);
 app.use('/developer', publicApiRouter);
 
 // catch 404 and forward to error handler

@@ -70,4 +70,5 @@ sessions
 .vscode/sftp.json
 # local uploads
 public/feeds/
+files/
 .history/

@@ -6,14 +6,16 @@ const path = require('path');
 const router = express.Router();
 const tool = require('array-tools')
 
-const db = require(path.join(__dirname, '../../../', 'utils/handlers/user'));
+const user = require(path.join(__dirname, '../../../', 'utils/handlers/user'));
 const User = require(path.join(__dirname, '../../../', 'utils/models/user'));
+
+
 const formParser = require(path.join(__dirname, '../../../','utils/form-parser.js'));
 const ig = require(path.join(__dirname, '../../../', 'config/instagram'));
 const g = require(path.join(__dirname, '../../../', 'config/google'));
 
-router.post('/v1/comment', function(req, res, next) {
-  db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
+router.post('/comment', function(req, res, next) {
+  user.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
     if(result) {
       res.send(true)
     }
@@ -23,8 +25,8 @@ router.post('/v1/comment', function(req, res, next) {
   });
 });
 
-router.post('/v1/like', function(req, res, next) {
-  db.like({username:req.body.author},{by:req.session.user},req.body._id, (err, result) => {
+router.post('/like', function(req, res, next) {
+  user.like({username:req.body.author},{by:req.session.user},req.body._id, (err, result) => {
     if(result) {
         res.send({event:true,msg:"Liked!"})
       }
@@ -34,8 +36,8 @@ router.post('/v1/like', function(req, res, next) {
   });
 });
 
-router.post('/v1/follow', function(req, res, next) {
-  db.findOne(req.body, (err, user) => {
+router.post('/follow', function(req, res, next) {
+  user.findOne(req.body, (err, user) => {
     var disabled = false;
     for(var i=0;i<user.followers.length;i++) {
       if(user.followers[i] == req.session._id) {
@@ -61,10 +63,10 @@ router.post('/v1/follow', function(req, res, next) {
   });
 });
 
-router.post('/v1/user/:mode', function(req, res, next) {
+router.post('/user/:mode', function(req, res, next) {
   if(!req.session.user) return res.sendStatus(404);
   if(req.params.mode == 'picture') {
-    db.findOne({_id: req.query.id}, (err, user) => {
+    user.findOne({_id: req.query.id}, (err, user) => {
       if(!user) return res.sendStatus(404);
       var image_types = ["png","jpeg","gif", "jpg"];
       var form = new formidable.IncomingForm();
@@ -97,7 +99,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
     return;
   }
 
-  db.findOne({_id: req.body._id}, (err, user) => {
+  user.findOne({_id: req.body._id}, (err, user) => {
     if(err) return res.end(err);
     if(!user) return res.sendStatus(404);
     
@@ -111,7 +113,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
   });
 });
 
-router.get('/v1/search', function(req, res, next) {
+router.get('/search', function(req, res, next) {
   var regx = '^'+req.query.q+'.*';
   User
   .find({$or:[
@@ -124,12 +126,12 @@ router.get('/v1/search', function(req, res, next) {
   });
 });
 
-router.get('/v1/oauth/:service', function(req, res, next) {
+router.get('/oauth/:service', function(req, res, next) {
   if(req.params.service == 'instagram') res.redirect(ig.auth_url);
   if(req.params.service == 'google') res.redirect(g.auth_url);
 });
 
-router.get('/v1/notifications', function(req, res, next) {
+router.get('/notifications', function(req, res, next) {
   User
   .findOne({_id:req.session._id})
   .exec((err, userData) => {
@@ -137,7 +139,7 @@ router.get('/v1/notifications', function(req, res, next) {
   });
 });
 
-router.post('/v1/notifications/markAsRead', function(req, res, next) {
+router.post('/notifications/markAsRead', function(req, res, next) {
   User
   .findOne({_id:req.session._id})
   .exec((err, userData) => {
