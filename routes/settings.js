@@ -1,41 +1,51 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-var guid = require('guid');
-var mv = require('mv');
-const mime = require('mime-types')
-var db = require('../utils/handlers/user');
-var formParser = require('../utils/form-parser.js');
+'use strict';
+const createError = require('http-errors');
+const express = require('express');
 const fs = require('file-system');
+const guid = require('guid');
+const mv = require('mv');
+const mime = require('mime-types')
+const path = require('path');
+const router = express.Router();
 
-var image_types = ["png","jpeg","gif"];
+const user = require('../utils/handlers/user');
+
+const Community = require("../utils/models/community");
+const MyFile = require("../utils/models/file");
+
+const formParser = require('../utils/form-parser.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  db.findOne({_id:req.session._id}, (err, user) => {
-  	res.render('me/index', {
-  		title: req.app.conf.name,
-  		user: user
-  	});
-  })
+  user.findOne({_id:req.session._id}, (err, user) => {
+    res.render('me/index', {
+      title: req.app.conf.name,
+      user: user
+    });
+  });
 });
 
 router.get('/settings', function(req, res, next) {
-  db.findOne({_id:req.session._id}, (err, user) => {
-  	res.render('me/settings', {
-  		title: req.app.conf.name,
-  		user: user
-  	});
+  Community.find()
+  .then((communities) => {
+    user.findOne({_id:req.session._id}, (err, user) => {
+      res.render('me/settings', {
+        title: req.app.conf.name,
+        user: user,
+        communities: communities   // For the dropdown selection menu
+      });
+    });
   })
+  .catch(err => next(createError(500, err)));
 });
 
 router.get('/activity', function(req, res, next) {
-  db.findOne({_id:req.session._id}, (err, user) => {
-  	res.render('me/activity', {
-  		title: req.app.conf.name,
-  		activity: user.notifications
-  	});
-  })
+  user.findOne({_id:req.session._id}, (err, user) => {
+    res.render('me/activity', {
+      title: req.app.conf.name,
+      activity: user.notifications
+    });
+  });
 });
 
 router.get('/post/:action/:query', function(req, res, next) {
@@ -43,73 +53,85 @@ router.get('/post/:action/:query', function(req, res, next) {
     case "edit":
       res.render('index');
       break;
-    case "delete": {
-			db.findOne({username:req.session.user}, (err, u) => {
-				let id = req.params.query
-				console.log(u);
-				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url) fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
-				u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
-				u.save(err => {
-					if (err) throw err;
-					console.log('Post deleted');
-					res.redirect('/')
-				})
-			});
-		}
+    case "delete":
+      user.findOne({username:req.session.user}, (err, u) => {
+        let id = req.params.query
+        if (u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url) {
+          fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
+        }
+        u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
+        u.save(err => {
+          if (err) throw err;
+          console.log('Post deleted');
+          res.redirect('/')
+        });
+      });
       break;
-    default:res.send("hi")
-
+    default: 
+      res.send("hi");
   }
-})
+});
 
 router.get('/upload', function(req, res, next) {
+    res.render('upload/file-upload', {
+      title:req.app.conf.name,
+      user: req.session.user
+    });
+});
 
-		res.render('upload/file-upload', {
-			title:req.app.conf.name,
-			user: req.session.user
-		})
-
-})
+// Adding a new file
 router.post('/upload', formParser,function(req, res, next) {
-			// Generate a random id
-			var random_id = guid.raw();
-			if(req.files.filetoupload.name) {
-			// Assign static_url path
-			var oldpath = req.files.filetoupload.path;
-		    var newpath = path.join(__dirname, `../public/feeds/${req.session.user}_${random_id}${req.files.filetoupload.name}`);
-		    var final_location = `/feeds/${req.session.user}_${random_id}${req.files.filetoupload.name}`;
+  if (req.files.filetoupload.name) {
+    // Create MyFile document
+    var newMyFile = new MyFile({
+      owner: req.session._id,
+      filename: req.files.filetoupload.name,
+      mimetype: req.files.filetoupload.type,
+      size: req.files.filetoupload.size,
+      privateFile: false
+    });
+    newMyFile.systemFilename = newMyFile.id + "-" + newMyFile.filename;
 
-		    console.log(`${oldpath} - OldPath\n ${newpath} - Newpath\n ${final_location} - DiskLocation\n`)
-		    // Finally upload the file to disk and save the feed to users profile.
-        var type = mime.lookup(req.files.filetoupload.name).split("/")[1]
-			mv(oldpath, newpath, function (err) {
-				console.log('moving files');
-			})
-		} else {
-			final_location = null;
-		}
-			db.findOne({username:req.session.user}, (err, u) => {
-				console.log(u)
-				u.posts.push({
-					_id:random_id,
-					author:req.session.user,
-					authorID: req.session._id,
-					static_url:final_location,
-					caption:req.body.caption,
-					category:req.body.type,
-					comments:[],
-					likes:[],
-					type:type,
-					createdAt:new Date(),
-					lastEditedAt:new Date()
-				})
-				u.save(err => {
-					if (err) throw err;
-					console.log('Post saved')
-					// Redirect back after the job is done.
-					res.redirect('/')
-				})
-			
-		})
-})
+    // Save and move to new location
+    newMyFile.save((err, MyFile) => {
+      if (err) return next(createError(500, "Could not create new MyFile record in DB."));
+      const newFile = path.join(__dirname, "../", req.app.conf.privateFiles, req.session._id, MyFile.systemFilename);
+      mv(req.files.filetoupload.path, newFile, {mkdirp: true}, function (err) {
+        // TODO - add some error management
+        if (err) console.log(err);
+      });
+    });
+
+    /*if (req.session.savingToFeed) {
+      //add to album
+    }*/
+
+    // files moved and saved to db
+
+    // Add post to user record TODO - make this a separate collection
+    user.findOne({username:req.session.user}, (err, u) => {
+      u.posts.push({
+        _id:newMyFile.id,
+        author:req.session.user,
+        authorID: req.session._id,
+        static_url: newMyFile.systemFilename,
+        caption: req.body.caption,
+        category: req.body.type,
+        comments: [],
+        likes: [],
+        type: newMyFile.mimetype,
+        created_at: new Date()
+      });
+      u.save(err => {
+        if (err) throw err;
+        // Redirect back after the job is done.
+        res.redirect('/')
+      });
+    });
+  } else {
+    // Send error, no file uploaded
+    next(createError(400, "File missing from upload."))
+  }
+});
+
 module.exports = router;

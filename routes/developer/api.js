@@ -1,12 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var httpRequest = require('request');
-var apiKeyGen = require("apikeygen").apikey;
+'use strict';
+const express = require('express');
+const router = express.Router();
+const httpRequest = require('request');
+const apiKeyGen = require("apikeygen").apikey;
 
-var db = require('../../utils/handlers/user');
-var formParser = require('../../utils/form-parser.js');
-var User = require('../../utils/models/user');
-var Keys = require('../../utils/models/keys');
+const db = require('../../utils/handlers/user');
+const formParser = require('../../utils/form-parser.js');
+const User = require('../../utils/models/user');
+const Keys = require('../../utils/models/keys');
 
 var verified = false;
 var secure_dev_key;

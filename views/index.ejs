@@ -19,28 +19,27 @@
   <%- include('tabs') -%>
   <%- include('footer') -%>
   <div id="notify_message" class="notify_message-success">
-
+    <!--Move this to a better spot -->
   </div>
-
   </body>
 
 <!-- End of your HTML body -->
 <script src="/animations/jquery-sakura.min.js"></script>
 <script src="javascripts/classie.js"></script>
 <script src="javascripts/notificationFx.js"></script>
-  <script type="text/javascript">
-    $(function() {
-        $.ajax({
-          method:"GET",
-          url:"/api/v1/notifications"
-        }).done(function(data) {
-          if(data != 0) {
-            show_new_notification({msg:`You have ${data} new notification(s).`}, 'notice');
-          }           
-        })
-      });
-  </script>
-  <script type="text/javascript" src="/javascripts/like.js"></script>
-  <script type="text/javascript" src="/javascripts/comment.js"></script>
+<script type="text/javascript">
+  $(function() {
+      $.ajax({
+        method:"GET",
+        url:"/api/v1/notifications"
+      }).done(function(data) {
+        if(data != 0) {
+          show_new_notification({msg:`You have ${data} new notification(s).`}, 'notice');
+        }           
+      })
+    });
+</script>
+<script type="text/javascript" src="/javascripts/like.js"></script>
+<script type="text/javascript" src="/javascripts/comment.js"></script>
   
 </html>
