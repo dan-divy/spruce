@@ -1,13 +1,8 @@
 // utils/handlers/user.js
-var mongoose = require("mongoose");
 var User = require("../models/user");
 var bcrypt = require("bcrypt-nodejs");
 const a = require("array-tools");
 const _ = require("lodash/_arrayIncludes");
-
-mongoose.connect(require("../../config/app").db.connectionUri, {
-  useNewUrlParser: true
-});
 
 function checkSpace(name) {
   var charSplit = name.split("");
@@ -51,7 +46,8 @@ function createNew(obj, cb) {
           profile_pic: "/images/logo/logo.png",
           posts: [],
           followers: [],
-          lastLogin: new Date()
+          lastLogin: new Date(),
+          created_at: new Date()
         });
         newUser.password = newUser.generateHash(obj.password);
         newUser.save((err, res) => {
@@ -76,7 +72,6 @@ usage:
 
 function checkUser(obj, cb) {
   User.findOne({ username: obj.username }).exec((err, user) => {
-    console.log(user);
     if (err) return cb(err, false);
     if (user) {
       bcrypt.compare(obj.password, user.password, (err, bool) => {
