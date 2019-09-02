@@ -61,10 +61,15 @@ typings/
 # dotenv environment variables file
 .env
 
+# file store session data
+sessions
+
 # next.js build output
 .next
 
 .vscode/sftp.json
 # local uploads
 public/feeds/
+files/
 .history/
+

@@ -1,6 +1,6 @@
 {
-  "name": "pudding",
-  "version": "4.0.0",
+  "name": "oak",
+  "version": "0.1.2",
   "scripts": {
     "dev": "NODE_ENV=development nodemon --ignore './sessions' bin/www",
     "start": "NODE_ENV=production node ./bin/www",
@@ -23,7 +23,6 @@
     "guid": "0.0.12",
     "helmet": "^3.20.1",
     "http-errors": "~1.6.2",
-    "ioredis": "^4.14.0",
     "lodash": "^4.17.13",
     "mocha": "^6.2.0",
     "mongoose": "^5.3.13",
@@ -33,7 +32,6 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
     "redis": "^2.8.0",
-    "redis-mock": "^0.46.0",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
     "time-ago": "0.2.1"
@@ -52,43 +50,5 @@
     "mongodb",
     "mongoose",
     "platform"
-  ],
-  "build": {
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "DivySrivastava",
-        "repo": "spruce"
-      }
-    ],
-    "appId": "com.divysrivastava.desktop.spruce",
-    "copyright": "Divy Srivastava 2019",
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "publish": "github",
-      "category": "public.app-category.social-networking"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ],
-      "publish": "github",
-      "publisherName": "DivySrivastava"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "zip",
-        "deb"
-      ],
-      "publish": "github",
-      "maintainer": "Divy Srivastava <dj.srivastava23@gmail.com>"
-    }
-  },
-  "author": "Divy Srivastava <dj.srivastava23@gmail.com>",
-  "license": "MIT"
+  ]
 }
