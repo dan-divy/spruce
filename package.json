@@ -3,7 +3,8 @@
   "version": "4.0.0",
   "scripts": {
     "start": "node ./bin/www",
-    "test":"mocha && node ./bin/www"
+    "test": "mocha && node ./bin/www",
+    "postinstall": "opencollective-postinstall || true"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
@@ -26,6 +27,7 @@
     "morgan": "~1.9.0",
     "mv": "2.1.1",
     "newsapi": "^2.4.0",
+    "opencollective-postinstall": "^2.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
     "request": "2.88.0",
@@ -83,5 +85,9 @@
     }
   },
   "author": "Divy Srivastava <dj.srivastava23@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/dan_divy"
+  }
 }
