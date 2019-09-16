@@ -4,7 +4,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha && node ./bin/www",
-    "postinstall": "opencollective-postinstall || true"
+    "postinstall": "opencollective-postinstall || true",
+    "app": "node ./app/main"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
