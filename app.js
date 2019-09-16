@@ -17,6 +17,8 @@ var publicApiRouter = require("./routes/developer/api");
 var chatRouter = require("./routes/chat");
 
 var app = express();
+
+
 app.conf = require("./config/app");
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -64,5 +66,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+
+if(process.argv.find(a => a == "--app")) {
+  require("./utils/handlers/app_socket")
+}
 
 module.exports = app;

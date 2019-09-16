@@ -8,7 +8,6 @@ var app = require("../app");
 var io = require("socket.io");
 var debug = require("debug")("v2.0.0:server");
 var http = require("http");
-
 /**
  * Get port from environment and store in Express.
  */
@@ -91,3 +90,5 @@ function onListening() {
 }
 
 module.exports = { sio };
+
+var socket = require("../utils/handlers/socket");
