@@ -35,7 +35,7 @@
     "time-ago": "0.2.1"
   },
   "devDependencies": {
-    "electron": "2.0.12"
+    "electron": "^2.0.12"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",
