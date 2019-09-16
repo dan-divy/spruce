@@ -11,7 +11,7 @@ function createWindow() {
     height: 600
   });
 
-  mainWindow.loadURL("./web/index.html");
+  mainWindow.loadFile("./web/index.html");
 
   mainWindow.on("closed", function() {
     mainWindow = null;
