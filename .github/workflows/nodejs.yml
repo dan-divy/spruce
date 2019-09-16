@@ -19,6 +19,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
       run: |
+        sudo apt install -y mongodb
+        sudo systemctl start mongodb
         npm install
         npm run build --if-present
         npm test
