@@ -41,9 +41,9 @@ describe('Database Tests', function() {
       var wrongSave = Name({
         notName: 'Not Mike'
       });
-      wrongSave.save(err => {
+      wrongSave.save((err) => {
         if(err) { return done(); }
-        throw new Error('Should generate error!');
+        done(new Error('Should generate error!'));
       });
     });
     it('Should retrieve data from test database', function(done) {
