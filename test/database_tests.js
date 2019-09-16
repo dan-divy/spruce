@@ -34,7 +34,10 @@ describe('Database Tests', function() {
         name: 'Mike'
       });
  
-      testName.save(done);
+      testName.save(done, (err) => {
+        if(err) done(err)
+          else done()
+      });
     });
     it('Dont save incorrect format to database', function(done) {
       //Attempt to save with wrong info. An error should trigger
@@ -49,8 +52,8 @@ describe('Database Tests', function() {
     it('Should retrieve data from test database', function(done) {
       //Look up the 'Mike' object previously saved.
       Name.find({name: 'Mike'}, (err, name) => {
-        if(err) {throw err;}
-        if(name.length === 0) {throw new Error('No data!');}
+        if(err) {done(err)}
+        if(name.length === 0) {done(new Error('No data!'))}
         done();
       });
     });
