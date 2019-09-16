@@ -19,7 +19,7 @@ describe('Database Tests', function() {
   //Once a connection is established invoke done()
 
   before(function (done) {
-    mongoose.connect('mongodb://localhost/spruce-test');
+    mongoose.connect('mongodb://localhost/spruce-test', { useNewUrlParser: true });
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error'));
     db.once('open', function() {
