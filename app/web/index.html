@@ -13,7 +13,17 @@
     <link href="./assets/css/main.css" rel="stylesheet">
     </head>
     <body>
-        <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+        <div id="connecting" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-12 m-5"></div>
+                    <div class="col-md-12 mx-auto mb-5">
+                            <h1>Connecting...</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="password-div" style="display: none" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <div class="container">
                 <div class="row text-center">
                     <div class="col-md-12 m-5"></div>
@@ -23,11 +33,24 @@
                     <div class="col-md-12 mx-auto">
                         <input placeholder="Your very secret amazing password..." class="form-control" id="password">
                     </div>
+                    <div class="col-md-12 mx-auto">
+                        <small id="password-error"></small>
+                    </div>
+                    <div class="col-md-4 mx-auto mt-4">
+                        <button class="btn btn-primary" id="password-button">Continue</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="./assets/js/scripts.js"></script></body>
+        <script type="text/javascript" src="./assets/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js" integrity="sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY=" crossorigin="anonymous"></script>
-        <script src="assets/js/main.js"></script>
+        <script>
+            if (typeof module === 'object') {
+                window.module = module; module = undefined;
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script>if (window.module) module = window.module;</script>
+        <script src="./assets/js/main.js"></script>
     </body>
 </html>
