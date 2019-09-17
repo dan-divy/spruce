@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+process.title = "spruce";
 
 var app = require("../app");
 var io = require("socket.io");
