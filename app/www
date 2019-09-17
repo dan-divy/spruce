@@ -2,6 +2,7 @@
 
 const { app, BrowserWindow, ipcMain } = require("electron");
 let mainWindow;
+const ps = require("ps-node");
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -23,6 +24,13 @@ function createWindow() {
       silent: true
     });
     console.log(pid);
+  });
+  ipcMain.on("end_spruce", function() {
+    ps.lookup({ command: "spruce" }, function(err, results) {
+      if (results[0] && results[0].command == "spruce") {
+        process.kill(results[0].pid);
+      }
+    });
   });
 }
 
