@@ -3,7 +3,7 @@
 
 <ul class="list-group">
   <li class="list-group-item list-group-item-primary">
-    <img src="<%= user.profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
+    <img src="<%= user.profile_pic %>?cache=<%= Math.random() %>" class="gram-card-user-image">
      <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> <br>
      <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
      <br>
@@ -14,7 +14,7 @@
 
 <div class="gram-card">
     <div class="gram-card-header">
-      <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image lozad">
+      <img src="<%= people[i].profile_pic %>?cache=<%= Math.random() %>" class="gram-card-user-image lozad">
       <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].authorID %>"><%= people[i].posts[z].author %></a>
 
             <div class="dropdown gram-card-time">
