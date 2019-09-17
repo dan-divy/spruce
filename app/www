@@ -12,7 +12,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadFile("./web/index.html");
+  mainWindow.loadFile(__dirname + "/web/index.html");
   mainWindow.on("closed", function() {
     mainWindow = null;
   });
