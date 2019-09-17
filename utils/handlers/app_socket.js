@@ -18,6 +18,7 @@ sio.on("connection", function(socket) {
             socket.authenticated = true;
             socket.emit("correct_password")
         } else {
+            socket.tries++;
             socket.emit("wrong_password", socket.tries)
         }
     })
