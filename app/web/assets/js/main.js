@@ -1,7 +1,7 @@
 const socket = io("http://localhost:4206");
 
 socket.on("connect", function() {
-    console.log("HI")
+    document.body.innerHTML = "Connected";
 })
 
 socket.on("correct_password", function() {
