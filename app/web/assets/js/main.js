@@ -1,6 +1,5 @@
 const backend = require("electron").ipcRenderer
 if(localStorage.dev_key) {
-    $("#connecting").fadeOut()
     console.log(localStorage.dev_key)
     startSocket(localStorage.dev_key)
 } else {
@@ -11,7 +10,19 @@ function startSocket(key) {
     console.log(key)
     const socket = io($("#host").val());
     var authenticated;
-    var connected
+    var connected;
+    setTimeout(() => {
+        if(!connected) {
+            if(localStorage.dev_key) {
+                delete localStorage.dev_key;
+                $.notify("Unable to connect automatically")
+            } else {
+                $.notify("Unable to connect after 5s")
+            }
+            socket.destroy();
+            $("#connecting").fadeIn()
+        }
+    }, 5000)
     socket.on("connect", function() {
         if(!connected) connected = true
             else return;
@@ -45,8 +56,12 @@ function startSocket(key) {
     });
 
     socket.on("wrong_password", function(tries) {
-        localStorage.dev_key = null;
-        $("#password-div").fadeIn();
+        if(localStorage.dev_key) {
+            delete localStorage.dev_key
+            $("#connecting").fadeIn()
+        } else {
+            $("#password-div").fadeIn()
+        }
         $("#password-error").html("<span style=\"color: red\">Password was incorrect, " + (5-tries) + " tries left!</span>")
     });
 
