@@ -3,7 +3,12 @@ function startSocket(key) {
     console.log(key)
     const socket = io($("#host").val());
     var authenticated;
+    var connected
     socket.on("connect", function() {
+        if(!connected) connected = true
+            else return;
+        console.log(connecting)
+        $.notify("Connected!", "success")
         $("#connecting").fadeOut(function(authenticated) {
             if(key) {
                 return socket.emit("password", key)
@@ -20,6 +25,14 @@ function startSocket(key) {
         $("#password-div").fadeOut(function() {
             $("#main").fadeIn();
         });
+    });
+
+    socket.on("disconnect", function() {
+        $.notify("Disconnected, attempting to reconnect...", "warning")
+    })
+
+    socket.on('reconnect', () => {
+        $.notify("Reconnected!", "success")
     });
 
     socket.on("wrong_password", function(tries) {
