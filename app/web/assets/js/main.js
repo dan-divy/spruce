@@ -42,6 +42,7 @@ function startSocket(key) {
     });
 
     socket.on("wrong_password", function(tries) {
+        localStorage.dev_key = null;
         $("#password-div").fadeIn();
         $("#password-error").html("<span style=\"color: red\">Password was incorrect, " + (5-tries) + " tries left!</span>")
     });
