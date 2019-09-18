@@ -1,5 +1,10 @@
 const backend = require("electron").ipcRenderer
+if(localStorage.dev_key) {
+    console.log(localStorage.dev_key)
+    startSocket(localStorage.dev_key)
+}
 function startSocket(key) {
+    $.notify("Connecting...", "info")
     console.log(key)
     const socket = io($("#host").val());
     var authenticated;
@@ -21,7 +26,8 @@ function startSocket(key) {
         })
     })
 
-    socket.on("correct_password", function() {
+    socket.on("correct_password", function(key) {
+        localStorage.dev_key = key;
         $("#password-div").fadeOut(function() {
             $("#main").fadeIn();
         });
@@ -47,8 +53,11 @@ function startSocket(key) {
 }
 
 function startSpruce() {
+    $("#connecting").fadeOut()
+    $.notify("Starting spruce...", "info")
     backend.send("start_spruce")
     backend.on("key", function(event, key) {
+        $.notify("Logging in...", "success")
         $("#connecting").fadeOut(function() {
             startSocket(key)
         });

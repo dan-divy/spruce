@@ -18,7 +18,7 @@ sio.on("connection", function(socket) {
         }
         if(password == dev_key) {
             socket.authenticated = true;
-            socket.emit("correct_password")
+            socket.emit("correct_password", password)
         } else {
             socket.tries++;
             socket.emit("wrong_password", socket.tries)
