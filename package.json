@@ -31,6 +31,7 @@
     "opencollective-postinstall": "^2.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "ps-node": "^0.1.6",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
     "time-ago": "0.2.1"

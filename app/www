@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 let mainWindow;
+const ps = require("ps-node");
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -12,9 +13,24 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadFile("./web/index.html");
+  mainWindow.loadFile(__dirname + "/web/index.html");
   mainWindow.on("closed", function() {
     mainWindow = null;
+  });
+  console.log(process.platform);
+  ipcMain.on("start_spruce", function() {
+    let { pid } = require("child_process").fork("./bin/www", ["--app"], {
+      detached: true,
+      silent: true
+    });
+    console.log(pid);
+  });
+  ipcMain.on("end_spruce", function() {
+    ps.lookup({ command: "spruce" }, function(err, results) {
+      if (results[0] && results[0].command == "spruce") {
+        process.kill(results[0].pid);
+      }
+    });
   });
 }
 
