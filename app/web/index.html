@@ -16,9 +16,16 @@
         <div id="connecting" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <div class="container">
                 <div class="row text-center">
-                    <div class="col-md-12 m-5"></div>
-                    <div class="col-md-12 mx-auto mb-5">
-                            <h1>Connecting...</h1>
+                    <div class="col-md-8 m-5"></div>
+                        <div class="col-md-5 mb-5 mx-auto">
+                            <h2>Connect to Spruce instance</h2><br>
+                            <input class="form-control" id="host" value="http://localhost:4206"><br>
+                            <button class="btn btn-primary" onclick="startSocket()">Connect</button>
+                        </div>
+                        <div class="col-md-5 mb-5 mx-auto">
+                            <h2>Start local Spruce instance</h2><br>
+                            <button class="btn btn-primary" onclick="startSpruce()">Start</button>
+                        </div>
                     </div>
                 </div>
             </div>

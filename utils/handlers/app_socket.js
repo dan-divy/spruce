@@ -7,6 +7,8 @@ const sio = io(server);
 const Users = require("./user")
 const { dev_key } = require("../../routes/developer/api");
 
+console.log("Admin console ready for connection on port 4206")
+
 sio.on("connection", function(socket) {
     socket.tries = 0;
     socket.authenticated = false;
