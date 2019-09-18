@@ -24,6 +24,10 @@ sio.on("connection", function(socket) {
             socket.emit("wrong_password", socket.tries)
         }
     })
+    socket.use(function(packet, next) {
+        if(!authenticated) return
+            else next();
+    })
 });
 
 server.listen("4206")
