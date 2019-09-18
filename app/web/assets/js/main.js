@@ -51,10 +51,6 @@ function startSocket(key) {
         $.notify("Disconnected, attempting to reconnect...", "warning")
     })
 
-    socket.on('reconnect', () => {
-        $.notify("Reconnected!", "success")
-    });
-
     socket.on("wrong_password", function(tries) {
         if(localStorage.dev_key) {
             delete localStorage.dev_key
@@ -76,7 +72,7 @@ function startSpruce() {
     $.notify("Starting spruce...", "info")
     backend.send("start_spruce")
     backend.on("key", function(event, key) {
-        $.notify("Logging in...", "success")
+        $.notify("Logging in...", "info")
         $("#connecting").fadeOut(function() {
             startSocket(key)
         });
