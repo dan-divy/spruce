@@ -1,13 +1,19 @@
 const socket = io("http://localhost:4206");
-
+var authenticated;
 socket.on("connect", function() {
-    $("#connecting").fadeOut(function() {
-        $("#password-div").fadeIn()
+    $("#connecting").fadeOut(function(authenticated) {
+        if(!authenticated) {
+            $("#password-div").fadeIn();
+        } else {
+            $("#main").fadeIn();
+        }
     })
 })
 
 socket.on("correct_password", function() {
-    document.body.innerHTML = "Password was correct!"
+    $("#password-div").fadeOut(function() {
+        $("#main").fadeIn();
+    });
 });
 
 socket.on("wrong_password", function(tries) {
@@ -18,3 +24,4 @@ $("#password-button").click(function() {
     $("#password-error").html("")
     socket.emit("password", $("#password").val())
 });
+
