@@ -19,10 +19,17 @@ function createWindow() {
   });
   console.log(process.platform);
   ipcMain.on("start_spruce", function() {
-    let { pid } = require("child_process").fork("./bin/www", ["--app"], {
+    let { pid, stdout } = require("child_process").fork("./bin/www", ["--app"], {
       detached: true,
       silent: true
     });
+    stdout.on("data", function(data) {
+      data = data.toString()
+      if(data.split("Developer key: ").length && data.split("Developer key: ").length > 1) {
+        console.log(data)
+        mainWindow.webContents.send("key", data.split("Developer key: ")[1].split("\n")[0])
+      } 
+    })
     console.log(pid);
   });
   ipcMain.on("end_spruce", function() {

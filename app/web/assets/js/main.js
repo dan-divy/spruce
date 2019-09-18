@@ -1,8 +1,13 @@
-function startSocket() {
+const backend = require("electron").ipcRenderer
+function startSocket(key) {
+    console.log(key)
     const socket = io($("#host").val());
     var authenticated;
     socket.on("connect", function() {
         $("#connecting").fadeOut(function(authenticated) {
+            if(key) {
+                return socket.emit("password", key)
+            }
             if(!authenticated) {
                 $("#password-div").fadeIn();
             } else {
@@ -18,6 +23,7 @@ function startSocket() {
     });
 
     socket.on("wrong_password", function(tries) {
+        $("#password-div").fadeIn();
         $("#password-error").html("<span style=\"color: red\">Password was incorrect, " + (5-tries) + " tries left!</span>")
     });
 
@@ -28,9 +34,11 @@ function startSocket() {
 }
 
 function startSpruce() {
-    require("electron").ipcRenderer.send("start_spruce")
-    $("#connecting").fadeOut(function() {
-        startSocket()
+    backend.send("start_spruce")
+    backend.on("key", function(event, key) {
+        $("#connecting").fadeOut(function() {
+            startSocket(key)
+        });
     });
 }
 
