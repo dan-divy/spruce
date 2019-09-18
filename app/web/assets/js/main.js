@@ -1,7 +1,10 @@
 const backend = require("electron").ipcRenderer
 if(localStorage.dev_key) {
+    $("#connecting").fadeOut()
     console.log(localStorage.dev_key)
     startSocket(localStorage.dev_key)
+} else {
+    $("#connecting").fadeIn()
 }
 function startSocket(key) {
     $.notify("Connecting...", "info")
