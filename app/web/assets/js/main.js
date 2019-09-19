@@ -32,8 +32,10 @@ function startSocket(key) {
             else return;
         console.log(connecting)
         $.notify("Connected!", "success")
-        copyToClipboard(key)
-        $.notify("Password copied to clipboard", "info")
+        if(key) {
+            copyToClipboard(key)
+            $.notify("Password copied to clipboard", "info")
+        }
         $("#connecting").fadeOut(function(authenticated) {
             if(key) {
                 return socket.emit("password", key)
@@ -101,4 +103,12 @@ function endSpruce() {
     })
 }
 
+function logout() {
+    forced = true;
+    socket.destroy()
+    socket.disconnect()
+    $("#main").fadeOut(function() {
+        $("#connecting").fadeIn();
+    })
+}
 
