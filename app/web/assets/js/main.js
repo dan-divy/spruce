@@ -1,4 +1,7 @@
 const backend = require("electron").ipcRenderer
+var socket;
+var authenticated;
+var connected;
 if(localStorage.dev_key) {
     console.log(localStorage.dev_key)
     startSocket(localStorage.dev_key)
@@ -6,22 +9,21 @@ if(localStorage.dev_key) {
     $("#connecting").fadeIn()
 }
 function startSocket(key) {
-    $.notify("Connecting...", "info")
+    if(connected) return;
     console.log(key)
-    const socket = io($("#host").val());
-    var authenticated;
-    var connected;
-    setTimeout(() => {
-        if(!connected) {
+    socket = io($("#host").val());
+    let i = setInterval(() => {
+        if(connected) return;
             if(localStorage.dev_key) {
+                localStorage.dev_key = ''
                 delete localStorage.dev_key;
                 $.notify("Unable to connect automatically")
             } else {
                 $.notify("Unable to connect after 5s")
             }
-            socket.destroy();
+            clearInterval(i)
+            socket.disconnect() && socket.destroy();
             $("#connecting").fadeIn()
-        }
     }, 5000)
     socket.on("connect", function() {
         if(!connected) connected = true
@@ -48,7 +50,11 @@ function startSocket(key) {
     });
 
     socket.on("disconnect", function() {
-        $.notify("Disconnected, attempting to reconnect...", "warning")
+        if(!connected) return;
+        $("#main").fadeOut();
+        $("#connecting").fadeIn();
+        $.notify("Disconnected", "warning")
+        connected = false;
     })
 
     socket.on("wrong_password", function(tries) {
@@ -72,11 +78,22 @@ function startSpruce() {
     $.notify("Starting spruce...", "info")
     backend.send("start_spruce")
     backend.on("key", function(event, key) {
-        $.notify("Logging in...", "info")
         $("#connecting").fadeOut(function() {
             startSocket(key)
         });
     });
+}
+
+function endSpruce() {
+    $("#main").fadeOut(function() {
+        $.notify("Stopping spruce...", "info")
+        backend.send("end_spruce")
+        $.notify("Sent stop signal to spruce", "success")
+        $("#connecting").fadeIn()
+        localStorage.dev_key = '';
+        delete localStorage.dev_key;
+        socket.disconnect() && socket.destroy();
+    })
 }
 
 
