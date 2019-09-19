@@ -19,7 +19,7 @@ module.exports = (conf) => {
     const fileId = req.body.fileId;
 
     if (!userId) return res.status(500).json({ error: 'User ID not parsed.' });
-    if (!message) return res.status(400).json({ error: 'Message body required.' });
+    if (!message) return res.status(400).json({ error: 'Post message body required.' });
 
     const newPost = Post({
       user: userId,
@@ -40,6 +40,19 @@ module.exports = (conf) => {
           .populate({ path: 'user', select: '-_id username' })
           );
       }
+    });
+  };
+
+  // Get a single posts
+  controller.GetPost = (req, res) => {
+    const postId = req.query.postId || req.body.postId;
+
+    if (!postId) return res.status(400).json({ error: 'Post id required.' });
+
+    Post
+    .findById(postId)
+    .then(post => {
+      res.status(200).json(post);
     });
   };
 
@@ -66,7 +79,49 @@ module.exports = (conf) => {
     .then(posts => {
       res.status(200).json(posts);
     });
+  };
 
+  // Update post
+  controller.UpdatePost = (req, res) => {
+    const postId = req.body.postId;
+    const message_body = req.body.message_body;
+    const fileId = req.body.fileId;
+
+    if (!postId) return res.status(400).json({ error: 'Post id required.' });
+
+    Post
+    .findById(postId)
+    .then(post => {
+      post.message_body = message_body;
+      post.fileId = fileId;
+
+      post.save(async (err, p) => {
+        if (err) return res.status(500).json({ error: `Could not save post. Err: ${err}` });
+
+        if (p.file) {
+          res.status(200).json(await Post.findById(p.id)
+            .populate({ path: 'user', select: '-_id username' })
+            .populate({ path: 'file', select: '-_id systemFilename' })
+            );
+        } else {
+          res.status(200).json(await Post.findById(p.id)
+            .populate({ path: 'user', select: '-_id username' })
+            );
+        }
+      })
+    });
+  };
+
+    // Delete post
+  controller.DeletePost = (req, res) => {
+    const postId = req.body.postId || req.query.postId;
+
+    if (!postId) return res.status(400).json({ error: 'Post id required.' });
+
+    Post.findByIdAndRemove(postId, (err, post) => {
+      if (err) return res.status(500).json({ error: `Could not delete post. Err: ${err}` });
+      res.status(200).json();
+    });
   };
 
   return controller;

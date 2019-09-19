@@ -39,7 +39,7 @@ export const GetPosts = async (pointInTime?:string, pageNumber:Number = 1, posts
   }
   query += `pageNumber=${pageNumber}&postsPerPage=${postsPerPage}`;
 
-  const res = await http.get<Post[]>(`${apiEndpoint}/post${query}`, new Headers(headers));
+  const res = await http.get<Post[]>(`${apiEndpoint}/post/set${query}`, new Headers(headers));
   return res.parsedBody;
 };
 

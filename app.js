@@ -65,7 +65,7 @@ app.set('port', port);
 
 if (isDev) {
   app.use((req, res, next) => {
-    debug(req.originalUrl);
+    //debug(req.originalUrl);
     next();
   });
   const webpack = require('webpack');

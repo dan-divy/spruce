@@ -142,7 +142,6 @@ module.exports = (conf) => {
       community.description = desc || community.description;
       community.private = private || community.private;
 
-
       community.save(err => {
         if (err) return res.status(500).json({ error: `Could not save updates to community ${community.name}.` });
         res.status(200).json();
