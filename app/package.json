@@ -1,0 +1,20 @@
+{
+  "name": "spruce-app",
+  "version": "2.0.0",
+  "description": "spruce app to control and start spruce",
+  "main": "www",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dan-divy/spruce.git"
+  },
+  "author": "dan-divy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dan-divy/spruce/issues"
+  },
+  "homepage": "https://github.com/dan-divy/spruce#readme"
+}
