@@ -2,6 +2,7 @@ const backend = require("electron").ipcRenderer
 var socket;
 var authenticated;
 var connected;
+var forced;
 if(localStorage.dev_key) {
     console.log(localStorage.dev_key)
     startSocket(localStorage.dev_key)
@@ -13,7 +14,7 @@ function startSocket(key) {
     console.log(key)
     socket = io($("#host").val());
     let i = setInterval(() => {
-        if(connected) return;
+        if(connected || forced) return forced = false;
             if(localStorage.dev_key) {
                 localStorage.dev_key = ''
                 delete localStorage.dev_key;
@@ -85,6 +86,7 @@ function startSpruce() {
 }
 
 function endSpruce() {
+    forced = true
     $("#main").fadeOut(function() {
         $.notify("Stopping spruce...", "info")
         backend.send("end_spruce")
