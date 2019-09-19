@@ -11,6 +11,19 @@
     "type": "git",
     "url": "git+https://github.com/dan-divy/spruce.git"
   },
+  "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "dan-divy",
+        "repo": "spruce",
+        "publishAutoUpdate": true,
+        "releaseType": "prerelease"
+      }
+    ],
+    "artifactName": "${productName}-${os}-${version}.${ext}",
+    "appId": "com.github.dan-divy.Spruce"
+  },
   "author": "dan-divy",
   "license": "MIT",
   "bugs": {
