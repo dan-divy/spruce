@@ -1,4 +1,5 @@
 const backend = require("electron").ipcRenderer
+const copyToClipboard = require("electron").clipboard.writeText;
 var socket;
 var authenticated;
 var connected;
@@ -31,6 +32,8 @@ function startSocket(key) {
             else return;
         console.log(connecting)
         $.notify("Connected!", "success")
+        copyToClipboard(key)
+        $.notify("Password copied to clipboard", "info")
         $("#connecting").fadeOut(function(authenticated) {
             if(key) {
                 return socket.emit("password", key)
