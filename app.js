@@ -15,6 +15,7 @@ var categoryRouter = require("./routes/category");
 var restApi = require("./routes/api/v1/index");
 var publicApiRouter = require("./routes/developer/api");
 var chatRouter = require("./routes/chat");
+var counterRouter = require("./utils/handlers/counter");
 
 var app = express();
 
@@ -40,6 +41,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(counterRouter);
+
 
 app.use("/", indexRouter);
 app.use("/u", usersRouter);
