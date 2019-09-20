@@ -28,7 +28,7 @@ sio.on("connection", function(socket) {
   });
   socket.on("client_analytics", function() {
     Analytics.find({}, function(err, docs) {
-      socket.emit("server_analytics", docs);
+      socket.emit("server_analytics", { name: docs.name, stats: docs.stats });
     });
   });
 });

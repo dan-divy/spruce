@@ -8,7 +8,7 @@ mongoose.connect(require("../../config/app").db.connectionUri, {
 
 var analyticsSchema = mongoose.Schema({
   name: String, // "2019-01-01"
-  stats: Object // {time:new Date(), visitor: 120}
+  stats: Array // {time:new Date(), visitor: 120}
 });
 
 module.exports = mongoose.model("analytics", analyticsSchema);
