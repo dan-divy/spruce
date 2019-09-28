@@ -1,7 +1,6 @@
 const backend = require("electron").ipcRenderer;
 const copyToClipboard = require("electron").clipboard.writeText;
 var socket;
-var authenticated;
 var connected;
 var forced;
 if (localStorage.dev_key) {
@@ -122,7 +121,7 @@ function startSocket(key) {
   }
   setInterval(function() {
     socket.emit("stats");
-  }, 1000);
+  }, 2000);
   socket.on("cpu", function(data) {
     changeStatus("cpu", data);
   });

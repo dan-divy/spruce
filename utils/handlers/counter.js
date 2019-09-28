@@ -21,12 +21,9 @@ module.exports = function(req, res, next) {
       };
     }
     stats[index >= 0 ? index : 0] = today;
-    console.log(stats);
     res.stats = stats;
-    console.log(res);
     res = new Analytics(res);
     req.session.today = date;
-    console.log(res);
     res.save(function() {
       next();
     });
