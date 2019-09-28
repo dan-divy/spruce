@@ -34,7 +34,8 @@
     "ps-node": "^0.1.6",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
-    "time-ago": "0.2.1"
+    "time-ago": "0.2.1",
+    "usage": "^0.7.1"
   },
   "devDependencies": {
     "electron": "^6.0.9"

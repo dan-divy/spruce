@@ -83,7 +83,52 @@ function startSocket(key) {
       x => x.name == new Date().toISOString().split("T")[0]
     );
   });
-
+  function changeStatus(name, value) {
+    const color = $(`#${name}-color`);
+    const face = $(`#${name}-icon`);
+    const text = $(`#${name}-status`);
+    function emotion(good) {
+      if (good) {
+        text.text("Good");
+        face.removeClass("fa-frown");
+        face.addClass("fa-smile");
+        color.removeClass("text-danger");
+        color.addClass("text-success");
+      } else {
+        text.text("Bad");
+        face.removeClass("fa-smile");
+        face.addClass("fa-frown");
+        color.removeClass("text-success");
+        color.addClass("text-danger");
+      }
+    }
+    $(`#${name}`).text(value + $(`#${name}`).attr("data-units"));
+    switch (name) {
+      case "ram":
+        if (value < 300) {
+          emotion(true);
+        } else {
+          emotion(false);
+        }
+        break;
+      case "cpu":
+        if (value < 20) {
+          emotion(true);
+        } else {
+          emotion(false);
+        }
+        break;
+    }
+  }
+  setInterval(function() {
+    socket.emit("stats");
+  }, 1000);
+  socket.on("cpu", function(data) {
+    changeStatus("cpu", data);
+  });
+  socket.on("ram", function(data) {
+    changeStatus("ram", data);
+  });
   $("#password-button").click(function() {
     $("#password-error").html("");
     socket.emit("password", $("#password").val());
@@ -99,6 +144,11 @@ function startSpruce() {
       startSocket(key);
     });
   });
+}
+
+function restartSpruce() {
+  endSpruce();
+  startSpruce();
 }
 
 function endSpruce() {
