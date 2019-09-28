@@ -3,6 +3,7 @@ const copyToClipboard = require("electron").clipboard.writeText;
 var socket;
 var connected;
 var forced;
+var graph = {};
 if (localStorage.dev_key) {
   console.log(localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -78,9 +79,46 @@ function startSocket(key) {
   });
 
   socket.on("server_analytics", function(data) {
-    const today = data.filter(
-      x => x.name == new Date().toISOString().split("T")[0]
+    const visitors = data.find(x => x.name == "visitors").stats;
+    console.log(visitors);
+    console.log(visitors.map(x => x.date));
+    const options = {
+      chart: { type: "area", height: 152, sparkline: { enabled: !0 } },
+      colors: ["#3ac47d"],
+      stroke: { width: 5, curve: "smooth" },
+      markers: { size: 0 },
+      tooltip: {
+        fixed: { enabled: !1 },
+        x: { show: !1 },
+        y: {
+          title: {
+            formatter: function(t) {
+              return "";
+            }
+          }
+        },
+        marker: { show: !1 }
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          stops: [0, 90, 100]
+        }
+      },
+      series: [{ name: "sessions", data: visitors.map(x => x.amount) }],
+      xaxis: {
+        categories: visitors.map(x => x.date)
+      }
+    };
+    if (graph["visitors"]) graph["visitors"].destroy();
+    graph["visitors"] = new ApexCharts(
+      document.querySelector("#visitors"),
+      options
     );
+    graph["visitors"].render();
   });
   function changeStatus(name, value) {
     const color = $(`#${name}-color`);
@@ -128,6 +166,9 @@ function startSocket(key) {
   socket.on("ram", function(data) {
     changeStatus("ram", data);
   });
+  socket.on("sockets", function(data) {
+    changeStatus("now", data);
+  });
   $("#password-button").click(function() {
     $("#password-error").html("");
     socket.emit("password", $("#password").val());
@@ -147,7 +188,9 @@ function startSpruce() {
 
 function restartSpruce() {
   endSpruce();
-  startSpruce();
+  setTimeout(() => {
+    startSpruce();
+  }, 1000);
 }
 
 function endSpruce() {

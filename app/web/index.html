@@ -873,17 +873,10 @@
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-9 bg-success"></div>
-                                                    <i class="lnr-apartment text-white"></i></div>
+                                                    <i class="fa fa-users text-white"></i></div>
                                                 <div class="widget-chart-content">
-                                                    <div class="widget-subheading">Capital Gains</div>
-                                                    <div class="widget-numbers text-success"><span>$563</span></div>
-                                                    <div class="widget-description text-focus">
-                                                        Increased by
-                                                        <span class="text-warning pl-1">
-                                                            <i class="fa fa-angle-up"></i>
-                                                            <span class="pl-1">7.35%</span>
-                                                        </span>
-                                                    </div>
+                                                    <div class="widget-subheading">Current users</div>
+                                                    <div class="widget-numbers" id="now" data-units=" users">0 users</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -925,8 +918,8 @@
                                                 </div>
                                             </div>
                                             <div class="p-0 card-body">
-                                                <div class="p-1 slick-slider-sm mx-auto">
-                                                    <div class="slick-slider">
+                                                <div class="p-1 mx-auto">
+                                                    <div class="">
                                                         <div>
                                                             <div class="widget-chart widget-chart2 text-left p-0">
                                                                 <div class="widget-chat-wrapper-outer">
@@ -950,57 +943,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="widget-chart-wrapper he-auto opacity-10 m-0">
-                                                                        <div id="dashboard-sparkline-3"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <div class="widget-chart widget-chart2 text-left p-0">
-                                                                <div class="widget-chat-wrapper-outer">
-                                                                    <div class="widget-chart-content widget-chart-content-lg pb-0">
-                                                                        <div class="widget-chart-flex">
-                                                                            <div class="widget-title opacity-5 text-muted text-uppercase">Visitors</div>
-                                                                        </div>
-                                                                        <div class="widget-numbers">
-                                                                            <div class="widget-chart-flex">
-                                                                                <div>
-                                                                                    <small class="opacity-3 pr-1">$</small>
-                                                                                    <span>629</span>
-                                                                                    <span class="text-primary pl-3">
-                                                                                    <i class="fa fa-angle-down"></i>
-                                                                                </span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="widget-chart-wrapper he-auto opacity-10 m-0">
-                                                                        <div id="dashboard-sparkline-1"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <div class="widget-chart widget-chart2 text-left p-0">
-                                                                <div class="widget-chat-wrapper-outer">
-                                                                    <div class="widget-chart-content widget-chart-content-lg pb-0">
-                                                                        <div class="widget-chart-flex">
-                                                                            <div class="widget-title opacity-5 text-muted text-uppercase">Helpdesk Tickets</div>
-                                                                        </div>
-                                                                        <div class="widget-numbers">
-                                                                            <div class="widget-chart-flex">
-                                                                                <div>
-                                                                                    <span class="text-warning">34</span>
-                                                                                </div>
-                                                                                <div class="widget-title ml-2 font-size-lg font-weight-normal text-dark">
-                                                                                    <span class="opacity-5 text-muted pl-2 pr-1">5%</span>
-                                                                                    increase
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="widget-chart-wrapper he-auto opacity-10 m-0">
-                                                                        <div id="dashboard-sparkline-2"></div>
+                                                                        <div id="visitors"></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2967,6 +2910,7 @@
         </script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="./assets/js/notify.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>if (window.module) module = window.module;</script>
         <script src="./assets/js/main.js"></script>
     </body>

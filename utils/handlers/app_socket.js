@@ -15,6 +15,7 @@ console.log("Admin console ready for connection on port 4206");
 sio.on("connection", function(socket) {
   socket.tries = 0;
   socket.authenticated = false;
+  socket.visitors = false;
   socket.on("password", function(password) {
     if (socket.tries > 4) {
       return socket.emit("wrong_password", socket.tries);
@@ -27,15 +28,20 @@ sio.on("connection", function(socket) {
       socket.emit("wrong_password", socket.tries);
     }
   });
-  socket.on("client_analytics", function() {
-    if (!socket.authenticated) return;
-    Analytics.find({}, function(err, docs) {
-      socket.emit("server_analytics", { name: docs.name, stats: docs.stats });
-    });
-  });
   socket.on("stats", function() {
     if (!socket.authenticated) return;
+    if (!socket.visitors) {
+      Analytics.find(function(err, docs) {
+        socket.emit("server_analytics", docs);
+      });
+      socket.visitors = true;
+    }
+    socket.emit(
+      "sockets",
+      Object.entries(require("./socket").sockets.connected).length
+    );
     usage.lookup(process.pid, function(err, result) {
+      if (err) return;
       socket.emit("cpu", result.cpu);
       socket.emit("ram", Math.round(result.memory * 0.000001));
     });
