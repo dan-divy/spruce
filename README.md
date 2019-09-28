@@ -89,6 +89,7 @@ spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for perform
 
 * [Divy Srivastava](http://github.com/DivySrivastava)
 * [Dan](https://github.com/dan-online)
+* [Robert](https://github.com/rburckner)
 
 ## License
 
