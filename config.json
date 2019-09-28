@@ -14,8 +14,8 @@
     "aud" : "",
     "iss" : "",
     "access" : {
-      "expiresIn" : 300,
-      "subject" : "User access - 5m = 300"
+      "expiresIn" : 900,
+      "subject" : "User access - 15m = 900"
     },
     "refresh" : {
       "expiresIn" : 2592000,
@@ -29,13 +29,9 @@
   "mongo":  {
     "host": "localhost",
     "port": 27017,
-    "database": "oak",
+    "database": "spruce",
     "username": "username",
-    "password": "g7F^d5S$"
-  },
-  "redis": {
-    "host": "localhost",
-    "port": 6379
+    "password": "password"
   },
   "sso": {
     "enabled": false,

@@ -1,5 +1,5 @@
 'uses strict';
-const debug = require('debug')('oak:routerAuthentication');
+const debug = require('debug')('spruce:routerAuthentication');
 const express = require('express');
 const path = require('path')
 const router = express.Router();

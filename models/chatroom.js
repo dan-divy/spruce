@@ -3,9 +3,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const chatroomSchema = Schema({
-  user_id: [{ 
+  // either a Community ID is required OR a manager ID
+  community: { 
     type : Schema.Types.ObjectId,
-    required: [true, 'User ID is required!'],
+    ref: 'user' 
+  },
+  manager: [{ 
+    type : Schema.Types.ObjectId,
+    ref: 'user' 
+  }],
+  member: [{ 
+    type : Schema.Types.ObjectId,
     ref: 'user' 
   }],
   message: [{ 

@@ -1,5 +1,5 @@
 'uses strict';
-const debug = require('debug')('oak:controllerPost');
+const debug = require('debug')('spruce:controllerPost');
 const path = require('path');
 
 const pathToRoot = '../../';
@@ -72,7 +72,7 @@ module.exports = (conf) => {
       { created_at: { $lte: pointInTime } }
     )
     .sort({created_at: 'desc'})
-    .limit(pageNumber * postsPerPage)   // try reordering these
+    .limit(pageNumber * postsPerPage)
     .skip((pageNumber - 1) * postsPerPage)
     .populate({ path: 'user', select: '-_id username' })
     .populate({ path: 'file', select: '-_id systemFilename' })

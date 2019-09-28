@@ -1,5 +1,5 @@
 'uses strict';
-const debug = require('debug')('oak:routerCommunity');
+const debug = require('debug')('spruce:routerCommunity');
 const express = require('express');
 const path = require('path')
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 const pathToRoot = '../../';
 
 module.exports = (conf) => {
-  const {api, name, jwt} = conf;
+  const {api} = conf;
   // Controllers
   const pathToControllers = path.join(__dirname, pathToRoot, 'controllers', api);
   const communityController = require(path.join(pathToControllers, 'community'))(conf);

@@ -1,7 +1,7 @@
 'uses strict';
 const compression = require('compression');
 const createError = require('http-errors');
-const debug = require('debug')('oak:app');
+const debug = require('debug')('spruce:app');
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
@@ -49,7 +49,7 @@ if (isDev) {
   debug('Operating in DEVELOPMENT mode.');
   const morgan = require('morgan');
 
-  app.use(morgan('dev'));
+  app.use(morgan('combined', { stream: { write: msg => debug(msg.trimEnd()) } }));
 } else {
   app.use(compression());
   app.use(helmet());
@@ -65,10 +65,10 @@ app.set('port', port);
 
 if (isDev) {
   app.use((req, res, next) => {
-    //debug(req.originalUrl);
+    debug(req.originalUrl);
     next();
   });
-  const webpack = require('webpack');
+/*  const webpack = require('webpack');
   const webpackMiddleware = require('webpack-dev-middleware');
   const webpackConfig = require('./webpack.config.js');
   app.use(webpackMiddleware(webpack(webpackConfig), {
@@ -76,7 +76,7 @@ if (isDev) {
     stats: {
       colors: true
     }
-  }));
+  }));*/
 } else {
   app.use(express.static('dist'));
 }
@@ -96,6 +96,9 @@ if (!api) {
   debug('Missing API parameter');
   return process.exit(1);
 }
+app.set('api', api);
+app.set('conf', nconf.get());
+
 app.get('/api/version', (req, res) => res.status(200).send({ 
   apiVersion: api, 
   apiEndpoint: nconf.get('apiEndpoint') 

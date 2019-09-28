@@ -45,7 +45,7 @@ export const tabs = Handlebars.compile(`
       </button>
     </div>
     <div class="list-group-item">
-      <a href="#post">
+      <a href="#chat">
         <i class="fa fa-paper-plane">Chat</i>
       </a>
     </div>

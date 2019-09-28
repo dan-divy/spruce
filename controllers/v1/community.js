@@ -1,6 +1,6 @@
 'uses strict';
 const auth = require('basic-auth');
-const debug = require('debug')('oak:controllerCommunity');
+const debug = require('debug')('spruce:controllerCommunity');
 const path = require('path')
 
 const pathToRoot = '../../';

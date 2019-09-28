@@ -2,11 +2,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+require('./user');
+require('./chatroom');
+
 const messageSchema = Schema({
-  user_id: { 
+  user: { 
     type : Schema.Types.ObjectId,
     required: [true, 'User ID is required!'],
     ref: 'user' 
+  },
+  chatroom: { 
+    type : Schema.Types.ObjectId,
+    required: [true, 'Chatroom is required!'],
+    ref: 'chatroom' 
   },
   message_body: {
     type: String,

@@ -1,5 +1,5 @@
 'uses strict';
-const debug = require('debug')('oak:controllerAuthentication');
+const debug = require('debug')('spruce:controllerAuthentication');
 
 module.exports = (mongo) => {
   const controller = {};

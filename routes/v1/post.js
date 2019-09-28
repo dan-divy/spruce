@@ -1,5 +1,5 @@
 'uses strict';
-const debug = require('debug')('oak:routerPost');
+const debug = require('debug')('spruce:routerPost');
 const express = require('express');
 const path = require('path')
 const router = express.Router();

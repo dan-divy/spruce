@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('oak:jwtMW');
+const debug = require('debug')('spruce:jwtMW');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -32,6 +32,10 @@ module.exports = (conf) => {
   }
 
   middleware.verifyRefreshToken = (req, res, next) => {
+
+    // TODO - add a check to ensure refresh token isn't revoked.
+
+
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
       const token = req.headers.authorization.split(' ')[1];
       const validToken = jwtUtils.verify(token, 'refresh');

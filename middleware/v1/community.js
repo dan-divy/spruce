@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('oak:commMW');
+const debug = require('debug')('spruce:commMW');
 const path = require('path');
 
 const pathToRoot = '../../';

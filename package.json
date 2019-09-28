@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf ./dist/ && webpack --mode production --config webpack.config.js",
-    "dev": "NODE_ENV=development DEBUG=oak:* nodemon --ignore './sessions' --ignore './app' bin/www",
+    "dev": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './sessions' --ignore './app' bin/www",
     "dev-wp": "webpack-dev-server --mode development --config webpack.config.js",
     "start": "NODE_ENV=production node ./bin/www",
     "test": "mocha && node ./bin/www"
@@ -24,7 +24,9 @@
     "morgan": "~1.9.0",
     "nconf": "^0.10.0",
     "passport": "^0.4.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "socket.io": "^2.3.0",
+    "socketio-auth": "^0.1.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.31",
@@ -33,11 +35,10 @@
     "bootstrap": "^4.3.1",
     "bootstrap-social": "^5.1.1",
     "css-loader": "^3.2.0",
-    "extract-text-webpack-plugin": "^3.0.2",
     "fibers": "^4.0.1",
     "file-loader": "^4.2.0",
     "font-awesome": "^4.7.0",
-    "handlebars": "^4.2.0",
+    "handlebars": "^4.3.3",
     "html-webpack-plugin": "^3.2.0",
     "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.8.0",

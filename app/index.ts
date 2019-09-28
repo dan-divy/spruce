@@ -4,8 +4,8 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 import 'bootstrap';
 import 'jquery';
 import './style.css'
+import Socket from 'socket.io-client';
 
-//var jwt = require('jsonwebtoken');
 
 import {apiEndpoint, name} from '../config.json';
 // Libraries
@@ -16,13 +16,17 @@ import * as Post from './lib/post';
 import * as Token from './lib/token';
 import * as User from './lib/user';
 import * as Utils from './lib/utils';
+// Socket Libraries
+import * as Chat from './lib/socket/chat';
+
 // Templates
 import * as admin from './templates/admin';
+import * as chat from './templates/chat';
 import * as main from './templates/main';
 import * as profile from './templates/profile';
 
 var refreshContext = false;
-
+var chatNsp:Socket;
 /**
  * Show an alert to the user
  */
@@ -51,9 +55,14 @@ const showView = async () => {
   const navbarElement = document.getElementById('app-navbar');
   const tabsElement = document.getElementById('app-tabs');
   const mainElement = document.getElementById('app-main');  
-  const postElement = document.getElementById('app-post');  
+  const postElement = document.getElementById('app-post');
+
+  // params ex. /#chat/room/5d8cfa2c3b36e84a1e47dff9
+  // [params]; params[0] = resource, params[1] = id
   const [view, ...params] = window.location.hash.split('/');
+
   var context:User.Context;
+  var chatroom:string;
 
   const buildContext = async () => {
     if (Auth.validSession()) {
@@ -66,12 +75,18 @@ const showView = async () => {
       refreshContext = false;
     }
 
-    // temp - for troubleshooting
+    if (chatNsp && chatNsp.connected && view != '#chat') {
+      chatNsp.emit('leave');
+      chatNsp.removeAllListeners();
+      chatNsp.close();
+      chatNsp = null;
+    }
+    /* temp - for troubleshooting
     if (Auth.isExpired(token)) {
       alert('error, expired token')
-    }
+    }*/
     console.log('build context ', context)
-    // END temp
+     //END temp
 
     navbarElement.innerHTML = '';
     tabsElement.innerHTML = '';
@@ -113,6 +128,128 @@ const showView = async () => {
       navbarElement.innerHTML = main.navbar({name, context});
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.notification();      
+      break;
+    case '#chat':
+      if (!Auth.validSession()) return window.location.hash = '#login';
+
+      if (params[0] == 'room') {
+        chatroom = params[1]
+      }
+
+      navbarElement.innerHTML = main.navbar({name, context});
+
+      // WE CAN NOW MAKE A CHAT ROOM TABLE!
+      if (chatroom) {
+        tabsElement.innerHTML = 'TODO - Chatroom community index'
+        mainElement.innerHTML = 'TODO - Chatroom user index'
+      } else {
+        tabsElement.innerHTML = 'TODO - Chatroom name'
+        mainElement.innerHTML = chat.chatRoom();
+
+        const messageElement = <HTMLElement>document.getElementById('message');
+        const inputMessage = <HTMLInputElement>document.getElementById('inputMessage');
+        inputMessage.disabled = true;
+        inputMessage.placeholder = 'Loading';
+        
+        if (!chatNsp) chatNsp = Chat.Socket(Auth.readToken('refresh'));
+        chatNsp.on('connect', socket => {
+          inputMessage.disabled = false;
+          inputMessage.placeholder = 'Type here...';
+          inputMessage.focus();
+
+          // add listeners
+          chatNsp.on('reconnect_attempt', (attemptNumber) => {
+            console.log('Chat Namespace reconnect. Attempt: ', attemptNumber);
+
+            // TODO - redirect to login if refresh token is not valid or expired
+            socket.io.opts.query = {
+              token: Auth.readToken('refresh')
+            }
+          });
+
+          chatNsp.on('history', data => {
+            messageElement.innerHTML = '';
+
+            data.forEach(message => {
+              const { user, message_body, sent_at } = message;
+              const mess:Chat.Message = {
+                message_body: message_body,
+                user: {
+                  username: user.username
+                },
+                sent_at: sent_at
+              }
+              if (context.username === user.username) {
+                mess.user = null;
+              }
+              messageElement.innerHTML += chat.message(mess);
+            });
+            window.scrollTo(0, document.body.scrollHeight);
+          });
+
+          chatNsp.on('new message', data => {
+            const { username, message, sent_at } = data;
+            const newMess:Chat.Message = {
+              message_body: message,
+              sent_at: sent_at
+            }
+            if (context.username !== username) {
+              newMess.user = {
+                username: username
+              };
+            }
+            messageElement.innerHTML += chat.message(newMess);
+          });
+
+          chatNsp.on('user joined', data => {
+            const { username, roomcount } = data;
+
+            console.log('TODO - notify user joined', username, roomcount)
+          });
+
+          chatNsp.on('user left', data => {
+            const { username, roomcount } = data;
+
+            console.log('TODO - notify user left', username, roomcount)
+          });
+
+          chatNsp.on('typing', data => {
+            const { username } = data;
+
+            console.log('TODO - notify user typing', username)
+          });
+
+          chatNsp.on('stop typing', data => {
+            const { username } = data;
+
+            console.log('TODO - notify user stop typing', username)
+          });
+
+          chatNsp.emit('join', { username: context.username, chatroom: '5d8cfa2c3b36e84a1e47dff9' });
+        });
+
+        inputMessage.addEventListener('keypress', (event: KeyboardEvent) => {
+          if (event.key === 'Enter' && chatNsp) {
+            chatNsp.emit('new message', {
+              userId: context.userId,
+              username: context.username,
+              message: inputMessage.value,
+              sent_at: new Date()
+            });
+
+          if (chatNsp) chatNsp.emit('stop typing');
+            inputMessage.value = '';
+          };
+        });
+
+        inputMessage.addEventListener('focus', (event: KeyboardEvent) => {
+          if (chatNsp) chatNsp.emit('typing');
+        });
+
+        inputMessage.addEventListener('blur', (event: KeyboardEvent) => {
+          if (chatNsp) chatNsp.emit('stop typing');
+        });
+      }
       break;
     case '#register':
       if (Auth.validSession()) return window.location.hash = '#main';

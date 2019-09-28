@@ -2,7 +2,7 @@
 //https://medium.com/@siddharthac6/json-web-token-jwt-the-right-way-of-implementing-with-node-js-65b8915d550e
 
 'use strict';
-const debug = require('debug')('oak:jwtUtils');
+const debug = require('debug')('spruce:jwtUtils');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const path = require('path');

@@ -1,15 +1,15 @@
 'use strict';
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const webpack = require('webpack');
+const Webpack = require('webpack');
 
 const distDir = path.join(__dirname, 'dist');
 const conf = require('./config.json');
 
 module.exports = {
   entry: './app/index.ts',
+  mode: conf.env || 'development',
   output: {
     filename: `${conf.name}.js`,
     path: distDir,
@@ -23,7 +23,8 @@ module.exports = {
     contentBase: distDir,
     port: 60800,
     proxy: {
-      '/api': 'http://localhost:60702'
+      '/api': 'http://localhost:60702',
+      '/socket.io': 'http://localhost:60702'
     }
   },
   module: {
@@ -74,7 +75,7 @@ module.exports = {
       chunkFilename: '[id].css',
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
-    new webpack.ProvidePlugin({
+    new Webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
     })
