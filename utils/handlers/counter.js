@@ -19,6 +19,8 @@ module.exports = function(req, res, next) {
         amount: 1,
         date
       };
+      stats.push(today);
+      index = stats.indexOf(today);
     }
     stats[index >= 0 ? index : 0] = today;
     res.stats = stats;

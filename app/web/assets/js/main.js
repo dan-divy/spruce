@@ -79,6 +79,7 @@ function startSocket(key) {
   });
 
   socket.on("server_analytics", function(data) {
+    console.log(data);
     const visitors = data.find(x => x.name == "visitors").stats;
     console.log(visitors);
     console.log(visitors.map(x => x.date));
@@ -86,10 +87,9 @@ function startSocket(key) {
       chart: { type: "area", height: 152, sparkline: { enabled: !0 } },
       colors: ["#3ac47d"],
       stroke: { width: 5, curve: "smooth" },
-      markers: { size: 0 },
+      markers: { size: 1 },
       tooltip: {
         fixed: { enabled: !1 },
-        x: { show: !1 },
         y: {
           title: {
             formatter: function(t) {
@@ -108,9 +108,15 @@ function startSocket(key) {
           stops: [0, 90, 100]
         }
       },
-      series: [{ name: "sessions", data: visitors.map(x => x.amount) }],
+      series: [
+        { name: "sessions", data: visitors.map(x => x.amount).reverse() }
+      ],
       xaxis: {
-        categories: visitors.map(x => x.date)
+        type: "category",
+        categories: visitors.map(x => x.date).reverse()
+      },
+      yaxis: {
+        min: 0
       }
     };
     if (graph["visitors"]) graph["visitors"].destroy();
@@ -119,6 +125,25 @@ function startSocket(key) {
       options
     );
     graph["visitors"].render();
+    visitors.reverse();
+    let yesterday =
+      visitors[visitors.length - 2 >= 0 ? visitors.length - 2 : 0].amount;
+    let now = visitors[visitors.length - 1].amount;
+    let percent = Math.round((now / yesterday) * 100);
+    let increase = now - yesterday;
+    $("#graph-daily").text(percent);
+    if (increase >= 0) {
+      var symbol = "+";
+      $("#graph-daily-amount").addClass("text-success");
+    } else {
+      $("#graph-daily-amount").removeClass("text-success");
+      $("#graph-daily-amount").addClass("text-danger");
+      $("#graph-daily-arrow").removeClass("fa-angle-up");
+      $("#graph-daily-arrow").addClass(["fa-angle-down", "text-danger"]);
+
+      var symbol = "";
+    }
+    $("#graph-daily-amount").text(symbol + increase);
   });
   function changeStatus(name, value) {
     const color = $(`#${name}-color`);
