@@ -9,12 +9,13 @@ import Socket from 'socket.io-client';
 
 import {apiEndpoint, name} from '../config.json';
 // Libraries
-import * as Auth from './lib/authentication';
-import * as Comm from './lib/community';
-import * as Http from './lib/http';
-import * as Post from './lib/post';
-import * as Token from './lib/token';
-import * as User from './lib/user';
+import * as AuthLib from './lib/authentication';
+import * as ChatLib from './lib/chat';
+import * as CommLib from './lib/community';
+//import * as HttpLib from './lib/http';
+import * as PostLib from './lib/post';
+import * as TokenLib from './lib/token';
+import * as UserLib from './lib/user';
 import * as Utils from './lib/utils';
 // Socket Libraries
 import * as Chat from './lib/socket/chat';
@@ -61,17 +62,17 @@ const showView = async () => {
   // [params]; params[0] = resource, params[1] = id
   const [view, ...params] = window.location.hash.split('/');
 
-  var context:User.Context;
-  var chatroom:string;
+  var context:UserLib.Context;
+  var chatroomId:string;
 
   const buildContext = async () => {
-    if (Auth.validSession()) {
-      var token = Auth.readToken();
-      if (!token || Auth.isExpired(token) || refreshContext) {
-        token = await Token.GetNewToken();
-        Auth.saveToken(token);
+    if (AuthLib.validSession()) {
+      var token = AuthLib.readToken();
+      if (!token || AuthLib.isExpired(token) || refreshContext) {
+        token = await TokenLib.GetNewToken();
+        AuthLib.saveToken(token);
       }
-      context = await Auth.decodeToken(token);
+      context = await AuthLib.decodeToken(token);
       refreshContext = false;
     }
 
@@ -82,14 +83,16 @@ const showView = async () => {
       chatNsp = null;
     }
     /* temp - for troubleshooting
-    if (Auth.isExpired(token)) {
+    if (AuthLib.isExpired(token)) {
       alert('error, expired token')
     }*/
-    console.log('build context ', context)
+    //console.log('build context ', context)
      //END temp
 
     navbarElement.innerHTML = '';
     tabsElement.innerHTML = '';
+    mainElement.innerHTML = '';
+    postElement.innerHTML = '';
   }
 
   await buildContext();
@@ -130,20 +133,24 @@ const showView = async () => {
       mainElement.innerHTML = admin.notification();      
       break;
     case '#chat':
-      if (!Auth.validSession()) return window.location.hash = '#login';
-
-      if (params[0] == 'room') {
-        chatroom = params[1]
-      }
+      if (!AuthLib.validSession()) return window.location.hash = '#login';
 
       navbarElement.innerHTML = main.navbar({name, context});
 
-      // WE CAN NOW MAKE A CHAT ROOM TABLE!
-      if (chatroom) {
-        tabsElement.innerHTML = 'TODO - Chatroom community index'
-        mainElement.innerHTML = 'TODO - Chatroom user index'
+      if (params[0] == 'room') {
+        chatroomId = params[1]
+      }
+
+      if (!chatroomId) {
+        const communityChatList = await ChatLib.GetCommunityChatrooms();
+        // TODO - not done here.
+        const userChatList = {};
+        
+        tabsElement.innerHTML = chat.communityIndex({ communities: communityChatList });
+        mainElement.innerHTML = chat.userIndex(userChatList);
       } else {
-        tabsElement.innerHTML = 'TODO - Chatroom name'
+        const chatroomName = await ChatLib.GetCommunityName(chatroomId);
+        tabsElement.innerHTML = chat.chatRoomName({ name: chatroomName })
         mainElement.innerHTML = chat.chatRoom();
 
         const messageElement = <HTMLElement>document.getElementById('message');
@@ -151,7 +158,7 @@ const showView = async () => {
         inputMessage.disabled = true;
         inputMessage.placeholder = 'Loading';
         
-        if (!chatNsp) chatNsp = Chat.Socket(Auth.readToken('refresh'));
+        if (!chatNsp) chatNsp = Chat.Socket(AuthLib.readToken('refresh'));
         chatNsp.on('connect', socket => {
           inputMessage.disabled = false;
           inputMessage.placeholder = 'Type here...';
@@ -163,7 +170,7 @@ const showView = async () => {
 
             // TODO - redirect to login if refresh token is not valid or expired
             socket.io.opts.query = {
-              token: Auth.readToken('refresh')
+              token: AuthLib.readToken('refresh')
             }
           });
 
@@ -225,7 +232,7 @@ const showView = async () => {
             console.log('TODO - notify user stop typing', username)
           });
 
-          chatNsp.emit('join', { username: context.username, chatroom: '5d8cfa2c3b36e84a1e47dff9' });
+          chatNsp.emit('join', { username: context.username, chatroom: chatroomId });
         });
 
         inputMessage.addEventListener('keypress', (event: KeyboardEvent) => {
@@ -252,7 +259,7 @@ const showView = async () => {
       }
       break;
     case '#register':
-      if (Auth.validSession()) return window.location.hash = '#main';
+      if (AuthLib.validSession()) return window.location.hash = '#main';
 
       mainElement.innerHTML = main.register();
       const firstnameInput = <HTMLInputElement>document.getElementById('firstname');
@@ -270,61 +277,61 @@ const showView = async () => {
           showAlert('Passwords do not match.');
           password2Input.focus();
         } else {
-          const newUser:User.User = {
+          const newUser:UserLib.User = {
             firstname: firstnameInput.value,
             lastname: lastnameInput.value,
             username: usernameInput.value,
             email: emailnameInput.value,
             password: passwordInput.value
           }
-          const refreshToken = await Auth.register(newUser);
+          const refreshToken = await AuthLib.register(newUser);
           if (refreshToken) {
-            Auth.saveToken(refreshToken, 'refresh');
+            AuthLib.saveToken(refreshToken, 'refresh');
             window.location.hash = '#main';
           }
         }
       });
       break;
     case '#login':
-      if (Auth.validSession()) return window.location.hash = '#main';
+      if (AuthLib.validSession()) return window.location.hash = '#main';
 
       mainElement.innerHTML = main.login();
       const btnFacebook = <HTMLButtonElement>document.getElementById('button-facebook');
-      btnFacebook.onclick = () => Auth.socialSignon(Auth.FACEBOOK);
+      btnFacebook.onclick = () => AuthLib.socialSignon(AuthLib.FACEBOOK);
       const btnGoogle = <HTMLButtonElement>document.getElementById('button-google');
-      btnGoogle.onclick = () => Auth.socialSignon(Auth.GOOGLE);
+      btnGoogle.onclick = () => AuthLib.socialSignon(AuthLib.GOOGLE);
       const btnTwitter = <HTMLButtonElement>document.getElementById('button-twitter');
-      btnTwitter.onclick = () => Auth.socialSignon(Auth.TWITTER);
+      btnTwitter.onclick = () => AuthLib.socialSignon(AuthLib.TWITTER);
       const signinForm = document.forms['form-signin'];
 
       signinForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const refreshToken = await Auth.login(
+        const refreshToken = await AuthLib.login(
             (<HTMLInputElement>document.getElementById('email')).value,
             (<HTMLInputElement>document.getElementById('password')).value
           );
         if (refreshToken) {
-          Auth.saveToken(refreshToken, 'refresh');
+          AuthLib.saveToken(refreshToken, 'refresh');
           window.location.hash = '#main';
         }
       });
       break;
     case '#logout':
-      Auth.logout();
+      AuthLib.logout();
       context = null;
-      Auth.clearTokens()
+      AuthLib.clearTokens()
       window.location.hash = '#login';
       break;
     case '#main':
-      if (!Auth.validSession()) return window.location.hash = '#login';
+      if (!AuthLib.validSession()) return window.location.hash = '#login';
 
       /**
        * Prepends post
        * Adds a post to the main view
        * @param  {Post} post message
        */
-      const prependPost = async (post:Post.Post) => {
+      const prependPost = async (post:PostLib.Post) => {
         const msgBody = document.createElement('p');
         const node = document.createTextNode(`${post.user.username}: ${post.message_body}`);
         msgBody.appendChild(node);
@@ -342,7 +349,7 @@ const showView = async () => {
        * Adds a post to the main view
        * @param  {Post} post message
        */
-      const appendPost = async (post:Post.Post) => {
+      const appendPost = async (post:PostLib.Post) => {
         const msgBody = document.createElement('p');
         const node = document.createTextNode(`${post.user.username}: ${post.message_body}`);
         msgBody.appendChild(node);
@@ -360,7 +367,7 @@ const showView = async () => {
       mainElement.innerHTML = main.welcome({context});
 
       var postContainer = <HTMLElement>document.getElementById('postContainer');
-      const posts = await Post.GetPosts(new Date().toISOString());
+      const posts = await PostLib.GetPosts(new Date().toISOString());
       posts.forEach(post => appendPost(post));
 
       const buttonPost = <HTMLButtonElement>document.getElementById('button-post');
@@ -374,7 +381,7 @@ const showView = async () => {
             // send the message to the server; success = append to top of view
             const message_body = (<HTMLInputElement>document.getElementById('message_body')).value;
             if (message_body.length) {
-              const result = await Post.CreatePost({message_body});
+              const result = await PostLib.CreatePost({message_body});
               prependPost(result);
             }
           });
@@ -386,15 +393,15 @@ const showView = async () => {
       break;
     case '#profile':
       navbarElement.innerHTML = main.navbar({name, context});
-      const resProfile = await User.GetProfile();
-      const resAvailComms = await Comm.GetAvailableCommunities();
+      const resProfile = await UserLib.GetProfile();
+      const resAvailComms = await CommLib.GetAvailableCommunities();
       mainElement.innerHTML = profile.profile({name, context, profile: resProfile});
 
       const inputNewCommunity = <HTMLInputElement>document.getElementById('newCommunity');
       const communityDatalist = <HTMLInputElement>document.getElementById('communityList');
       const btnNewCommunity = <HTMLButtonElement>document.getElementById('btnCreateNewCommunity');
       const communityTable = <HTMLTableElement>document.getElementById('communityTable');
-      const listCommunity = (community:Comm.Community) => {
+      const listCommunity = (community:CommLib.Community) => {
         const row = communityTable.insertRow(1);
         const cellName = row.insertCell(0);
         const cellLeave = row.insertCell(1);
@@ -434,7 +441,7 @@ const showView = async () => {
           name: inputNewCommunity.value,
           private: false
         }
-        const result = await Comm.CreateJoinCommunity(body);
+        const result = await CommLib.CreateJoinCommunity(body);
         if (result._id) {
           // append to current list
           inputNewCommunity.value = '';

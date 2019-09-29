@@ -1,6 +1,6 @@
 import {apiEndpoint} from '../../config.json';
-import * as auth from './authentication';
-import * as http from './http';
+import * as Auth from './authentication';
+import * as Http from './http';
 
 export interface Community {
   _id: string;
@@ -9,6 +9,7 @@ export interface Community {
 };
 
 export const LeaveCommunity = (data) => {
+  // TODO
   console.log('leave comm')
   console.log(data.getAttribute('data-id'))
 };
@@ -20,7 +21,7 @@ export const LeaveCommunity = (data) => {
  * @return  {Community} community[], list of communitites
  */
 export const GetAvailableCommunities = async () => {
-  const token = auth.readToken();
+  const token = Auth.readToken();
   if (!token) return null;
 
   const headers = {
@@ -29,7 +30,7 @@ export const GetAvailableCommunities = async () => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await http.get<Community[]>(`${apiEndpoint}/community/available`, new Headers(headers));
+  const res = await Http.get<Community[]>(`${apiEndpoint}/community/available`, new Headers(headers));
 
   return res.parsedBody;
 };
@@ -40,7 +41,7 @@ export const GetAvailableCommunities = async () => {
  * @return  {Community} community, new/joined community
  */
 export const CreateJoinCommunity = async (body:any) => {
-  const token = auth.readToken();
+  const token = Auth.readToken();
   if (!token) return null;
 
   const headers = {
@@ -49,6 +50,6 @@ export const CreateJoinCommunity = async (body:any) => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await http.post<Community>(`${apiEndpoint}/community`, new Headers(headers), body);
+  const res = await Http.post<Community>(`${apiEndpoint}/community`, new Headers(headers), body);
   return res.parsedBody;
 };

@@ -24,6 +24,7 @@ export const navbar = Handlebars.compile(`
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hi, {{context.username}}!</a>
           <div class="dropdown-menu" aria-labelledby="dropdown03">
+            <a class="dropdown-item" href="#chat"><i class="fa fa-paper-plane">Chat</i></a>
             <a class="dropdown-item" href="#profile">Profile</a>
             {{#if context.admin}}
               <a class="dropdown-item" href="#admin">Admin</a>
@@ -38,16 +39,13 @@ export const navbar = Handlebars.compile(`
 `);
 
 export const tabs = Handlebars.compile(`
+  <!-- https://support.litmos.com/hc/en-us/articles/115001428953-Sample-HTML-Banner-code -->
+
   {{#if context.sessionId}}
     <div class="list-group-item">
       <button id="button-post" class="btn btn-lg btn-primary btn-block ">
         <i class="fa fa-plus"> Post </i>
       </button>
-    </div>
-    <div class="list-group-item">
-      <a href="#chat">
-        <i class="fa fa-paper-plane">Chat</i>
-      </a>
     </div>
     {{#each context.community}}
       <div class="list-group-item">
@@ -58,28 +56,6 @@ export const tabs = Handlebars.compile(`
 `);
 
 export const postInput = Handlebars.compile(`
-  <div id="postContainer" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Modal body text goes here.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-`);
-
-export const postInputORIG = Handlebars.compile(`
   <div id="postContainer" class="container">
     <div class="form-label-group">
       <input type="text" id="message_body" class="form-control" placeholder="Post a new message" autofocus>
@@ -88,7 +64,6 @@ export const postInputORIG = Handlebars.compile(`
     </div>
   </div>
 `);
-
 
 /*
   <div class="alert alert-primary" role="alert">

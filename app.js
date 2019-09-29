@@ -105,6 +105,7 @@ app.get('/api/version', (req, res) => res.status(200).send({
 }));
 app.use(`/api/${api}/auth/`, require(`./routes/${api}/authentication`)(nconf.get(), passport));
 app.use(`/api/${api}/community/`, require(`./routes/${api}/community`)(nconf.get()));
+app.use(`/api/${api}/chat/`, require(`./routes/${api}/chat`)(nconf.get()));
 app.use(`/api/${api}/post/`, require(`./routes/${api}/post`)(nconf.get()));
 app.use(`/api/${api}/user/`, require(`./routes/${api}/user`)(nconf.get()));
 

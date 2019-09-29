@@ -1,5 +1,25 @@
 import * as Handlebars from '../../node_modules/handlebars/dist/handlebars.js'
 
+
+export const communityIndex = Handlebars.compile(`
+  <h1 class="h3 mb-3 font-weight-normal">Profile</h1>
+  <ul>
+    {{#each communities}}
+      <li><a href="/#chat/room/{{chatroom}}">{{name}}</a></li>
+    {{/each}}
+  </ul>
+`);
+
+export const userIndex = Handlebars.compile(`
+  TODO - Create a view to build chats with other users.
+`);
+
+export const chatRoomName = Handlebars.compile(`
+  <h1>
+    {{name}}
+  </h1>
+`);
+
 export const chatRoom = Handlebars.compile(`
   <ul class="pages">
     <li class="chat page">

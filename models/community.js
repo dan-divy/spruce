@@ -2,11 +2,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+require('./chatroom');
+require('./user');
+
 const communitySchema = Schema({
   name: {
     type: String,
     required: [true, 'Community name is required!'],
     trim: true
+  },
+  chatroom: { 
+    type : Schema.Types.ObjectId,
+    ref: 'room' 
   },
   description: String,
   private: { type: Boolean, default: false },

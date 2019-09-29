@@ -91,6 +91,16 @@ module.exports = (conf) => {
     });
   };
 
+  // Reset
+  controller.userList = (req, res) => {
+    User
+    .find()
+    .select('_id username firstname lastname')
+    .then(users => {
+      res.status(200).json(users);
+    });
+  };
+
   // Get a user's profile
   controller.getProfile = (req, res) => {
     const userId = req.locals.userId;

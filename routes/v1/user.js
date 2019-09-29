@@ -19,6 +19,8 @@ module.exports = (conf) => {
   router.post('/', userController.register);
   // Check to see if username exists
   router.get('/', userController.checkUsername);
+  // Retrieve a list of users
+  router.get('/list', userController.userList);
   // Retrieve a user's profile
   router.get('/profile', jwtMW.verifyToken, userController.getProfile);
   // Reset user's password

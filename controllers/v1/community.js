@@ -6,7 +6,8 @@ const path = require('path')
 const pathToRoot = '../../';
 
 module.exports = (conf) => {
-
+  // Models
+  const Chatroom = require(path.join(__dirname, pathToRoot, 'models/chatroom'));
   const Community = require(path.join(__dirname, pathToRoot, 'models/community'));
 
   const controller = {};
@@ -24,8 +25,6 @@ module.exports = (conf) => {
     .findOne({ name : communityName })
     .then(community => {
       // if the community exists, join as a member, not a manager
-      //if (community) return res.status(409).json({ error: 'Community name already exists.' });
-
       if (community) {
         // Join the community
         community.members.push(userId);
@@ -34,16 +33,24 @@ module.exports = (conf) => {
           return res.status(200).json({ _id: comm.id, name: comm.name });
         });
       } else {
-        // Create the community
+        // Create the community and respective chatroom
+        const newChatroom = new Chatroom();
         const newCommunity = new Community({
           name: communityName,
+          chatroom: newChatroom._id,
           private: communityPrivate,
           updated_by: userId
         });
-        newCommunity.managers.push(userId);
-        newCommunity.save((err, community) => {
-          if (err) return res.status(500).json({ error: `Could not create new community. Err: ${err}` });
-          res.status(200).json({ communityId: community.id, communityName: community.name })
+        newChatroom.community = newCommunity._id;
+        newChatroom.save((err, chatroom) => {
+          if (err) return res.status(500).json({ error: `Could not chatroom for new community. Err: ${err}` });
+
+          newCommunity.managers.push(userId);
+          newCommunity.save((err, community) => {
+            if (err) return res.status(500).json({ error: `Could not create new community. Err: ${err}` });
+            res.status(200).json({ communityId: community.id, communityName: community.name })
+          });
+
         });
       }
     })
@@ -158,7 +165,12 @@ module.exports = (conf) => {
     Community
     .deleteOne({ _id: communityId}, err => {
       if (err) return res.status(500).json({ error: `Could not delete community ID: ${communityId}.` });
-      res.status(200).json();
+
+      Chatroom.deleteOne({ community: communityId }, (err) => {
+        if (err) return res.status(500).json({ error: `Could not delete chatroom for community ID: ${communityId}.` });
+        
+        res.status(200).json();
+      });
     });
   }
   return controller;
