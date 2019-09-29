@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+const { app, BrowserWindow, ipcMain } = require("electron");
+let mainWindow;
+const ps = require("ps-node");
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1400,
+    height: 700,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  mainWindow.loadFile(__dirname + "/web/index.html");
+  mainWindow.on("closed", function() {
+    mainWindow = null;
+  });
+  console.log(process.platform);
+  ipcMain.on("start_spruce", function() {
+    let { pid, stdout } = require("child_process").fork("./bin/www", ["--app"], {
+      detached: true,
+      silent: true
+    });
+    stdout.on("data", function(data) {
+      data = data.toString()
+      if(data.split("Developer key: ").length && data.split("Developer key: ").length > 1) {
+        console.log(data)
+        mainWindow.webContents.send("key", data.split("Developer key: ")[1].split("\n")[0])
+      } 
+    })
+    console.log(pid);
+  });
+  ipcMain.on("end_spruce", function() {
+    ps.lookup({ command: "spruce" }, function(err, results) {
+      if (results[0] && results[0].command == "spruce") {
+        process.kill(results[0].pid);
+      }
+    });
+  });
+}
+
+app.on("ready", createWindow);
+
+app.on("window-all-closed", function() {
+  if (process.platform !== "darwin") app.quit();
+});
+
+app.on("activate", function() {
+  if (mainWindow === null) createWindow();
+});

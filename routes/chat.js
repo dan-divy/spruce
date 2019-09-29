@@ -27,7 +27,6 @@ router.get('/:userid', function(req, res, next) {
       stack:"Can't chat with yourself."
     }
   });
-  require('../utils/handlers/socket');
   User
   .findOne({_id:req.params.userid})
   .exec((error, user) => {

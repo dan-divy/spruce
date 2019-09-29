@@ -40,7 +40,7 @@ router.post('/new', formParser, function(req, res, next) {
 	 	else {
 			req.session._id = result._id;
 			req.session.user = result.username;
-			res.redirect('/');
+			res.redirect(req.query.redirect_uri || '/');
 		}
 	})
 })
@@ -58,7 +58,7 @@ router.post('/getin', formParser, function(req, res, next) {
 			req.session.user = result.username;
 			result.lastLogin = new Date();
 			result.save(() => {
-				res.redirect('/');
+				res.redirect(req.query.redirect_uri || '/');
 			})
 
 		}

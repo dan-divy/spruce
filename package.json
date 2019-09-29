@@ -3,8 +3,9 @@
   "version": "4.0.0",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha && node ./bin/www",
-    "postinstall": "opencollective-postinstall || true"
+    "test": "mocha",
+    "postinstall": "opencollective-postinstall || true",
+    "app": "electron ./app/www"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
@@ -30,12 +31,14 @@
     "opencollective-postinstall": "^2.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "ps-node": "^0.1.6",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
-    "time-ago": "0.2.1"
+    "time-ago": "0.2.1",
+    "usage": "^0.7.1"
   },
   "devDependencies": {
-    "electron": "2.0.12"
+    "electron": "^6.0.9"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",

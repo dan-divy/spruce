@@ -1,4 +1,5 @@
 const io = require("socket.io");
+const express = require("express");
 var User = require("../models/user");
 var Room = require("../models/room");
 const sio = require("../../bin/www").sio;
@@ -43,6 +44,7 @@ function sendMsg(socket, chat) {
 sio.on("connection", function(socket) {
   const session = socket.request.session;
   socket.session = session;
+  if (!session.socket) return;
   socket.join(session.socket.room);
   Room.findOne({ _id: session.socket.room }, function(err, room) {
     if (!room) {
@@ -58,4 +60,4 @@ sio.on("connection", function(socket) {
   });
 });
 
-module.exports = io;
+module.exports = sio;

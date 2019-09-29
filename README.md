@@ -26,6 +26,7 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 * View your/others profile.
 * Follow a particular user and get notified for his/her activities.
 * Change your profile picture, bio, people who follow you etc.
+* Electron app
 
 And a lot more to be added soon...
 
