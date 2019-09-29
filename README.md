@@ -4,7 +4,7 @@
 
 Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB. 
 
-[![Financial Contributors on Open Collective](https://opencollective.com/dan_divy/all/badge.svg?label=financial+contributors)](https://opencollective.com/dan_divy) [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DivySrivastava/spruce&amp;utm_campaign=Badge_Grade) ![](https://img.shields.io/badge/license-MIT-green.svg) ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
+[![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DivySrivastava/spruce&amp;utm_campaign=Badge_Grade) ![](https://img.shields.io/badge/license-MIT-green.svg) ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
 
 _Deployed_ [_here_](http://spruce.dancodes.online)
 
@@ -22,7 +22,6 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
   * events \(location can be specified\)
   * moments \(personal post\)
 * Like and comment on a feed.
-* API for developers
 * View your/others profile.
 * Follow a particular user and get notified for his/her activities.
 * Change your profile picture, bio, people who follow you etc.
@@ -53,19 +52,17 @@ $ npm i
 
 ## Local Development
 
-Before running, we need to add the Instgram and Google API Credentials to the project. Under the `config` directory of the repo, you will find `instagram.js` and `google.js`. We need to add the `<CLIENT_ID>`, `<CLIENT_SECRET>` and `<host>:<port>` with our own API credentials
+To sign/verify the access tokens public/private RSA keys need to be generated. Paths to the cert and key must be noted in config.json.
+
+Before running, you need to add the social media API Credentials to the project. In the config.json file you will find `google`, `facebook` and `instagram` client/secret pairs. You need to add the `clientId`, and `secret` with your own API credentials
 
 ```javascript
 /** REPLACE YOUR API CREDENTIALS HERE **/
-var in_client_id = 'XXXXXXXXXXXXXXXXXX', // <CLIENT_ID>
-    in_client_secret = 'XXXXXXXXXXXXXXXXXXXX', // <CLIENT_SECRET>
+      "clientID": "<client id>",
+      "secret"  : "<client secret>",
 ```
 
 Now Replace the `<host>` & `<port>` with the redirect uri specified in the [Instagram API Dashboard](https://www.instagram.com/developer) and [Google API Dashboard](https://developers.google.com). Default is `http://localhost:80/account/oauth`.
-
-```javascript
-var in_redirect_uri = 'http://localhost:80/account/oauth/:service'
-```
 
 Finally start the MongoDB server in a seperate bash/pm2
 
@@ -89,36 +86,7 @@ spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for perform
 
 * [Divy Srivastava](http://github.com/DivySrivastava)
 * [Dan](https://github.com/dan-online)
-
-## Contributors
-
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/dan-divy/spruce/graphs/contributors"><img src="https://opencollective.com/dan_divy/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/dan_divy/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/dan_divy"><img src="https://opencollective.com/dan_divy/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/dan_divy/contribute)]
-
-<a href="https://opencollective.com/dan_divy/organization/0/website"><img src="https://opencollective.com/dan_divy/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/1/website"><img src="https://opencollective.com/dan_divy/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/2/website"><img src="https://opencollective.com/dan_divy/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/3/website"><img src="https://opencollective.com/dan_divy/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/4/website"><img src="https://opencollective.com/dan_divy/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/5/website"><img src="https://opencollective.com/dan_divy/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/6/website"><img src="https://opencollective.com/dan_divy/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/7/website"><img src="https://opencollective.com/dan_divy/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/8/website"><img src="https://opencollective.com/dan_divy/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/dan_divy/organization/9/website"><img src="https://opencollective.com/dan_divy/organization/9/avatar.svg"></a>
+* [Robert](https://github.com/rburckner)
 
 ## License
 

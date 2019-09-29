@@ -1,68 +1,111 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var session = require("express-session");
-var bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+'uses strict';
+const compression = require('compression');
+const createError = require('http-errors');
+const debug = require('debug')('spruce:app');
+const express = require('express');
+const helmet = require('helmet');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const path = require('path');
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var accountRouter = require("./routes/auth");
-var meRouter = require("./routes/settings");
-var extraRouter = require("./routes/extras/wordbeater/main");
-var categoryRouter = require("./routes/category");
-var restApi = require("./routes/api/v1/index");
-var publicApiRouter = require("./routes/developer/api");
-var chatRouter = require("./routes/chat");
+const nconf = require('nconf');
+nconf
+  .argv()
+  .env('__')
+  .defaults({
+    conf: `${__dirname}/config.json`,
+    'NODE_ENV': 'development'
+  });
+nconf.file(nconf.get('conf'));
+const mongo = nconf.get('mongo');
 
-var app = express();
-app.conf = require("./config/app");
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+const app = express();
 
-var cooky = {
-  secret: "work hard",
-  resave: true,
-  expires: new Date() * 60 * 60 * 24 * 7,
-  saveUninitialized: true
-};
+// Define environment
+const NODE_ENV = nconf.get('env') || 'development';
+app.set('env', NODE_ENV);
+const isDev = NODE_ENV === 'development';
 
-app.sessionMiddleware = session(cooky);
-
-app.set("trust proxy", 1); // trust first proxy
-app.use(app.sessionMiddleware);
-app.use(logger("tiny"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/", indexRouter);
-app.use("/u", usersRouter);
-app.use("/account", accountRouter);
-app.use("/me", meRouter);
-app.use("/api", restApi);
-app.use("/category", categoryRouter);
-app.use("/products", extraRouter);
-app.use("/chat", chatRouter);
-app.use("/developer", publicApiRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// Connect to mongoDB
+var mongoUri = 'mongodb://';
+if (mongo.username && mongo.password) {
+  mongoUri += mongo.host + ':' + mongo.port + '/' + mongo.database + '-dev';
+} else {
+  mongoUri += mongo.username + ':' + encodeURIComponent(mongo.password) + '@' + 
+              mongo.host + ':' + mongo.port + '/' + mongo.database;
+}
+mongoose.set('useCreateIndex', true)
+mongoose.set('useNewUrlParser', true)
+mongoose.connect(mongoUri, (err) => {
+  if (err) {
+    debug(`ERROR connecting to DB: ${mongo.host}`);
+    return process.exit(1);
+  }
+  debug(`Successfully connected to DB: ${mongo.host}`);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// Setup for SPA
+if (isDev) {
+  debug('Operating in DEVELOPMENT mode.');
+  const morgan = require('morgan');
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
+  app.use(morgan('combined', { stream: { write: msg => debug(msg.trimEnd()) } }));
+} else {
+  app.use(compression());
+  app.use(helmet());
+} 
+
+app.set('trust proxy', 1); 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+// server setting
+const port = process.env.PORT || nconf.get('port') || '3000';
+app.set('port', port);
+
+if (isDev) {
+  app.use((req, res, next) => {
+    debug(req.originalUrl);
+    next();
+  });
+/*  const webpack = require('webpack');
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const webpackConfig = require('./webpack.config.js');
+  app.use(webpackMiddleware(webpack(webpackConfig), {
+    publicPath: '/',
+    stats: {
+      colors: true
+    }
+  }));*/
+} else {
+  app.use(express.static('dist'));
+}
+
+if (nconf.get('sso').enabled) {
+  // Init passport authentication 
+  app.use(passport.initialize());
+  // persistent login sessions 
+  app.use(passport.session());
+  require('./utils/sso')(passport, nconf.get('sso'));
+}
+
+
+// ROUTES - API
+const api = nconf.get('api');
+if (!api) {
+  debug('Missing API parameter');
+  return process.exit(1);
+}
+app.set('api', api);
+app.set('conf', nconf.get());
+
+app.get('/api/version', (req, res) => res.status(200).send({ 
+  apiVersion: api, 
+  apiEndpoint: nconf.get('apiEndpoint') 
+}));
+app.use(`/api/${api}/auth/`, require(`./routes/${api}/authentication`)(nconf.get(), passport));
+app.use(`/api/${api}/community/`, require(`./routes/${api}/community`)(nconf.get()));
+app.use(`/api/${api}/post/`, require(`./routes/${api}/post`)(nconf.get()));
+app.use(`/api/${api}/user/`, require(`./routes/${api}/user`)(nconf.get()));
 
 module.exports = app;
