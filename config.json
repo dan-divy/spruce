@@ -1,0 +1,54 @@
+{
+  "name": "Spruce",
+  "env": "development",
+  "host": "localhost",
+  "port": 60702,
+  "api" : "v1",
+  "apiEndpoint" : "/api/v1",
+  "verifyEmail" : false,
+  "postsPerPage" : 25,
+  "jwt": {
+    "key": "certs/key.pem",
+    "cert": "certs/cert.pem",
+    "alg" : "RS256",
+    "aud" : "",
+    "iss" : "",
+    "access" : {
+      "expiresIn" : 900,
+      "subject" : "User access - 15m = 900"
+    },
+    "refresh" : {
+      "expiresIn" : 2592000,
+      "subject" : "Refresh access token - 30d = 2592000"
+    },
+    "resource" : {
+      "expiresIn" : 1296000,
+      "subject" : "Resource access - 15d"
+    }
+  },
+  "mongo":  {
+    "host": "localhost",
+    "port": 27017,
+    "database": "spruce",
+    "username": "username",
+    "password": "password"
+  },
+  "sso": {
+    "enabled": false,
+    "google": {
+      "clientID": "<client id>",
+      "secret"  : "<client secret>",
+      "redirect": "/account/oauth/google"
+    },
+    "facebook": {
+      "clientID": "<client id>",
+      "secret"  : "<client secret>",
+      "redirect": "/account/oauth/facebook"
+    },
+    "instagram": {
+      "clientID": "<client id>",
+      "secret"  : "<client secret>",
+      "redirect": "/account/oauth/instagram"
+    }
+  }
+}
