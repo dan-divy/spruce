@@ -14,7 +14,6 @@ import * as ChatLib from './lib/chat';
 import * as CommLib from './lib/community';
 //import * as HttpLib from './lib/http';
 import * as PostLib from './lib/post';
-import * as TokenLib from './lib/token';
 import * as UserLib from './lib/user';
 import * as Utils from './lib/utils';
 // Socket Libraries
@@ -70,7 +69,7 @@ const showView = async () => {
     if (AuthLib.validSession()) {
       var token = AuthLib.readToken();
       if (!token || AuthLib.isExpired(token) || refreshContext) {
-        token = await TokenLib.GetNewToken();
+        token = await AuthLib.getNewToken();
         AuthLib.saveToken(token);
       }
       context = await AuthLib.decodeToken(token);
@@ -80,7 +79,7 @@ const showView = async () => {
     if (params[0] == 'room') {
       chatroomId = params[1]
     }
-    
+
     if (chatNsp && chatNsp.connected && !chatroomId) {
       chatNsp.emit('leave');
       chatNsp.removeAllListeners();
@@ -141,14 +140,13 @@ const showView = async () => {
     case '#chat':
       if (!AuthLib.validSession()) return window.location.hash = '#login';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
 
       if (!chatroomId) {
         const chatRoomResponse = await ChatLib.GetCommunityChatrooms();
         // TODO - not done here.
         const userChatList = {};
         
-        console.log(chatroomId)
         if (noErrors(chatRoomResponse)) {
           tabsElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse });
           mainElement.innerHTML = chat.userIndex(userChatList);

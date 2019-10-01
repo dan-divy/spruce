@@ -1,10 +1,10 @@
 var jwt = require('jsonwebtoken');
 
-import {apiEndpoint, name} from '../../config.json';
+import {apiEndpoint} from '../../config.json';
 import {User} from './user';
 import {Token} from './token';
-import * as auth from './authentication';
-import * as http from './http';
+import * as Auth from './authentication';
+import * as Http from './http';
 
 // Token labels
 export const ACCECSS = 'access';
@@ -16,15 +16,20 @@ export const FACEBOOK = 'facebook';
 export const GOOGLE = 'google';
 export const TWITTER = 'twitter';
 
+export interface Token {
+  token: string;
+  error: string;
+};
+
 /**
  * Read access token
  *
  * @param  {string} type, optional, defaults to 'access'. 'access' and 'refresh' are acceptable 
  * @return  {string} Access token
  */
-export const readToken = (type = 'access') => {
+export const readToken = (type = ACCECSS) => {
   var token = '';
-  if ((type.toLowerCase() != 'access') && (type.toLowerCase() != 'refresh')) return null;
+  if ((type.toLowerCase() != ACCECSS) && (type.toLowerCase() != REFRESH)) return null;
   var name = `${type.toLowerCase()}=`;
 
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -50,7 +55,7 @@ export const readToken = (type = 'access') => {
  * @param  {long}   exp (s) Expiration of token in seconds
  * @param  {object} done Callback once complete
  */
-export const saveToken = (token, type = 'access', exp = 0) => {
+export const saveToken = (token, type = ACCECSS, exp = 0) => {
   const d = new Date();
   d.setTime(exp * 1000);
   var cookieStr = type + '=' + token + ';';
@@ -74,7 +79,7 @@ export const clearTokens = () => {
  * @return  {boolean} True for valid session
  */
 export const validSession = () => {
-  const refreshToken = readToken('refresh');
+  const refreshToken = readToken(REFRESH);
   if (isExpired(refreshToken)) {
     return false;
   }
@@ -138,7 +143,7 @@ export const register = async (newUser:User) => {
   };
 
   try {
-    const res = await http.post<Token>(`${apiEndpoint}/user`, new Headers(headers), newUser);
+    const res = await Http.post<Token>(`${apiEndpoint}/user`, new Headers(headers), newUser);
     if (res.parsedBody.token) {
       return res.parsedBody;
     }
@@ -170,7 +175,7 @@ export const login = async (email: string, password: string) => {
   }
 
   try {
-    const res = await http.post<Token>(`${apiEndpoint}/auth`, new Headers(headers), body);
+    const res = await Http.post<Token>(`${apiEndpoint}/auth`, new Headers(headers), body);
     if (res.parsedBody.token) {
       return res.parsedBody;
     }
@@ -188,7 +193,7 @@ export const login = async (email: string, password: string) => {
  *
  */
 export const logout = async () => {
-  const token = auth.readToken();
+  const token = Auth.readToken();
 
   const headers = {
     'Accept': 'application/json',
@@ -197,10 +202,36 @@ export const logout = async () => {
   };
 
   try {
-    await http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(headers));
+    await Http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(headers));
   } catch (err) {
     console.log('Logout error. ', err)
   }
+};
+
+/**
+ * Fetch a new access token
+ *
+ * @return  {string} token Token
+ */
+export const getNewToken = async () => {
+  const refreshToken = Auth.readToken('refresh');
+  if (!refreshToken) return null;
+
+  const headers = {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${refreshToken}`,
+    'Content-Type': 'application/json; charset=UTF-8'
+  };
+
+  const res = await Http.get<Token>(`${apiEndpoint}/auth/access`, new Headers(headers));
+  const resBody = res.parsedBody;
+  if (resBody.token) {
+    return resBody.token;
+  }
+  if (resBody.error) {
+    console.log(resBody.error);
+  }
+  return null;
 };
 
 /**
