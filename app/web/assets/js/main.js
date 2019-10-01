@@ -83,6 +83,12 @@ function startSocket(key) {
     const visitors = data.find(x => x.name == "visitors").stats;
     console.log(visitors);
     console.log(visitors.map(x => x.date));
+    visitors.sort((x, y) => {
+      return (
+        x.date.split("-")[x.date.split("-").length - 1] -
+        y.date.split("-")[y.date.split("-").length - 1]
+      );
+    });
     const options = {
       chart: { type: "area", height: 152, sparkline: { enabled: !0 } },
       colors: ["#3ac47d"],
@@ -108,12 +114,10 @@ function startSocket(key) {
           stops: [0, 90, 100]
         }
       },
-      series: [
-        { name: "sessions", data: visitors.map(x => x.amount).reverse() }
-      ],
+      series: [{ name: "sessions", data: visitors.map(x => x.amount) }],
       xaxis: {
         type: "category",
-        categories: visitors.map(x => x.date).reverse()
+        categories: visitors.map(x => x.date)
       },
       yaxis: {
         min: 0
@@ -125,7 +129,6 @@ function startSocket(key) {
       options
     );
     graph["visitors"].render();
-    visitors.reverse();
     let yesterday =
       visitors[visitors.length - 2 >= 0 ? visitors.length - 2 : 0].amount;
     let now = visitors[visitors.length - 1].amount;
