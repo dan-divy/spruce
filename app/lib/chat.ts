@@ -23,9 +23,13 @@ export const GetCommunityChatrooms = async () => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community`, new Headers(headers));
+  try {
+    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
+  }
 
-  return res.parsedBody;
 };
 
 /**
@@ -43,7 +47,10 @@ export const GetCommunityName = async (chatroomId:string) => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community/name/${chatroomId}`, new Headers(headers));
-
-  return res.parsedBody;
+  try {
+    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community/name/${chatroomId}`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
+  }
 };

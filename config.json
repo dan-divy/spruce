@@ -1,8 +1,9 @@
 {
   "name": "Spruce",
   "env": "development",
-  "host": "localhost",
+  "host": "http://localhost",
   "port": 60702,
+  "servicePort": 60702,
   "api" : "v1",
   "apiEndpoint" : "/api/v1",
   "verifyEmail" : false,
@@ -34,18 +35,20 @@
     "password": "password"
   },
   "sso": {
-    "enabled": false,
     "google": {
+      "enabled": false,
       "clientID": "<client id>",
       "secret"  : "<client secret>",
       "redirect": "/account/oauth/google"
     },
     "facebook": {
+      "enabled": false,
       "clientID": "<client id>",
       "secret"  : "<client secret>",
       "redirect": "/account/oauth/facebook"
     },
     "instagram": {
+      "enabled": false,
       "clientID": "<client id>",
       "secret"  : "<client secret>",
       "redirect": "/account/oauth/instagram"

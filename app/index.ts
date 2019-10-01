@@ -28,6 +28,7 @@ import * as profile from './templates/profile';
 
 var refreshContext = false;
 var chatNsp:Socket;
+
 /**
  * Show an alert to the user
  */
@@ -38,21 +39,21 @@ const showAlert = (message, type = 'danger') => {
 }
 
 /**
- * Fetch error handler
- * Parses the JSON returned by a network request
+ * Handle errors in each response JSON object
  * @param  {object} response A fetch response
  */
-const handleErrors = async (response) => {
-  if (!response.ok) {
-    const resJSON = await response.json();
-    showAlert(resJSON.message);
+const noErrors = (response) => {
+  if (response.error) {
+    showAlert(response.error);
   }
+  return !response.error;
 }
 
 /**
  * Use window location hash to show the specified view
  */
 const showView = async () => {
+  const alertElement = document.getElementById('app-alerts');
   const navbarElement = document.getElementById('app-navbar');
   const tabsElement = document.getElementById('app-tabs');
   const mainElement = document.getElementById('app-main');  
@@ -76,7 +77,11 @@ const showView = async () => {
       refreshContext = false;
     }
 
-    if (chatNsp && chatNsp.connected && view != '#chat') {
+    if (params[0] == 'room') {
+      chatroomId = params[1]
+    }
+    
+    if (chatNsp && chatNsp.connected && !chatroomId) {
       chatNsp.emit('leave');
       chatNsp.removeAllListeners();
       chatNsp.close();
@@ -89,6 +94,7 @@ const showView = async () => {
     //console.log('build context ', context)
      //END temp
 
+    alertElement.innerHTML = '';
     navbarElement.innerHTML = '';
     tabsElement.innerHTML = '';
     mainElement.innerHTML = '';
@@ -137,17 +143,16 @@ const showView = async () => {
 
       navbarElement.innerHTML = main.navbar({name, context});
 
-      if (params[0] == 'room') {
-        chatroomId = params[1]
-      }
-
       if (!chatroomId) {
-        const communityChatList = await ChatLib.GetCommunityChatrooms();
+        const chatRoomResponse = await ChatLib.GetCommunityChatrooms();
         // TODO - not done here.
         const userChatList = {};
         
-        tabsElement.innerHTML = chat.communityIndex({ communities: communityChatList });
-        mainElement.innerHTML = chat.userIndex(userChatList);
+        console.log(chatroomId)
+        if (noErrors(chatRoomResponse)) {
+          tabsElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse });
+          mainElement.innerHTML = chat.userIndex(userChatList);
+        }
       } else {
         const chatroomName = await ChatLib.GetCommunityName(chatroomId);
         tabsElement.innerHTML = chat.chatRoomName({ name: chatroomName })
@@ -158,7 +163,7 @@ const showView = async () => {
         inputMessage.disabled = true;
         inputMessage.placeholder = 'Loading';
         
-        if (!chatNsp) chatNsp = Chat.Socket(AuthLib.readToken('refresh'));
+        if (!chatNsp) chatNsp = Chat.Socket(AuthLib.readToken(AuthLib.REFRESH));
         chatNsp.on('connect', socket => {
           inputMessage.disabled = false;
           inputMessage.placeholder = 'Type here...';
@@ -170,7 +175,7 @@ const showView = async () => {
 
             // TODO - redirect to login if refresh token is not valid or expired
             socket.io.opts.query = {
-              token: AuthLib.readToken('refresh')
+              token: AuthLib.readToken(AuthLib.REFRESH)
             }
           });
 
@@ -284,9 +289,9 @@ const showView = async () => {
             email: emailnameInput.value,
             password: passwordInput.value
           }
-          const refreshToken = await AuthLib.register(newUser);
-          if (refreshToken) {
-            AuthLib.saveToken(refreshToken, 'refresh');
+          const response = await AuthLib.register(newUser);
+          if (noErrors(response) && response.token) {
+            AuthLib.saveToken(response.token, AuthLib.REFRESH);
             window.location.hash = '#main';
           }
         }
@@ -307,12 +312,12 @@ const showView = async () => {
       signinForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const refreshToken = await AuthLib.login(
+        const response = await AuthLib.login(
             (<HTMLInputElement>document.getElementById('email')).value,
             (<HTMLInputElement>document.getElementById('password')).value
           );
-        if (refreshToken) {
-          AuthLib.saveToken(refreshToken, 'refresh');
+        if (noErrors(response) && response.token) {
+          AuthLib.saveToken(response.token, AuthLib.REFRESH);
           window.location.hash = '#main';
         }
       });

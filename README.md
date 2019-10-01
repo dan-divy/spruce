@@ -80,6 +80,35 @@ $ npm start
 
 spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for performing CRUD operations on MongoDB and [express.js](https://npmjs.com/package/express) for server-side HTTP routing.
 
+NGINX site example for reverse proxy of TLS/SSL connections with Socket.IO websockets:
+
+server {
+    listen 8443 ssl;
+
+    server_name <{fully qualified domain name}>;
+    ssl_certificate     /etc/ssl/certs/chain.pem; # The certificate file
+    ssl_certificate_key /etc/ssl/private/server.key; # The private key file
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+
+        proxy_pass http://127.0.0.1:8080;
+        proxy_redirect off;
+
+        # Socket.IO Support
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+
+
 **This project needs contributors!!**
 
 ## Authors

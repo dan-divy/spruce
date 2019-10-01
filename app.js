@@ -22,33 +22,34 @@ const mongo = nconf.get('mongo');
 const app = express();
 
 // Define environment
-const NODE_ENV = nconf.get('env') || 'development';
+const NODE_ENV = process.env.NODE_ENV || nconf.get('env') || 'development';
 app.set('env', NODE_ENV);
 const isDev = NODE_ENV === 'development';
 
 // Connect to mongoDB
-var mongoUri = 'mongodb://';
-if (mongo.username && mongo.password) {
-  mongoUri += mongo.host + ':' + mongo.port + '/' + mongo.database + '-dev';
+var mongoUri = 'mongodb://' + mongo.host + ':' + mongo.port + '/' + mongo.database;
+var options = {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true  
+};
+if (mongo.auth) {
+  options.user = mongo.username;
+  options.pass = mongo.password;
 } else {
-  mongoUri += mongo.username + ':' + encodeURIComponent(mongo.password) + '@' + 
-              mongo.host + ':' + mongo.port + '/' + mongo.database;
+  mongoUri += '-dev';
 }
-mongoose.set('useCreateIndex', true)
-mongoose.set('useNewUrlParser', true)
-mongoose.connect(mongoUri, (err) => {
+mongoose.connect(mongoUri, options, (err) => {
   if (err) {
     debug(`ERROR connecting to DB: ${mongo.host}`);
     return process.exit(1);
   }
-  debug(`Successfully connected to DB: ${mongo.host}`);
+  console.log(`Successfully connected to DB: ${mongo.host}`);
 });
 
 // Setup for SPA
 if (isDev) {
-  debug('Operating in DEVELOPMENT mode.');
   const morgan = require('morgan');
-
   app.use(morgan('combined', { stream: { write: msg => debug(msg.trimEnd()) } }));
 } else {
   app.use(compression());
@@ -64,19 +65,15 @@ const port = process.env.PORT || nconf.get('port') || '3000';
 app.set('port', port);
 
 if (isDev) {
-  app.use((req, res, next) => {
-    debug(req.originalUrl);
-    next();
-  });
-/*  const webpack = require('webpack');
+  const webpack = require('webpack');
   const webpackMiddleware = require('webpack-dev-middleware');
   const webpackConfig = require('./webpack.config.js');
+
   app.use(webpackMiddleware(webpack(webpackConfig), {
     publicPath: '/',
-    stats: {
-      colors: true
-    }
-  }));*/
+    stats: { colors: true }
+  }))
+  app.use(express.static('static'));
 } else {
   app.use(express.static('dist'));
 }
@@ -93,7 +90,7 @@ if (nconf.get('sso').enabled) {
 // ROUTES - API
 const api = nconf.get('api');
 if (!api) {
-  debug('Missing API parameter');
+  debug('Missing API parameter in config.json');
   return process.exit(1);
 }
 app.set('api', api);

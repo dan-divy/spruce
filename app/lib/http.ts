@@ -11,8 +11,8 @@ const http = <T>(request: RequestInfo): Promise<IHttpResponse<T>> => {
         return res.json();
       })
       .then(body => {
+        response.parsedBody = body;
         if (response.ok) {
-          response.parsedBody = body;
           resolve(response);
         } else {
           reject(response);

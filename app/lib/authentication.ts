@@ -6,6 +6,12 @@ import {Token} from './token';
 import * as auth from './authentication';
 import * as http from './http';
 
+// Token labels
+export const ACCECSS = 'access';
+export const REFRESH = 'refresh';
+export const RESOURCE = 'resource';
+
+// Social Signon identifiers
 export const FACEBOOK = 'facebook';
 export const GOOGLE = 'google';
 export const TWITTER = 'twitter';
@@ -121,10 +127,10 @@ export const isExpired = (token, offset = 60) => {
  * Register a new user
  *
  * @param   {NewUser} newUser object
- * @return  {string} token Token
+ * @return  {object} response Response object; error or token
  */
 export const register = async (newUser:User) => {
-  if (!newUser) return null;
+  if (!newUser) return { error: 'Missing new user object' };
 
   const headers = {
     'Accept': 'application/json',
@@ -133,24 +139,25 @@ export const register = async (newUser:User) => {
 
   try {
     const res = await http.post<Token>(`${apiEndpoint}/user`, new Headers(headers), newUser);
-    const resBody = res.parsedBody;
-    if (resBody.token) {
-      return resBody.token;
+    if (res.parsedBody.token) {
+      return res.parsedBody;
     }
-    return null;
-  } catch (res) {
-    console.log('Register Error ', res)
-    return null;
+    return { error: 'Token not found in server response.' };
+  } catch (err) {
+    if (err.parsedBody) {
+      return err.parsedBody;
+    }
+    return { error: err };
   }
 };
 
 /**
  * Login
  *
- * @return  {string} token Token
+ * @return  {object} response Response object; error or token
  */
 export const login = async (email: string, password: string) => {
-  if (!email || !password) return null;
+  if (!email || !password) return { error: 'Missing credentials' };
 
   const headers = {
     'Accept': 'application/json',
@@ -164,14 +171,15 @@ export const login = async (email: string, password: string) => {
 
   try {
     const res = await http.post<Token>(`${apiEndpoint}/auth`, new Headers(headers), body);
-    const resBody = res.parsedBody;
-    if (resBody.token) {
-      return resBody.token;
+    if (res.parsedBody.token) {
+      return res.parsedBody;
     }
-    return null;
-  } catch (res) {
-    console.log('Login Error ', res)
-    return null;
+    return { error: 'Token not found in server response.' };
+  } catch (err) {
+    if (err.parsedBody) {
+      return err.parsedBody;
+    }
+    return { error: err };
   }
 };
 
@@ -189,9 +197,9 @@ export const logout = async () => {
   };
 
   try {
-    const res = await http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(headers));
-  } catch (res) {
-
+    await http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(headers));
+  } catch (err) {
+    console.log('Logout error. ', err)
   }
 };
 

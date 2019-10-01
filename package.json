@@ -3,9 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "rm -rf ./dist/ && webpack --mode production --config webpack.config.js",
+    "build": "rm -rf ./dist/* && cp -r ./static/* ./dist/ && webpack --config webpack.config.js",
     "dev": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './sessions' --ignore './app' bin/www",
-    "dev-wp": "webpack-dev-server --mode development --config webpack.config.js",
     "start": "NODE_ENV=production node ./bin/www",
     "test": "mocha && node ./bin/www"
   },

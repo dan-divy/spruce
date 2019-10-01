@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import {apiEndpoint} from '../../../config.json';
+import {apiEndpoint, host, servicePort} from '../../../config.json';
 
 interface Query {
   token: string,
@@ -27,12 +27,10 @@ export const Socket = (token:string) => {
   if (!token) return null;
 
   const options:chatOptions = {
-    //autoConnect: false,
     query: {
       token: token
     },
     transports: ['websocket']
   };
-  // omitting url has issues with webpack-dev server
-  return io('http://localhost:60702/chat', options);
+  return io(`${host}:${servicePort}/chat`, options);
 };

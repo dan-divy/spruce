@@ -6,21 +6,22 @@ const Webpack = require('webpack');
 
 const distDir = path.join(__dirname, 'dist');
 const conf = require('./config.json');
+const node_env = process.env.NODE_ENV || conf.env || 'development';
+const devMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: './app/index.ts',
-  mode: conf.env || 'development',
+  mode: node_env,
   output: {
-    filename: `${conf.name}.js`,
-    path: distDir,
-    libraryTarget: 'var',
-    library: 'UI'
+    filename: 'bundle.js',
+    path: distDir
   },
   resolve: {
     extensions: ['.ts', '.js', '.css']
   },
   devServer: {
     contentBase: distDir,
+    publicPath: '/',
     port: 60800,
     proxy: {
       '/api': 'http://localhost:60702',
@@ -71,8 +72,8 @@ module.exports = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // all options are optional
-      filename: 'app.[contenthash:8].css',
-      chunkFilename: '[id].css',
+      filename: devMode ? '[name].css' : '[name].[hash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
     new Webpack.ProvidePlugin({
