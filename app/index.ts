@@ -6,8 +6,6 @@ import 'jquery';
 import './style.css'
 import Socket from 'socket.io-client';
 
-
-import {apiEndpoint, name} from '../config.json';
 // Libraries
 import * as AuthLib from './lib/authentication';
 import * as ChatLib from './lib/chat';
@@ -24,6 +22,8 @@ import * as admin from './templates/admin';
 import * as chat from './templates/chat';
 import * as main from './templates/main';
 import * as profile from './templates/profile';
+
+const name = 'Spruce';
 
 var refreshContext = false;
 var chatNsp:Socket;
