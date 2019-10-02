@@ -244,6 +244,9 @@ function logout() {
   });
 }
 
-function openBrowser() {
+function openBrowser(def) {
+  if(def) {
+    shell.openExternal("https://github.com/dan-divy/spruce");
+  }
   shell.openExternal(`http://${config.http.host}:${config.http.port}`);
 }
