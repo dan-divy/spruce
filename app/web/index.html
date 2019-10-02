@@ -54,7 +54,7 @@
         </div>
         <div id="main" style="display: none" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <div class="app-main">
-                    <div class="app-header header-shadow">
+                    <div class="app-header">
                             <div class="app-header__logo">
                                 <div class="logo-src"><img height="60px" src="../../public/images/logo/banner.png"></div>
                                 <div class="header__pane ml-auto">
@@ -636,16 +636,12 @@
                             <div class="tabs-animation">
                                 <div class="mb-3 card">
                                     <div class="card-header-tab card-header">
-                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                            <i class="header-icon lnr-charts icon-gradient bg-happy-green"> </i>
-                                            Stats
-                                        </div>
-                                        <div class="btn-actions-pane-right text-capitalize">
-                                            <button class="btn-wide btn-outline-2x mr-md-2 btn btn-outline-focus btn-sm">View All</button>
+                                        <div class="card-header-title font-size-lg font-weight-normal">
+                                            <span id="stats-status" style="font-size: 20px;">Connecting...</i></span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-md-4 col-xl-4">
+                                        <div class="col-sm-6 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-10 bg-warning"></div>
@@ -655,8 +651,8 @@
                                                     <div class="widget-numbers" id="ram" data-units="MB">0MB</div>
                                                     <div class="widget-description opacity-8 text-focus">
                                                         <div id="ram-color" class="d-inline text-success pr-1">
-                                                            <i id="ram-icon" class="fa fa-smile"></i>
-                                                            Status: <span id="ram-status" class="pl-1">Good</span>
+                                                            <i id="ram-icon" class="fa fa-frown"></i>
+                                                            Status: <span id="ram-status" class="pl-1">Disconnected</span>
                                                         </div>
                                                         
                                                     </div>
@@ -664,7 +660,7 @@
                                             </div>
                                             <div class="divider m-0 d-md-none d-sm-block"></div>
                                         </div>
-                                        <div class="col-sm-6 col-md-4 col-xl-4">
+                                        <div class="col-sm-6 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-9 bg-danger"></div>
@@ -673,9 +669,9 @@
                                                     <div class="widget-subheading">CPU Usage</div>
                                                     <div class="widget-numbers" id="cpu" data-units="%">0%</div>
                                                     <div class="widget-description opacity-8 text-focus">
-                                                        <div id="cpu-color" class="d-inline text-success pr-1">
-                                                            <i id="cpu-icon" class="fa fa-smile"></i>
-                                                            Status: <span id="cpu-status" class="pl-1">Good</span>
+                                                        <div id="cpu-color" class="d-inline text-danger pr-1">
+                                                            <i id="cpu-icon" class="fa fa-frown"></i>
+                                                            Status: <span id="cpu-status" class="pl-1">Disconnected</span>
                                                         </div>
                                                         
                                                     </div>
@@ -683,25 +679,37 @@
                                             </div>
                                             <div class="divider m-0 d-md-none d-sm-block"></div>
                                         </div>
-                                        <div class="col-sm-12 col-md-4 col-xl-4">
+                                        <div class="col-sm-12 col-md-3 col-xl-3">
+                                                <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
+                                                    <div class="icon-wrapper rounded-circle">
+                                                        <div class="icon-wrapper-bg opacity-9 bg-success"></div>
+                                                        <i class="fa fa-server text-white"></i></div>
+                                                    <div class="widget-chart-content">
+                                                        <div class="widget-subheading">Database</div>
+                                                        <div class="widget-numbers" id="database" data-units=" docs">0 docs</div>
+                                                        <div class="widget-description opacity-8 text-focus">
+                                                                <div id="database-color" class="d-inline text-danger pr-1">
+                                                                    <i id="database-icon" class="fa fa-frown"></i>
+                                                                    Status: <span id="database-status" class="pl-1">Disconnected</span>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div class="col-sm-12 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-9 bg-success"></div>
                                                     <i class="fa fa-users text-white"></i></div>
                                                 <div class="widget-chart-content">
-                                                    <div class="widget-subheading">Currently online</div>
+                                                    <div class="widget-subheading">Online</div>
                                                     <div class="widget-numbers" id="now" data-units=" users">0 users</div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center d-block p-3 card-footer">
-                                        <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg">
-                                            <span class="mr-2 opacity-7">
-                                                <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
-                                            </span>
-                                            <span class="mr-1">View Complete Report</span>
-                                        </button>
+                                        
                                     </div>
                                 </div>
                                 <div class="row">
@@ -769,27 +777,29 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-6">
                                         <div class="card-hover-shadow-2x mb-3 card">
+                                                <div class="card-header-tab card-header">
+                                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                                            <i class="header-icon fa fa-database icon-gradient bg-happy-itmeo"> </i>
+                                                            Database
+                                                        </div>
+                                                        
+                                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                    <ul class="list-group list-group-flush" id="database-docs">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-6">
+                                        <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                                     <i class="header-icon lnr-lighter icon-gradient bg-amy-crisp"> </i>
                                                     Timeline Example
-                                                </div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
-                                                            <i class="pe-7s-menu btn-icon-wrapper"></i>
-                                                        </button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="scroll-area-lg">
@@ -1098,8 +1108,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div></div>
                                 <div class="row">
                                     <div class="col-md-6 col-xl-3">
                                         <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-success border-success">
@@ -1190,6 +1199,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="card mb-3">
                                     <div class="card-header-tab card-header">
                                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-laptop-phone mr-3 text-muted opacity-6"> </i>Easy Dynamic Tables</div>
@@ -1697,21 +1707,7 @@
                                         <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-database icon-gradient bg-malibu-beach"> </i>Tasks List</div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link"><i class="pe-7s-menu btn-icon-wrapper"></i></button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                             <div class="scroll-area-lg">
                                                 <div class="scrollbar-container">
@@ -2009,21 +2005,7 @@
                                         <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-printer icon-gradient bg-ripe-malin"> </i>Chat Box</div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link"><i class="pe-7s-menu btn-icon-wrapper"></i></button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                             <div class="scroll-area-lg">
                                                 <div class="scrollbar-container">
@@ -2132,7 +2114,7 @@
                                 </div>
                                 <div class="card no-shadow bg-transparent no-border rm-borders mb-3">
                                     <div class="card">
-                                        <div class="no-gutters row">
+                                        <div class="row">
                                             <div class="col-md-12 col-lg-4">
                                                 <ul class="list-group list-group-flush">
                                                     <li class="bg-transparent list-group-item">
