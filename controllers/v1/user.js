@@ -121,8 +121,9 @@ module.exports = (conf) => {
     )
     .then(user => {
       if (!user) return res.status(500).json({ error: `Could not find user.` });
-      res.status(200).json(user);
-    });
+      res.status(200).json({ profile: user });
+    })
+    .catch(err => res.status(500).json({ error: `Error searching for user.` }));
   };
 
   // Reset

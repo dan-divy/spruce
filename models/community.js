@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 require('./chatroom');
+require('./collection');
 require('./user');
 
 const communitySchema = Schema({
@@ -24,7 +25,8 @@ const communitySchema = Schema({
   }],
   members: [{ type : Schema.Types.ObjectId, ref: 'user' }],
   pending: [{ type : Schema.Types.ObjectId, ref: 'user' }],
-  updated_by : Schema.Types.ObjectId,
+  collections: [{ type : Schema.Types.ObjectId, ref: 'collection' }],
+  updated_by : { type : Schema.Types.ObjectId, ref: 'user' },
   created_at : { type: Date, default: Date.now },
   updated_at : { type: Date, default: Date.now }
 });

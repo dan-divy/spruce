@@ -49,7 +49,7 @@ export const tabs = Handlebars.compile(`
     </div>
     {{#each context.community}}
       <div class="list-group-item">
-        <a href="#community/{{this._id}}">{{this.name}}</a>
+        <a href="#community/comm/{{this._id}}">{{this.name}}</a>
       </div>
     {{/each}}
   {{/if}}

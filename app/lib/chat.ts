@@ -15,7 +15,7 @@ export interface Community {
  */
 export const GetCommunityChatrooms = async () => {
   const token = Auth.readToken();
-  if (!token) return null;
+  if (!token) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',
@@ -39,7 +39,7 @@ export const GetCommunityChatrooms = async () => {
  */
 export const GetCommunityName = async (chatroomId:string) => {
   const token = Auth.readToken();
-  if (!token) return null;
+  if (!token) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',

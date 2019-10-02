@@ -2,7 +2,7 @@ import * as Handlebars from '../../node_modules/handlebars/dist/handlebars.js'
 
 
 export const communityIndex = Handlebars.compile(`
-  <h1 class="h3 mb-3 font-weight-normal">Profile</h1>
+  <h1 class="h3 mb-3 font-weight-normal">Community Chatrooms</h1>
   <ul>
     {{#each communities}}
       <li><a href="/#chat/room/{{chatroom}}">{{name}}</a></li>
@@ -10,8 +10,20 @@ export const communityIndex = Handlebars.compile(`
   </ul>
 `);
 
-export const userIndex = Handlebars.compile(`
-  TODO - Create a view to build chats with other users.
+export const privateIndex = Handlebars.compile(`
+  <h1 class="h3 mb-3 font-weight-normal">Private Chatrooms</h1>
+  <ul>
+    {{#each private}}
+      <li><a href="/#chat/room/{{chatroom}}">[list of members]</a></li>
+    {{/each}}
+  </ul>
+
+  TODO - Create a view to build private chats with other users.
+
+  Button to create a new private chat room.
+  -- new private chat room api should not create a chatroom with identical memberships.
+  List existing chats
+  Leave private chatrooms
 `);
 
 export const chatRoomName = Handlebars.compile(`

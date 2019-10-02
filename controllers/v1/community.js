@@ -89,6 +89,21 @@ module.exports = (conf) => {
     });
   }
 
+  // Get a community
+  controller.getCommunity = (req, res) => {
+    const communityId = req.params.communityId || req.query.communityId;
+    if (!communityId) return res.status(400).json({ error: 'Community ID required.' });
+
+    Community
+    .findById(communityId,
+      // Select
+      { name: true, collections: true }
+    )
+    .populate({ path: 'collections', select: 'name created_at' })
+    .then(community => res.status(200).json({ community: community }))
+    .catch(err => res.status(500).json({ error: `Cannot process query.` }));
+  }
+
   // Get user's communities
   controller.getUser = (req, res) => {
     const userId = req.locals.userId;
@@ -128,9 +143,8 @@ module.exports = (conf) => {
       // Select
       { name: true }
     )
-    .then(communities => {
-      res.status(200).json(communities);
-    });
+    .then(communities => res.status(200).json({ communities : communities }))
+    .catch(err => res.status(500).json({ error: 'Could not search for available communities to join.' }));
   }
   
   // Update a community

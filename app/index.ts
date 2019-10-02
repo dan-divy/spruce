@@ -20,6 +20,7 @@ import * as Chat from './lib/socket/chat';
 // Templates
 import * as admin from './templates/admin';
 import * as chat from './templates/chat';
+import * as comm from './templates/community';
 import * as main from './templates/main';
 import * as profile from './templates/profile';
 
@@ -63,21 +64,32 @@ const showView = async () => {
   const [view, ...params] = window.location.hash.split('/');
 
   var context:UserLib.Context;
+  var communityId:string;
   var chatroomId:string;
 
   const buildContext = async () => {
     if (AuthLib.validSession()) {
       var token = AuthLib.readToken();
       if (!token || AuthLib.isExpired(token) || refreshContext) {
-        token = await AuthLib.getNewToken();
-        AuthLib.saveToken(token);
+        const tokenResponse = await AuthLib.getNewToken();
+        if (noErrors(tokenResponse)) {
+          AuthLib.saveToken(tokenResponse.token);
+        }
       }
-      context = await AuthLib.decodeToken(token);
-      refreshContext = false;
+      const contextResponse = await AuthLib.decodeToken(token);
+      if (noErrors(contextResponse)) {
+        context = contextResponse.context;
+        refreshContext = false;
+      }
     }
 
-    if (params[0] == 'room') {
-      chatroomId = params[1]
+    switch (params[0]) {
+      case 'comm':
+        communityId = params[1];
+        break;
+      case 'room':
+        chatroomId = params[1];
+        break;
     }
 
     if (chatNsp && chatNsp.connected && !chatroomId) {
@@ -145,11 +157,10 @@ const showView = async () => {
       if (!chatroomId) {
         const chatRoomResponse = await ChatLib.GetCommunityChatrooms();
         // TODO - not done here.
-        const userChatList = {};
-        
-        if (noErrors(chatRoomResponse)) {
-          tabsElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse });
-          mainElement.innerHTML = chat.userIndex(userChatList);
+        const usersChatroomsResponse = {};
+        if (noErrors(chatRoomResponse) && noErrors(usersChatroomsResponse)) {
+          mainElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse });
+          mainElement.innerHTML += chat.privateIndex({ private: usersChatroomsResponse });
         }
       } else {
         const chatroomName = await ChatLib.GetCommunityName(chatroomId);
@@ -260,6 +271,19 @@ const showView = async () => {
           if (chatNsp) chatNsp.emit('stop typing');
         });
       }
+      break;
+    case '#community':
+      if (!AuthLib.validSession()) return window.location.hash = '#login';
+
+      navbarElement.innerHTML = main.navbar({name, context});
+
+      const communityResponse = await CommLib.getCommunity(communityId);
+      if (noErrors(communityResponse)) {
+        const community = communityResponse.community;
+        tabsElement.innerHTML = comm.tabs(community)
+        mainElement.innerHTML = comm.collections(community.collections);
+      }
+
       break;
     case '#register':
       if (AuthLib.validSession()) return window.location.hash = '#main';
@@ -396,15 +420,17 @@ const showView = async () => {
       break;
     case '#profile':
       navbarElement.innerHTML = main.navbar({name, context});
+      
       const resProfile = await UserLib.GetProfile();
-      const resAvailComms = await CommLib.GetAvailableCommunities();
-      mainElement.innerHTML = profile.profile({name, context, profile: resProfile});
-
+      if (!noErrors(resProfile)) break;
+      const usersProfile = resProfile.profile;
+      mainElement.innerHTML = profile.profile(usersProfile);
       const inputNewCommunity = <HTMLInputElement>document.getElementById('newCommunity');
-      const communityDatalist = <HTMLInputElement>document.getElementById('communityList');
+      const communityDatalist = <HTMLInputElement>document.getElementById('communityDatalist');
       const btnNewCommunity = <HTMLButtonElement>document.getElementById('btnCreateNewCommunity');
       const communityTable = <HTMLTableElement>document.getElementById('communityTable');
-      const listCommunity = (community:CommLib.Community) => {
+
+      const addCommunity = (community:CommLib.Community) => {
         const row = communityTable.insertRow(1);
         const cellName = row.insertCell(0);
         const cellLeave = row.insertCell(1);
@@ -414,21 +440,31 @@ const showView = async () => {
         cellLeave.innerHTML = `<button class="btn delete" data-id="${community._id}">Leave(TODO)</button>`;
       };
       context.community.forEach(item => {
-        listCommunity(item);
+        addCommunity(item);
       })
 
-      if (resAvailComms) {
-        resAvailComms.forEach(item => {
-          //listCommunity(item);
+      const resAvailComms = await CommLib.getAvailableCommunities();
+      if (noErrors(resAvailComms)) {
+        const communities = resAvailComms.communities;
+        communities.forEach(item => {
           const option = document.createElement('option');
           option.value = item.name;
           communityDatalist.appendChild(option);
         });
       }
+
       inputNewCommunity.addEventListener('input', event => {
-        //if input is in resAvailComms change button to join
+        var member = false;
+        context.community.forEach(item => {
+          if (item.name.toLowerCase() == inputNewCommunity.value.toLowerCase()) {
+            member = true;
+          }
+        })
+        btnNewCommunity.disabled = member;
+
+        const communities = resAvailComms.communities;
         var match = false;
-        resAvailComms.forEach(item => {
+        communities.forEach(item => {
           if (item.name.toLowerCase() == inputNewCommunity.value.toLowerCase()) {
             match = true;
           }
@@ -439,16 +475,19 @@ const showView = async () => {
           btnNewCommunity.innerHTML = 'Create';
         }
       });
+
       btnNewCommunity.onclick = async () => {
         const body = {
           name: inputNewCommunity.value,
           private: false
         }
-        const result = await CommLib.CreateJoinCommunity(body);
+
+        // TODO - add error handling and listen for response message. If message (pending membership) alert user.
+        const result = await CommLib.createJoinCommunity(body);
         if (result._id) {
           // append to current list
           inputNewCommunity.value = '';
-          listCommunity(result);
+          addCommunity(result);
           context.community.push(result);
           refreshContext = true;
         }

@@ -40,7 +40,6 @@ module.exports = (conf) => {
     });
   };
 
-  // THIS MAY NOT BE NECESSARY
   middleware.userIsMember = async (req, res, next) => {
     const userId = req.locals.userId;
 

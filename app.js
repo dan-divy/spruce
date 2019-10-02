@@ -72,7 +72,7 @@ if (isDev) {
   app.use(webpackMiddleware(webpack(webpackConfig), {
     publicPath: '/',
     stats: { colors: true }
-  }))
+  }));
   app.use(express.static('static'));
 } else {
   app.use(express.static('dist'));

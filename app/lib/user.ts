@@ -43,7 +43,7 @@ export interface Profile {
  */
 export const GetProfile = async () => {
   const token = Auth.readToken();
-  if (!token) return null;
+  if (!token) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',
@@ -51,11 +51,10 @@ export const GetProfile = async () => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.get<Profile>(`${apiEndpoint}/user/profile`, new Headers(headers));
-  const resBody = res.parsedBody;
-
-  if (resBody.error) {
-    console.log(resBody.error);
+  try {
+    const res = await Http.get<Profile>(`${apiEndpoint}/user/profile`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
   }
-  return resBody;
 };

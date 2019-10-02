@@ -6,9 +6,10 @@ export interface Community {
   _id: string;
   name: string;
   private: boolean;
+  collections: string[];
 };
 
-export const LeaveCommunity = (data) => {
+export const leaveCommunity = (data) => {
   // TODO
   console.log('leave comm')
   console.log(data.getAttribute('data-id'))
@@ -20,9 +21,9 @@ export const LeaveCommunity = (data) => {
  *
  * @return  {Community} community[], list of communitites
  */
-export const GetAvailableCommunities = async () => {
+export const getAvailableCommunities = async () => {
   const token = Auth.readToken();
-  if (!token) return null;
+  if (!token) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',
@@ -30,9 +31,12 @@ export const GetAvailableCommunities = async () => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.get<Community[]>(`${apiEndpoint}/community/available`, new Headers(headers));
-
-  return res.parsedBody;
+  try {
+    const res = await Http.get<Community[]>(`${apiEndpoint}/community/available`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
+  }
 };
 
 /**
@@ -40,9 +44,9 @@ export const GetAvailableCommunities = async () => {
  *
  * @return  {Community} community, new/joined community
  */
-export const CreateJoinCommunity = async (body:any) => {
+export const createJoinCommunity = async (body:any) => {
   const token = Auth.readToken();
-  if (!token) return null;
+  if (!token) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',
@@ -50,6 +54,34 @@ export const CreateJoinCommunity = async (body:any) => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.post<Community>(`${apiEndpoint}/community`, new Headers(headers), body);
-  return res.parsedBody;
+  try {
+    const res = await Http.post<Community>(`${apiEndpoint}/community`, new Headers(headers), body);
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
+  }
+};
+
+/**
+ * Fetch community as an object
+ *
+ * @return  {Community} community
+ */
+export const getCommunity = async (communityId:string) => {
+  const token = Auth.readToken();
+  if (!token) return { error: 'Token not found' };
+  if (!communityId) return { error: 'Missing community ID.' };
+
+  const headers = {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json; charset=UTF-8'
+  };
+
+  try {
+    const res = await Http.get<Community>(`${apiEndpoint}/community/${communityId}`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
+  }
 };

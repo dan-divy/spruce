@@ -8,21 +8,21 @@ export const profile = Handlebars.compile(`
       <hr>
       <form class="form-profile" action="/save" method="post">
         <label for="inputFirstName" class="sr-only">First Name</label>
-        <input name="firstName" type="text" id="inputFirstName" value="{{profile.firstname}}" class="form-control" placeholder="First Name" required="" autofocus="" disabled>
+        <input name="firstName" type="text" id="inputFirstName" value="{{firstname}}" class="form-control" placeholder="First Name" required="" autofocus="" disabled>
         
         <label for="inputLastName" class="sr-only">Last Name</label>
-        <input name="lastName" type="text" id="inputLastName" value="{{profile.lastname}}" class="form-control" placeholder="Last Name" required="" autofocus="" disabled>
+        <input name="lastName" type="text" id="inputLastName" value="{{lastname}}" class="form-control" placeholder="Last Name" required="" autofocus="" disabled>
         
         <label for="inputUserame" class="sr-only">Username</label>
-        <input name="userName" type="text" id="inputUserame" value="{{profile.username}}" class="form-control" placeholder="Username" required="" autofocus="" disabled>
+        <input name="userName" type="text" id="inputUserame" value="{{username}}" class="form-control" placeholder="Username" required="" autofocus="" disabled>
         
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input name="email" type="email" id="inputEmail" value="{{profile.email}}" class="form-control" placeholder="Email address" required="" autofocus="" disabled>
+        <input name="email" type="email" id="inputEmail" value="{{email}}" class="form-control" placeholder="Email address" required="" autofocus="" disabled>
 
         <label for="inputBio" class="sr-only">Biography</label>
-        <input name="bio" type="text" id="inputBio" value="{{profile.bio}}" class="form-control" placeholder="Biography" disabled>
+        <input name="bio" type="text" id="inputBio" value="{{bio}}" class="form-control" placeholder="Biography" disabled>
 
-        <p>Last Login: {{formatDate profile.lastLogin}} </p>
+        <p>Last Login: {{formatDate lastLogin}} </p>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
@@ -36,8 +36,8 @@ export const profile = Handlebars.compile(`
       <div class="row">
         <h1 class="h3 mb-3 font-weight-normal">Communities</h1>
         <label for="newCommunity" class="sr-only">New Community</label>
-        <input name="newCommunity" type="text" id="newCommunity" class="form-control" list="communityList" class="form-control" placeholder="Enter a new community name" >
-        <datalist id="communityList"></datalist>
+        <input name="newCommunity" type="text" id="newCommunity" class="form-control" list="communityDatalist" class="form-control" placeholder="Enter a new community name" autocomplete="off" >
+        <datalist id="communityDatalist"></datalist>
         <button type="button" class="btn btn-primary btn-block" id="btnCreateNewCommunity"> Create </button>
         <div class="panel panel-default">
           <table id="communityTable" class="table">

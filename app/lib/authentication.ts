@@ -2,7 +2,6 @@ var jwt = require('jsonwebtoken');
 
 import {apiEndpoint} from '../../config.json';
 import {User} from './user';
-import {Token} from './token';
 import * as Auth from './authentication';
 import * as Http from './http';
 
@@ -94,9 +93,9 @@ export const validSession = () => {
  */
 export const decodeToken = async (token) => {
   try {
-    return await jwt.decode(token);
+    return { context: await jwt.decode(token) };
   } catch (err) {
-    return null;
+    return { error: err };
   }
 };
 
@@ -215,7 +214,7 @@ export const logout = async () => {
  */
 export const getNewToken = async () => {
   const refreshToken = Auth.readToken('refresh');
-  if (!refreshToken) return null;
+  if (!refreshToken) return { error: 'Token not found' };
 
   const headers = {
     'Accept': 'application/json',
@@ -223,15 +222,12 @@ export const getNewToken = async () => {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  const res = await Http.get<Token>(`${apiEndpoint}/auth/access`, new Headers(headers));
-  const resBody = res.parsedBody;
-  if (resBody.token) {
-    return resBody.token;
+  try {
+    const res = await Http.get<Token>(`${apiEndpoint}/auth/access`, new Headers(headers));
+    return res.parsedBody;
+  } catch (err) {
+    return err.parsedBody || { error: err };
   }
-  if (resBody.error) {
-    console.log(resBody.error);
-  }
-  return null;
 };
 
 /**

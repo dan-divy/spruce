@@ -17,11 +17,19 @@ module.exports = (conf) => {
 
   // Create a new community
   router.post('/', jwtMW.verifyToken, communityController.create);
-  router.get('/', jwtMW.verifyToken, communityController.checkCommunityName);
+  // Check to see if a community name exists
+  router.get('/name', jwtMW.verifyToken, communityController.checkCommunityName);
+  // Get all the communities
   router.get('/all', jwtMW.verifyToken, communityController.getAll);
+  // Get all the user's communities
   router.get('/user', jwtMW.verifyToken, communityController.getUser);
+  // Get all the communities a user is not a member of
   router.get('/available', jwtMW.verifyToken, communityController.getAvailable);
+  // Get a community object
+  router.get('/:communityId', jwtMW.verifyToken, commMW.userIsMember, communityController.getCommunity);
+  // Update/Save a community
   router.patch('/', jwtMW.verifyToken, commMW.userIsManager, communityController.update);
+  // Delete a community
   router.delete('/:communityId', jwtMW.verifyToken, commMW.userIsManager, communityController.delete);
 
 
