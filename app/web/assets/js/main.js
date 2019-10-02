@@ -1,5 +1,7 @@
 const backend = require("electron").ipcRenderer;
 const copyToClipboard = require("electron").clipboard.writeText;
+const shell = require("electron").shell;
+var config;
 var socket;
 var connected;
 var forced;
@@ -49,8 +51,9 @@ function startSocket(key) {
     });
   });
 
-  socket.on("correct_password", function(key) {
+  socket.on("correct_password", function(key, conf) {
     localStorage.dev_key = key;
+    config = conf;
     $("#password-div").fadeOut(function() {
       $("#main").fadeIn();
     });
@@ -127,10 +130,11 @@ function startSocket(key) {
     graph["visitors"].render();
     visitors.reverse();
     let yesterday =
-      visitors[visitors.length - 2 >= 0 ? visitors.length - 2 : 0].amount;
+      visitors.length - 2 >= 0 ? visitors[visitors.length - 2].amount : 0;
     let now = visitors[visitors.length - 1].amount;
-    let percent = Math.round((now / yesterday) * 100);
+    let percent = Math.round((yesterday / now) * 100);
     let increase = now - yesterday;
+    console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
       var symbol = "+";
@@ -238,4 +242,8 @@ function logout() {
   $("#main").fadeOut(function() {
     $("#connecting").fadeIn();
   });
+}
+
+function openBrowser() {
+  shell.openExternal(`http://${config.http.host}:${config.http.port}`);
 }

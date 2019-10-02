@@ -22,7 +22,7 @@ sio.on("connection", function(socket) {
     }
     if (password == dev_key) {
       socket.authenticated = true;
-      socket.emit("correct_password", password);
+      socket.emit("correct_password", password, require("../../config/app"));
     } else {
       socket.tries++;
       socket.emit("wrong_password", socket.tries);
