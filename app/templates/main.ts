@@ -1,5 +1,12 @@
 import * as Handlebars from '../../node_modules/handlebars/dist/handlebars.js'
 
+export const ALERT_PRIMARY = 'primary';
+export const ALERT_SECONDARY = 'secondary';
+export const ALERT_SUCCESS = 'success';
+export const ALERT_WARNING = 'warning';
+export const ALERT_INFO = 'info';
+export const ALERT_LIGHT = 'light';
+
 export const main = Handlebars.compile(`
   <nav id="app-navbar" class="navbar site-header sticky-top py-1 navbar-expand-sm navbar-dark bg-dark"></nav>
   <main role="main" class="flex-shrink-0">
@@ -65,16 +72,6 @@ export const postInput = Handlebars.compile(`
   </div>
 `);
 
-/*
-  <div class="alert alert-primary" role="alert">
-  <div class="alert alert-secondary" role="alert">
-  <div class="alert alert-success" role="alert">
-  <div class="alert alert-danger" role="alert">
-  <div class="alert alert-warning" role="alert">
-  <div class="alert alert-info" role="alert">
-  <div class="alert alert-light" role="alert">
-  <div class="alert alert-dark" role="alert">
-*/
 export const alert = Handlebars.compile(`
   <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

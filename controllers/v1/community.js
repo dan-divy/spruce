@@ -23,14 +23,21 @@ module.exports = (conf) => {
 
     Community
     .findOne({ name : communityName })
-    .then(community => {
+    .then(communityExists => {
       // if the community exists, join as a member, not a manager
-      if (community) {
+      if (communityExists) {
         // Join the community
-        community.members.push(userId);
-        community.save((err, comm) => {
+        if(communityExists.private) {
+          communityExists.pending.push(userId);
+        } else {
+          communityExists.members.push(userId);
+        }
+        communityExists.save((err, community) => {
           if (err) return res.status(500).json({ error: `Coule not join community. err: ${err}` });
-          return res.status(200).json({ _id: comm.id, name: comm.name });
+          if (community.private) {
+            return res.status(200).json({ message: `Membership with ${community.name} is pending.` });
+          }
+          res.status(200).json({ community: community });
         });
       } else {
         // Create the community and respective chatroom
@@ -48,9 +55,8 @@ module.exports = (conf) => {
           newCommunity.managers.push(userId);
           newCommunity.save((err, community) => {
             if (err) return res.status(500).json({ error: `Could not create new community. Err: ${err}` });
-            res.status(200).json({ communityId: community.id, communityName: community.name })
+            res.status(200).json({ community: community })
           });
-
         });
       }
     })

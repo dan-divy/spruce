@@ -26,7 +26,7 @@ import * as profile from './templates/profile';
 
 const name = 'Spruce';
 
-var refreshContext = false;
+var shouldRefreshContext = false;
 var chatNsp:Socket;
 
 /**
@@ -70,16 +70,19 @@ const showView = async () => {
   const buildContext = async () => {
     if (AuthLib.validSession()) {
       var token = AuthLib.readToken();
-      if (!token || AuthLib.isExpired(token) || refreshContext) {
+
+      console.log(shouldRefreshContext)
+
+      if (!token || AuthLib.isExpired(token) || shouldRefreshContext) {
         const tokenResponse = await AuthLib.getNewToken();
         if (noErrors(tokenResponse)) {
           AuthLib.saveToken(tokenResponse.token);
         }
       }
-      const contextResponse = await AuthLib.decodeToken(token);
+      const contextResponse = await AuthLib.decodeToken(AuthLib.readToken());
       if (noErrors(contextResponse)) {
         context = contextResponse.context;
-        refreshContext = false;
+        shouldRefreshContext = false;
       }
     }
 
@@ -404,7 +407,6 @@ const showView = async () => {
 
           const buttonSend = <HTMLButtonElement>document.getElementById('button-send');
           buttonSend.addEventListener('click', async event => {
-            console.log('send')
             // send the message to the server; success = append to top of view
             const message_body = (<HTMLInputElement>document.getElementById('message_body')).value;
             if (message_body.length) {
@@ -484,13 +486,13 @@ const showView = async () => {
 
         // TODO - add error handling and listen for response message. If message (pending membership) alert user.
         const result = await CommLib.createJoinCommunity(body);
-        if (result._id) {
+        if (result.message) return showAlert(result.message, main.ALERT_SUCCESS);
+        if (noErrors(result)) {
           // append to current list
-          inputNewCommunity.value = '';
-          addCommunity(result);
-          context.community.push(result);
-          refreshContext = true;
+          addCommunity(result.community);
+          shouldRefreshContext = true;
         }
+        inputNewCommunity.value = '';
       };
       break;
     default:
