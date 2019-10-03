@@ -6,6 +6,7 @@ var socket;
 var connected;
 var forced;
 var graph = {};
+var statsInt;
 if (localStorage.dev_key) {
   console.log(localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -61,6 +62,7 @@ function startSocket(key) {
 
   socket.on("disconnect", function() {
     if (!connected) return;
+    clearInterval(statsInt)
     $("#main").fadeOut();
     $("#connecting").fadeIn();
     $.notify("Disconnected", "warning");
@@ -194,9 +196,9 @@ function startSocket(key) {
     }
   }
   socket.emit("stats");
-  setInterval(function() {
+  statsInt = setInterval(function() {
     socket.emit("stats");
-  }, 2000);
+  }, 1000);
   socket.on("cpu", function(data) {
     changeStatus("cpu", data);
     let current_datetime = new Date();
