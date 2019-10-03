@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 const { app, BrowserWindow, ipcMain } = require("electron");
+const nodeGit = require("nodegit");
+const fs = require("file-system");
+
 let mainWindow;
 const ps = require("ps-node");
 
@@ -19,18 +22,91 @@ function createWindow() {
   });
   console.log(process.platform);
   ipcMain.on("start_spruce", function() {
-    let { pid, stdout } = require("child_process").fork("./bin/www", ["--app"], {
-      detached: true,
-      silent: true
-    });
-    stdout.on("data", function(data) {
-      data = data.toString()
-      if(data.split("Developer key: ").length && data.split("Developer key: ").length > 1) {
-        console.log(data)
-        mainWindow.webContents.send("key", data.split("Developer key: ")[1].split("\n")[0])
-      } 
-    })
-    console.log(pid);
+    let available = true;
+    try {
+      fs.readFileSync(__dirname + "/spruce/bin/www");
+    } catch (err) {
+      available = false;
+    }
+    // transferProgress: {
+    //   throttle: 0,
+    //   callback: (progress) => {
+    //     return Object.keys(progress.__proto__).map(k => console.log(`${k}: ${progress[k]()}`))
+    //   }
+    // }
+    if (available) {
+      let { pid, stdout } = require("child_process").fork(
+        __dirname + "/spruce/bin/www",
+        ["--app"],
+        {
+          detached: true,
+          silent: true
+        }
+      );
+      stdout.on("data", function(data) {
+        data = data.toString();
+        if (
+          data.split("Developer key: ").length &&
+          data.split("Developer key: ").length > 1
+        ) {
+          console.log(data);
+          mainWindow.webContents.send(
+            "key",
+            data.split("Developer key: ")[1].split("\n")[0]
+          );
+        }
+      });
+      console.log(pid);
+    } else {
+      try {
+        fs.rmdirSync(__dirname + "/spruce");
+      } catch (err) {}
+      console.log("Downloading...");
+      nodeGit
+        .Clone("https://github.com/dan-divy/spruce", __dirname + "/spruce", {
+          checkoutBranch: "project-oak",
+          fetchOpts: {
+            callbacks: {
+              transferProgress: function(stats) {
+                const progress =
+                  (100 * (stats.receivedObjects() + stats.indexedObjects())) /
+                  (stats.totalObjects() * 2);
+                mainWindow.webContents.send("progress", {
+                  name: "git",
+                  progress
+                });
+              }
+            }
+          }
+        })
+        .then(function() {
+          mainWindow.webContents.send("progress", {
+            name: "npm",
+            progress: 0.0
+          });
+          let progress = 0;
+          let { stdout } = require("child_process").exec(
+            `cd ${__dirname}/spruce; npm install`
+          );
+          stdout.on("data", function() {
+            progress += (100 - progress) /2
+            mainWindow.webContents.send("progress", {
+              name: "npm",
+              progress
+            });
+          });
+          stdout.on("close", function() {
+            mainWindow.webContents.send("progress", {
+              name: "npm",
+              progress: 100,
+              done: true
+            });
+          });
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
   });
   ipcMain.on("end_spruce", function() {
     ps.lookup({ command: "spruce" }, function(err, results) {

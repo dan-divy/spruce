@@ -174,8 +174,9 @@ function comment(user, comment, _id, cb) {
   });
 }
 function like(user, like, _id, cb) {
+  console.log(user)
   User.findOne(user).exec((err, obj) => {
-    //	if (!obj) return cb("Does not exist.",null);
+    if (!obj) return cb("Does not exist.",null);
     //console.log(obj);
     for (var i = 0; i < obj.posts.length; i++) {
       if (obj.posts[i]._id == _id) {

@@ -28,6 +28,7 @@
     "morgan": "~1.9.0",
     "mv": "2.1.1",
     "newsapi": "^2.4.0",
+    "nodegit": "^0.26.2",
     "opencollective-postinstall": "^2.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",

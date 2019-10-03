@@ -332,6 +332,26 @@ function startSocket(key) {
     socket.emit("password", $("#password").val());
   });
 }
+let done;
+backend.on("progress", (event, obj) => {
+  if(done) return;
+  let percent = (parseInt(obj.progress * 100) / 100) + "%"
+  $("#download").fadeIn();
+  $("#download-progress").attr("aria-valuenow", Math.round(parseInt(obj.progress) * 100) / 100);
+  $("#download-progress").css("width", percent);
+  $("#download-percent").text(percent)
+  if(obj.name == "git") {
+    $("#download-name").text("Spruce is downloading the latest version...")
+  }
+  if(obj.name == "npm") {
+    $("#download-name").text("Spruce is downloading the latest packages...");
+  }
+  if(obj.name == "npm" && obj.done) {
+    done = true;
+    $("#download").fadeOut();
+    startSpruce()
+  }
+});
 
 function startSpruce() {
   $("#connecting").fadeOut();
