@@ -333,8 +333,11 @@ function startSocket(key) {
   });
 }
 let done;
-backend.on("progress-error", function(event, obj) {
-
+backend.on("progress-error", function(event, err) {
+  $("#download").fadeOut();
+  $("#connecting").fadeIn();
+  $.notify(err);
+  console.error(obj);
 })
 backend.on("progress", (event, obj) => {
   if(done) return;
