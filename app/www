@@ -96,7 +96,7 @@ function createWindow() {
             if (err) {
               if 		(err.code === npmi.LOAD_ERR) 	console.log('npm load error');
               else if (err.code === npmi.INSTALL_ERR) console.log('npm install error');
-              return console.log(err.message);
+              return mainWindow.webContents.send("progress-error", err);
             }
           
             mainWindow.webContents.send("progress", {
@@ -107,7 +107,7 @@ function createWindow() {
           });
         })
         .catch(err => {
-          console.error(err);
+          mainWindow.webContents.send("progress-error", err);
         });
     }
   });
