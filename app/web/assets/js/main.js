@@ -1,9 +1,12 @@
 const backend = require("electron").ipcRenderer;
 const copyToClipboard = require("electron").clipboard.writeText;
+const shell = require("electron").shell;
+var config;
 var socket;
 var connected;
 var forced;
 var graph = {};
+var statsInt;
 if (localStorage.dev_key) {
   console.log(localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -21,12 +24,12 @@ function startSocket(key) {
       delete localStorage.dev_key;
       $.notify("Unable to connect automatically");
     } else {
-      $.notify("Unable to connect after 5s");
+      $.notify("Unable to connect after 7s");
     }
     clearInterval(i);
     socket.disconnect() && socket.destroy();
     $("#connecting").fadeIn();
-  }, 5000);
+  }, 7000);
   socket.on("connect", function() {
     socket.emit("client_analytics");
     if (!connected) connected = true;
@@ -49,8 +52,9 @@ function startSocket(key) {
     });
   });
 
-  socket.on("correct_password", function(key) {
+  socket.on("correct_password", function(key, conf) {
     localStorage.dev_key = key;
+    config = conf;
     $("#password-div").fadeOut(function() {
       $("#main").fadeIn();
     });
@@ -58,6 +62,7 @@ function startSocket(key) {
 
   socket.on("disconnect", function() {
     if (!connected) return;
+    clearInterval(statsInt);
     $("#main").fadeOut();
     $("#connecting").fadeIn();
     $.notify("Disconnected", "warning");
@@ -114,10 +119,19 @@ function startSocket(key) {
           stops: [0, 90, 100]
         }
       },
-      series: [{ name: "sessions", data: visitors.map(x => x.amount) }],
+      series: [
+        {
+          name: "sessions",
+          data: visitors
+            .map(x => x.amount)
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+        }
+      ],
       xaxis: {
         type: "category",
-        categories: visitors.map(x => x.date)
+        categories: visitors
+          .map(x => x.date)
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
       },
       yaxis: {
         min: 0
@@ -130,10 +144,11 @@ function startSocket(key) {
     );
     graph["visitors"].render();
     let yesterday =
-      visitors[visitors.length - 2 >= 0 ? visitors.length - 2 : 0].amount;
+      visitors.length - 2 >= 0 ? visitors[visitors.length - 2].amount : 0;
     let now = visitors[visitors.length - 1].amount;
-    let percent = Math.round((now / yesterday) * 100);
+    let percent = Math.round((yesterday / now) * 100);
     let increase = now - yesterday;
+    console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
       var symbol = "+";
@@ -167,7 +182,11 @@ function startSocket(key) {
         color.addClass("text-danger");
       }
     }
-    $(`#${name}`).text(value + $(`#${name}`).attr("data-units"));
+    let ending = $(`#${name}`).attr("data-units");
+    if (ending.endsWith("s")) {
+      ending = value != 1 ? ending : ending.slice(0, -1);
+    }
+    $(`#${name}`).text(value + ending);
     switch (name) {
       case "ram":
         if (value < 300) {
@@ -183,25 +202,177 @@ function startSocket(key) {
           emotion(false);
         }
         break;
+      case "database":
+        emotion(true);
+        break;
     }
   }
-  setInterval(function() {
+  socket.emit("stats");
+  statsInt = setInterval(function() {
     socket.emit("stats");
-  }, 2000);
+  }, 1000);
   socket.on("cpu", function(data) {
     changeStatus("cpu", data);
+    let current_datetime = new Date();
+    let formatted_date =
+      current_datetime.getFullYear() +
+      "-" +
+      (current_datetime.getMonth() + 1) +
+      "-" +
+      current_datetime.getDate() +
+      ", " +
+      current_datetime.getHours() +
+      ":" +
+      current_datetime.getMinutes() +
+      ":" +
+      current_datetime.getSeconds();
+    $("#stats-status").html("Connected at " + formatted_date);
+  });
+  socket.on("database", function(data) {
+    let count = 0;
+    console.log(data.data);
+    data.data.forEach(x => (count += x.count));
+    changeStatus("database", count);
+    $("#database-status").html(data.msg);
+    let current_datetime = new Date();
+    let formatted_date =
+      current_datetime.getFullYear() +
+      "-" +
+      (current_datetime.getMonth() + 1) +
+      "-" +
+      current_datetime.getDate() +
+      ", " +
+      current_datetime.getHours() +
+      ":" +
+      current_datetime.getMinutes() +
+      ":" +
+      current_datetime.getSeconds();
+    $("#stats-status").html("Connected at " + formatted_date);
+    let a = [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ];
+    data.data.sort(
+      (o, t) =>
+        a.indexOf(o.name[0].toUpperCase()) - a.indexOf(t.name[0].toUpperCase())
+    );
+    $("#database-docs").html(
+      data.data.map(model => {
+        let upper = model.name[0].toUpperCase();
+        model.name = model.name.slice(1);
+        model.name = upper + model.name;
+        model.name += model.name.endsWith("s") ? "" : "s";
+        return `<li class="bg-transparent list-group-item">
+            <div class="widget-content p-0">
+                <div class="widget-content-outer">
+                    <div class="widget-content-wrapper">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">${model.name}</div>
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-primary">${
+                              model.count
+                            } ${model.count != 1 ? "docs" : "doc"}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </li>`;
+      })
+    );
   });
   socket.on("ram", function(data) {
     changeStatus("ram", data);
+    let current_datetime = new Date();
+    let formatted_date =
+      current_datetime.getFullYear() +
+      "-" +
+      (current_datetime.getMonth() + 1) +
+      "-" +
+      current_datetime.getDate() +
+      ", " +
+      current_datetime.getHours() +
+      ":" +
+      current_datetime.getMinutes() +
+      ":" +
+      current_datetime.getSeconds();
+    $("#stats-status").html("Connected at " + formatted_date);
   });
   socket.on("sockets", function(data) {
     changeStatus("now", data);
+    let current_datetime = new Date();
+    let formatted_date =
+      current_datetime.getFullYear() +
+      "-" +
+      (current_datetime.getMonth() + 1) +
+      "-" +
+      current_datetime.getDate() +
+      ", " +
+      current_datetime.getHours() +
+      ":" +
+      current_datetime.getMinutes() +
+      ":" +
+      current_datetime.getSeconds();
+    $("#stats-status").html("Connected at " + formatted_date);
   });
   $("#password-button").click(function() {
     $("#password-error").html("");
     socket.emit("password", $("#password").val());
   });
 }
+let done;
+backend.on("progress-error", function(event, err) {
+  $("#download").fadeOut();
+  $("#connecting").fadeIn();
+  $.notify(err);
+  console.error(obj);
+});
+backend.on("progress", (event, obj) => {
+  if (done) return;
+  let percent = parseInt(obj.progress * 100) / 100 + "%";
+  $("#download").fadeIn();
+  $("#download-progress").attr(
+    "aria-valuenow",
+    Math.round(parseInt(obj.progress) * 100) / 100
+  );
+  $("#download-progress").css("width", percent);
+  $("#download-percent").text(percent);
+  if (obj.name == "git") {
+    $("#download-name").text("Spruce is downloading the latest version...");
+  }
+  if (obj.name == "npm") {
+    $("#download-name").text("Spruce is downloading the latest packages...");
+  }
+  if (obj.name == "npm" && obj.done) {
+    done = true;
+    $("#download").fadeOut();
+    startSpruce();
+  }
+});
 
 function startSpruce() {
   $("#connecting").fadeOut();
@@ -215,13 +386,12 @@ function startSpruce() {
 }
 
 function restartSpruce() {
-  endSpruce();
-  setTimeout(() => {
+  endSpruce(function() {
     startSpruce();
-  }, 1000);
+  });
 }
 
-function endSpruce() {
+function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
     $.notify("Stopping spruce...", "info");
@@ -230,6 +400,9 @@ function endSpruce() {
     $("#connecting").fadeIn();
     localStorage.dev_key = "";
     delete localStorage.dev_key;
+    socket.on("disconnect", function() {
+      if (cb) cb();
+    });
     socket.disconnect() && socket.destroy();
   });
 }
@@ -241,4 +414,11 @@ function logout() {
   $("#main").fadeOut(function() {
     $("#connecting").fadeIn();
   });
+}
+
+function openBrowser(def) {
+  if (def) {
+    shell.openExternal("https://github.com/dan-divy/spruce");
+  }
+  shell.openExternal(`http://${config.http.host}:${config.http.port}`);
 }

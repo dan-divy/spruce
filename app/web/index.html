@@ -18,7 +18,9 @@
         <div id="connecting" style="display:none" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <div class="container">
                 <div class="row text-center">
-                    <div class="col-md-8 m-5"></div>
+                    <div class="col-md-12 m-5">
+                        <h1>Welcome to the <a href="javascript:openBrowser(true)">Spruce App</a></h1>
+                    </div>
                     <div class="col-md-5 mb-5 mx-auto">
                         <h2>Connect to Spruce instance</h2><br>
                         <input class="form-control" id="host" value="http://localhost:4206"><br>
@@ -27,6 +29,21 @@
                     <div class="col-md-5 mb-5 mx-auto">
                         <h2>Start local Spruce instance</h2><br>
                         <button class="btn btn-primary" onclick="startSpruce()">Start</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="download" style="display:none" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+            <div class="container">
+                <div class="row text-center mt-5">
+                    <div class="col-md-12 m-5">
+                        <h1 id="download-name"></h1><br>
+                        <h4 id="download-percent"></h4>
+                    </div><br>
+                    <div class="col-md-12 mb-5 mx-auto">
+                        <div class="progress">
+                            <div id="download-progress" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -52,7 +69,7 @@
         </div>
         <div id="main" style="display: none" class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <div class="app-main">
-                    <div class="app-header header-shadow">
+                    <div class="app-header">
                             <div class="app-header__logo">
                                 <div class="logo-src"><img height="60px" src="../../public/images/logo/banner.png"></div>
                                 <div class="header__pane ml-auto">
@@ -83,161 +100,6 @@
                                     </button>
                                 </span>
                             </div>    <div class="app-header__content">
-                                <div class="app-header-left">
-                                    <div class="search-wrapper">
-                                        <div class="input-holder">
-                                            <input type="text" class="search-input" placeholder="Type to search">
-                                            <button class="search-icon"><span></span></button>
-                                        </div>
-                                        <button class="close"></button>
-                                    </div>
-                                    <ul class="header-megamenu nav">
-                                        <li class="nav-item">
-                                            <a href="javascript:void(0);" data-placement="bottom" rel="popover-focus" data-offset="300" data-toggle="popover-custom" class="nav-link">
-                                                <i class="nav-link-icon pe-7s-gift"> </i>
-                                                Mega Menu
-                                                <i class="fa fa-angle-down ml-2 opacity-5"></i>
-                                            </a>
-                                            <div class="rm-max-width">
-                                                <div class="d-none popover-custom-content">
-                                                    <div class="dropdown-mega-menu">
-                                                        <div class="grid-menu grid-menu-3col">
-                                                            <div class="no-gutters row">
-                                                                <div class="col-sm-6 col-xl-4">
-                                                                    <ul class="nav flex-column">
-                                                                        <li class="nav-item-header nav-item">
-                                                                            Overview
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">
-                                                                                <i class="nav-link-icon lnr-inbox">
-                                                                                </i>
-                                                                                <span>
-                                                                                    Contacts
-                                                                                </span>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">
-                                                                                <i class="nav-link-icon lnr-book">
-                                                                                </i>
-                                                                                <span>
-                                                                                    Incidents
-                                                                                </span>
-                                                                                <div class="ml-auto badge badge-pill badge-danger">5
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">
-                                                                                <i class="nav-link-icon lnr-picture">
-                                                                                </i>
-                                                                                <span>
-                                                                                    Companies
-                                                                                </span>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a disabled="" href="javascript:void(0);" class="nav-link disabled">
-                                                                                <i class="nav-link-icon lnr-file-empty">
-                                                                                </i>
-                                                                                <span>
-                                                                                    Dashboards
-                                                                                </span>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-sm-6 col-xl-4">
-                                                                    <ul class="nav flex-column">
-                                                                        <li class="nav-item-header nav-item">
-                                                                            Favourites
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">
-                                                                                Reports Conversions
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">
-                                                                                Quick Start
-                                                                                <div class="ml-auto badge badge-success">New</div>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Users &amp; Groups</a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Proprieties</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-sm-6 col-xl-4">
-                                                                    <ul class="nav flex-column">
-                                                                        <li class="nav-item-header nav-item">Sales &amp; Marketing
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Queues
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Resource Groups
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Goal Metrics
-                                                                                <div class="ml-auto badge badge-warning">3
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a href="javascript:void(0);" class="nav-link">Campaigns
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="btn-group nav-item">
-                                            <a  class="nav-link" data-toggle="dropdown" aria-expanded="false">
-                                                <span class="badge badge-pill badge-danger ml-0 mr-2">4</span>
-                                                Settings
-                                                <i class="fa fa-angle-down ml-2 opacity-5"></i>
-                                            </a>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu">
-                                                <div class="dropdown-menu-header">
-                                                    <div class="dropdown-menu-header-inner bg-secondary">
-                                                        <div class="menu-header-image opacity-5" style="background-image: url('assets/images/dropdown-header/abstract2.jpg');"></div>
-                                                        <div class="menu-header-content">
-                                                            <h5 class="menu-header-title">Overview</h5>
-                                                            <h6 class="menu-header-subtitle">Dropdown menus for everyone</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="scroll-area-xs">
-                                                    <div class="scrollbar-container">
-                                                        <h6 tabindex="-1" class="dropdown-header">Key Figures</h6>
-                                                        <button type="button" tabindex="0" class="dropdown-item">Service Calendar</button>
-                                                        <button type="button" tabindex="0" class="dropdown-item">Knowledge Base</button>
-                                                        <button type="button" tabindex="0" class="dropdown-item">Accounts</button>
-                                                        <div tabindex="-1" class="dropdown-divider"></div>
-                                                        <button type="button" tabindex="0" class="dropdown-item">Products</button>
-                                                        <button type="button" tabindex="0" class="dropdown-item">Rollup Queries</button>
-                                                    </div>
-                                                </div>
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item-divider nav-item"></li>
-                                                    <li class="nav-item-btn nav-item">
-                                                        <button class="btn-wide btn-shadow btn btn-danger btn-sm">Cancel</button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>        </div>
                                 <div class="app-header-right">
                                     <div class="header-dots">
                                         <div class="dropdown">
@@ -306,10 +168,10 @@
                                             </div>
                                         </div>
                                         <div class="dropdown">
-                                            <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="p-0 mr-2 btn btn-link">
+                                            <button type="button" onclick="openBrowser()" class="p-0 mr-2 btn btn-link">
                                                 <span class="icon-wrapper icon-wrapper-alt rounded-circle">
                                                     <span class="icon-wrapper-bg bg-danger"></span>
-                                                    <i class="fa fa-bell text-danger icon-anim-pulse"></i>
+                                                    <i class="fa fa-external-link-alt text-danger"></i>
                                                 </span>
                                             </button>
                                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-xl rm-pointers dropdown-menu dropdown-menu-right">
@@ -769,7 +631,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-11 ml-2 no-pad-left no-pad-right">
+                                    <div class="col-lg-11 ml-2 no-pad-left no-pad-right mt-4">
                                         <ul class="list-group">
                                             <li class="list-group-item list-group-item-primary">Actions</li>
                                                 <li class="list-group-item">
@@ -777,43 +639,14 @@
                                                     <a href="javascript:(endSpruce())">shut down</a>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <i class="fa fa-plus"></i>&nbsp;
-                                                    <a href="/me/upload">upload</a>
+                                                    <i class="fa fa-sync"></i>&nbsp;
+                                                    <a href="javascript:(restartSpruce())">reboot</a>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <i class="fa fa-paper-plane"></i>&nbsp;
-                                                    <a href="/chat">chat</a>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <i class="fa fa-heart"></i>&nbsp;
-                                                    <a href="/me/activity">activity</a>
-                                                </li>
-                                        </ul>
-                                        <ul class="list-group">
-                                            <li class="list-group-item list-group-item-primary">Categories</li>
-                                                <li class="list-group-item">
-                                                    <i class="fa fa-mug-hot"></i>&nbsp;
-                                                    <a href="/category/moments">moments</a>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <i class="fa fa-guitar"></i>&nbsp;
-                                                    <a href="/category/events">events</a>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <i class="fa fa-brain"></i>&nbsp;
-                                                    <a href="/category/thoughts">thoughts</a>
-                                                </li>
-                                        </ul>
-                                        <ul class="list-group">
-                                            <li class="list-group-item list-group-item-primary">
-                                                Console Actions
-                                            </li>
-                                                <li class="list-group-item">
-                                                    <i class="fa fa-power-off"></i>&nbsp;
+                                                    <i class="fa fa-sign-out-alt"></i>&nbsp;
                                                     <a href="javascript:(logout())">log out</a>
                                                 </li>
                                         </ul>
-                
                                     </div>
                                 </div>
                             </div>
@@ -822,16 +655,12 @@
                             <div class="tabs-animation">
                                 <div class="mb-3 card">
                                     <div class="card-header-tab card-header">
-                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                            <i class="header-icon lnr-charts icon-gradient bg-happy-green"> </i>
-                                            Stats
-                                        </div>
-                                        <div class="btn-actions-pane-right text-capitalize">
-                                            <button class="btn-wide btn-outline-2x mr-md-2 btn btn-outline-focus btn-sm">View All</button>
+                                        <div class="card-header-title font-size-lg font-weight-normal">
+                                            <span id="stats-status" style="font-size: 20px;">Connecting...</i></span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-md-4 col-xl-4">
+                                        <div class="col-sm-6 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-10 bg-warning"></div>
@@ -841,8 +670,8 @@
                                                     <div class="widget-numbers" id="ram" data-units="MB">0MB</div>
                                                     <div class="widget-description opacity-8 text-focus">
                                                         <div id="ram-color" class="d-inline text-success pr-1">
-                                                            <i id="ram-icon" class="fa fa-smile"></i>
-                                                            Status: <span id="ram-status" class="pl-1">Good</span>
+                                                            <i id="ram-icon" class="fa fa-frown"></i>
+                                                            Status: <span id="ram-status" class="pl-1">Disconnected</span>
                                                         </div>
                                                         
                                                     </div>
@@ -850,7 +679,7 @@
                                             </div>
                                             <div class="divider m-0 d-md-none d-sm-block"></div>
                                         </div>
-                                        <div class="col-sm-6 col-md-4 col-xl-4">
+                                        <div class="col-sm-6 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-9 bg-danger"></div>
@@ -859,9 +688,9 @@
                                                     <div class="widget-subheading">CPU Usage</div>
                                                     <div class="widget-numbers" id="cpu" data-units="%">0%</div>
                                                     <div class="widget-description opacity-8 text-focus">
-                                                        <div id="cpu-color" class="d-inline text-success pr-1">
-                                                            <i id="cpu-icon" class="fa fa-smile"></i>
-                                                            Status: <span id="cpu-status" class="pl-1">Good</span>
+                                                        <div id="cpu-color" class="d-inline text-danger pr-1">
+                                                            <i id="cpu-icon" class="fa fa-frown"></i>
+                                                            Status: <span id="cpu-status" class="pl-1">Disconnected</span>
                                                         </div>
                                                         
                                                     </div>
@@ -869,25 +698,37 @@
                                             </div>
                                             <div class="divider m-0 d-md-none d-sm-block"></div>
                                         </div>
-                                        <div class="col-sm-12 col-md-4 col-xl-4">
+                                        <div class="col-sm-12 col-md-3 col-xl-3">
+                                                <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
+                                                    <div class="icon-wrapper rounded-circle">
+                                                        <div class="icon-wrapper-bg opacity-9 bg-success"></div>
+                                                        <i class="fa fa-server text-white"></i></div>
+                                                    <div class="widget-chart-content">
+                                                        <div class="widget-subheading">Database</div>
+                                                        <div class="widget-numbers" id="database" data-units=" docs">0 docs</div>
+                                                        <div class="widget-description opacity-8 text-focus">
+                                                                <div id="database-color" class="d-inline text-danger pr-1">
+                                                                    <i id="database-icon" class="fa fa-frown"></i>
+                                                                    Status: <span id="database-status" class="pl-1">Disconnected</span>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div class="col-sm-12 col-md-3 col-xl-3">
                                             <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                                 <div class="icon-wrapper rounded-circle">
                                                     <div class="icon-wrapper-bg opacity-9 bg-success"></div>
                                                     <i class="fa fa-users text-white"></i></div>
                                                 <div class="widget-chart-content">
-                                                    <div class="widget-subheading">Currently online</div>
+                                                    <div class="widget-subheading">Online</div>
                                                     <div class="widget-numbers" id="now" data-units=" users">0 users</div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center d-block p-3 card-footer">
-                                        <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg">
-                                            <span class="mr-2 opacity-7">
-                                                <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
-                                            </span>
-                                            <span class="mr-1">View Complete Report</span>
-                                        </button>
+                                        
                                     </div>
                                 </div>
                                 <div class="row">
@@ -895,8 +736,8 @@
                                         <div class="mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                                    <i class="header-icon lnr-cloud-download icon-gradient bg-happy-itmeo"> </i>
-                                                    Technical Support
+                                                    <i class="header-icon fa fa-chart-bar icon-gradient bg-happy-itmeo"> </i>
+                                                    Graphs
                                                 </div>
                                                 <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
                                                     <div class="btn-group dropdown">
@@ -967,35 +808,34 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-lg-6">
+                                        <div class="card-hover-shadow-2x mb-3 card">
+                                                <div class="card-header-tab card-header">
+                                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                                            <i class="header-icon fa fa-database icon-gradient bg-happy-itmeo"> </i>
+                                                            Database
+                                                        </div>
+                                                        
+                                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                    <ul class="list-group list-group-flush" id="database-docs">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-12 col-lg-6">
                                         <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                                                     <i class="header-icon lnr-lighter icon-gradient bg-amy-crisp"> </i>
                                                     Timeline Example
-                                                </div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link">
-                                                            <i class="pe-7s-menu btn-icon-wrapper"></i>
-                                                        </button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="scroll-area-lg">
@@ -1304,8 +1144,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div></div>
                                 <div class="row">
                                     <div class="col-md-6 col-xl-3">
                                         <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-success border-success">
@@ -1396,6 +1235,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="card mb-3">
                                     <div class="card-header-tab card-header">
                                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-laptop-phone mr-3 text-muted opacity-6"> </i>Easy Dynamic Tables</div>
@@ -1903,21 +1743,7 @@
                                         <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-database icon-gradient bg-malibu-beach"> </i>Tasks List</div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link"><i class="pe-7s-menu btn-icon-wrapper"></i></button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                             <div class="scroll-area-lg">
                                                 <div class="scrollbar-container">
@@ -2215,21 +2041,7 @@
                                         <div class="card-hover-shadow-2x mb-3 card">
                                             <div class="card-header-tab card-header">
                                                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon lnr-printer icon-gradient bg-ripe-malin"> </i>Chat Box</div>
-                                                <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                                    <div class="btn-group dropdown">
-                                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-icon btn-icon-only btn btn-link"><i class="pe-7s-menu btn-icon-wrapper"></i></button>
-                                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-inbox"> </i><span>Menus</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-file-empty"> </i><span>Settings</span></button>
-                                                            <button type="button" tabindex="0" class="dropdown-item"><i class="dropdown-icon lnr-book"> </i><span>Actions</span></button>
-                                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                                            <div class="p-3 text-right">
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-link">View Details</button>
-                                                                <button class="mr-2 btn-shadow btn-sm btn btn-primary">Action</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                             <div class="scroll-area-lg">
                                                 <div class="scrollbar-container">
@@ -2338,7 +2150,7 @@
                                 </div>
                                 <div class="card no-shadow bg-transparent no-border rm-borders mb-3">
                                     <div class="card">
-                                        <div class="no-gutters row">
+                                        <div class="row">
                                             <div class="col-md-12 col-lg-4">
                                                 <ul class="list-group list-group-flush">
                                                     <li class="bg-transparent list-group-item">

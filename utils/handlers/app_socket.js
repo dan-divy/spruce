@@ -5,7 +5,6 @@ const http = require("http");
 const server = http.createServer(app);
 const sio = io(server);
 const Users = require("./user");
-const Analytics = require("../models/analytics");
 
 const { dev_key } = require("../../routes/developer/api");
 const usage = require("usage");
@@ -22,14 +21,34 @@ sio.on("connection", function(socket) {
     }
     if (password == dev_key) {
       socket.authenticated = true;
-      socket.emit("correct_password", password);
+      socket.emit("correct_password", password, require("../../config/app"));
     } else {
       socket.tries++;
       socket.emit("wrong_password", socket.tries);
     }
   });
   socket.on("stats", function() {
+    const Analytics = require("../models/analytics");
     if (!socket.authenticated) return;
+    Analytics.data(function(keys, db) {
+      let database = { online: db.connection.readyState };
+      switch (db.connection.readyState) {
+        case 0:
+          database.msg = "Disconnected";
+          break;
+        case 1:
+          database.msg = "Connected";
+          break;
+        case 2:
+          database.msg = "Connecting";
+          break;
+        case 3:
+          database.msg = "Disconnecting";
+          break;
+      }
+      database.data = keys;
+      socket.emit("database", database);
+    });
     if (!socket.visitors) {
       Analytics.find(function(err, docs) {
         socket.emit("server_analytics", docs);
