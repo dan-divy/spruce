@@ -114,11 +114,11 @@ function startSocket(key) {
         }
       },
       series: [
-        { name: "sessions", data: visitors.map(x => x.amount).reverse() }
+        { name: "sessions", data: visitors.map(x => x.amount).sort((a, b) => new Date(a.date) - new Date(b.date)) }
       ],
       xaxis: {
         type: "category",
-        categories: visitors.map(x => x.date).reverse()
+        categories: visitors.map(x => x.date).sort((a, b) => new Date(a.date) - new Date(b.date))
       },
       yaxis: {
         min: 0
@@ -371,13 +371,12 @@ function startSpruce() {
 }
 
 function restartSpruce() {
-  endSpruce();
-  setTimeout(() => {
+  endSpruce(function() {
     startSpruce();
-  }, 1000);
+  });
 }
 
-function endSpruce() {
+function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
     $.notify("Stopping spruce...", "info");
@@ -386,6 +385,9 @@ function endSpruce() {
     $("#connecting").fadeIn();
     localStorage.dev_key = "";
     delete localStorage.dev_key;
+    socket.on("disconnect", function() {
+      if(cb) cb()
+    });
     socket.disconnect() && socket.destroy();
   });
 }

@@ -81,34 +81,38 @@ function createWindow() {
         })
         .then(function() {
           mainWindow.webContents.send("progress", {
+            name: "git",
+            progress: 100
+          });
+          mainWindow.webContents.send("progress", {
             name: "npm",
             progress: 0.0
           });
-          let progress = 0;
           var options = {
             path: __dirname + "/spruce",				// installation path [default: '.']
-            forceInstall: true,	// force install if set to true (even if already installed, it will do a reinstall) [default: false]
-            callback(data) {
-                console.log("CALLBACK DATA: " + data)
-              }
+            forceInstall: true
           };
+          
           npmi(options, function (err, result) {
             if (err) {
-              if 		(err.code === npmi.LOAD_ERR) 	console.log('npm load error');
-              else if (err.code === npmi.INSTALL_ERR) console.log('npm install error');
-              err.message = err.message || err.toString();
-              return mainWindow.webContents.send("progress-error", err);
+              return mainWindow.webContents.send("progress-error", err.toString());
             }
-          
+            
             mainWindow.webContents.send("progress", {
               name: "npm",
               progress: 100,
               done: true
             });
+          })
+          process.stdout.on("data", function(obj) {
+            console.log("CAUGHT: " + obj)
+          });
+          mainWindow.webContents.send("progress", {
+            name: "npm",
+            progress: 50
           });
         })
         .catch(err => {
-          err.message = err.toString();
           mainWindow.webContents.send("progress-error", err.toString());
         });
     }
