@@ -6,7 +6,7 @@ import * as Auth from './authentication';
 import * as Http from './http';
 
 // Token labels
-export const ACCECSS = 'access';
+export const ACCESS = 'access';
 export const REFRESH = 'refresh';
 export const RESOURCE = 'resource';
 
@@ -26,9 +26,9 @@ export interface Token {
  * @param  {string} type, optional, defaults to 'access'. 'access' and 'refresh' are acceptable 
  * @return  {string} Access token
  */
-export const readToken = (type = ACCECSS) => {
+export const readToken = async (type = ACCESS) => {
   var token = '';
-  if ((type.toLowerCase() != ACCECSS) && (type.toLowerCase() != REFRESH)) return null;
+  if ((type.toLowerCase() != ACCESS) && (type.toLowerCase() != REFRESH)) return null;
   var name = `${type.toLowerCase()}=`;
 
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -43,6 +43,12 @@ export const readToken = (type = ACCECSS) => {
       token = c.substring(name.length, c.length);
     }
   }
+  /*
+  if (type.toLowerCase() == ACCESS && isExpired(token)) {
+    const tokenResponse = await getNewToken();
+    if (tokenResponse.token) return tokenResponse.token;
+    return null;
+  }*/
   return token;
 };
 
@@ -54,7 +60,7 @@ export const readToken = (type = ACCECSS) => {
  * @param  {long}   exp (s) Expiration of token in seconds
  * @param  {object} done Callback once complete
  */
-export const saveToken = (token, type = ACCECSS, exp = 0) => {
+export const saveToken = (token, type = ACCESS, exp = 0) => {
   const d = new Date();
   d.setTime(exp * 1000);
   var cookieStr = type + '=' + token + ';';
@@ -213,7 +219,7 @@ export const logout = async () => {
  * @return  {string} token Token
  */
 export const getNewToken = async () => {
-  const refreshToken = Auth.readToken('refresh');
+  const refreshToken = Auth.readToken(REFRESH);
   if (!refreshToken) return { error: 'Token not found' };
 
   const headers = {

@@ -32,7 +32,7 @@ var chatNsp:Socket;
 /**
  * Show an alert to the user
  */
-const showAlert = (message, type = 'danger') => {
+const showAlert = (message, type = main.ALERT_DANGER) => {
   const alertElement = document.getElementById('app-alerts');
   const html = main.alert({ type, message });
   alertElement.insertAdjacentHTML('beforeend', html);
@@ -70,8 +70,6 @@ const showView = async () => {
   const buildContext = async () => {
     if (AuthLib.validSession()) {
       var token = AuthLib.readToken();
-
-      console.log(shouldRefreshContext)
 
       if (!token || AuthLib.isExpired(token) || shouldRefreshContext) {
         const tokenResponse = await AuthLib.getNewToken();
@@ -175,7 +173,7 @@ const showView = async () => {
         inputMessage.disabled = true;
         inputMessage.placeholder = 'Loading';
         
-        if (!chatNsp) chatNsp = Chat.Socket(AuthLib.readToken(AuthLib.REFRESH));
+        if (!chatNsp) chatNsp = Chat.Socket(await AuthLib.readToken(AuthLib.REFRESH));
         chatNsp.on('connect', socket => {
           inputMessage.disabled = false;
           inputMessage.placeholder = 'Type here...';

@@ -3,6 +3,7 @@ import * as Handlebars from '../../node_modules/handlebars/dist/handlebars.js'
 export const ALERT_PRIMARY = 'primary';
 export const ALERT_SECONDARY = 'secondary';
 export const ALERT_SUCCESS = 'success';
+export const ALERT_DANGER = 'danger';
 export const ALERT_WARNING = 'warning';
 export const ALERT_INFO = 'info';
 export const ALERT_LIGHT = 'light';
