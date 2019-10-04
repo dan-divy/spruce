@@ -24,12 +24,12 @@ function startSocket(key) {
       delete localStorage.dev_key;
       $.notify("Unable to connect automatically");
     } else {
-      $.notify("Unable to connect after 5s");
+      $.notify("Unable to connect after 7s");
     }
     clearInterval(i);
     socket.disconnect() && socket.destroy();
     $("#connecting").fadeIn();
-  }, 5000);
+  }, 7000);
   socket.on("connect", function() {
     socket.emit("client_analytics");
     if (!connected) connected = true;
@@ -333,6 +333,9 @@ function startSocket(key) {
   });
 }
 let done;
+backend.on("progress-error", function(event, obj) {
+
+})
 backend.on("progress", (event, obj) => {
   if(done) return;
   let percent = (parseInt(obj.progress * 100) / 100) + "%"

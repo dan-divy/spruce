@@ -3,7 +3,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const nodeGit = require("nodegit");
 const fs = require("file-system");
-
+const npmi = require('npmi');
 let mainWindow;
 const ps = require("ps-node");
 
@@ -85,17 +85,20 @@ function createWindow() {
             progress: 0.0
           });
           let progress = 0;
-          let { stdout } = require("child_process").exec(
-            `cd ${__dirname}/spruce; npm install`
-          );
-          stdout.on("data", function() {
-            progress += (100 - progress) /2
-            mainWindow.webContents.send("progress", {
-              name: "npm",
-              progress
-            });
-          });
-          stdout.on("close", function() {
+          var options = {
+            path: __dirname + "/spruce",				// installation path [default: '.']
+            forceInstall: true,	// force install if set to true (even if already installed, it will do a reinstall) [default: false]
+            callback(data) {
+                console.log("CALLBACK DATA: " + data)
+              }
+          };
+          npmi(options, function (err, result) {
+            if (err) {
+              if 		(err.code === npmi.LOAD_ERR) 	console.log('npm load error');
+              else if (err.code === npmi.INSTALL_ERR) console.log('npm install error');
+              return console.log(err.message);
+            }
+          
             mainWindow.webContents.send("progress", {
               name: "npm",
               progress: 100,
