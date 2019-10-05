@@ -10,9 +10,9 @@ import Socket from 'socket.io-client';
 import * as AuthLib from './lib/authentication';
 import * as ChatLib from './lib/chat';
 import * as CommLib from './lib/community';
-//import * as HttpLib from './lib/http';
 import * as PostLib from './lib/post';
 import * as UserLib from './lib/user';
+import * as Env from './lib/context';
 import * as Utils from './lib/utils';
 // Socket Libraries
 import * as Chat from './lib/socket/chat';
@@ -26,7 +26,7 @@ import * as profile from './templates/profile';
 
 const name = 'Spruce';
 
-var shouldRefreshContext = false;
+var context:Env.Context;
 var chatNsp:Socket;
 
 /**
@@ -59,114 +59,97 @@ const showView = async () => {
   const mainElement = document.getElementById('app-main');  
   const postElement = document.getElementById('app-post');
 
+  //alertElement.innerHTML = '';
+  navbarElement.innerHTML = '';
+  tabsElement.innerHTML = '';
+  mainElement.innerHTML = '';
+  postElement.innerHTML = '';
+
   // params ex. /#chat/room/5d8cfa2c3b36e84a1e47dff9
   // [params]; params[0] = resource, params[1] = id
   const [view, ...params] = window.location.hash.split('/');
+  const isValidSession = await Env.validSession();
 
-  var context:UserLib.Context;
-  var communityId:string;
-  var chatroomId:string;
-
-  const buildContext = async () => {
-    if (AuthLib.validSession()) {
-      var token = AuthLib.readToken();
-
-      if (!token || AuthLib.isExpired(token) || shouldRefreshContext) {
-        const tokenResponse = await AuthLib.getNewToken();
-        if (noErrors(tokenResponse)) {
-          AuthLib.saveToken(tokenResponse.token);
-        }
-      }
-      const contextResponse = await AuthLib.decodeToken(AuthLib.readToken());
-      if (noErrors(contextResponse)) {
-        context = contextResponse.context;
-        shouldRefreshContext = false;
-      }
-    }
-
-    switch (params[0]) {
-      case 'comm':
-        communityId = params[1];
-        break;
-      case 'room':
-        chatroomId = params[1];
-        break;
-    }
-
-    if (chatNsp && chatNsp.connected && !chatroomId) {
-      chatNsp.emit('leave');
-      chatNsp.removeAllListeners();
-      chatNsp.close();
-      chatNsp = null;
-    }
-    /* temp - for troubleshooting
-    if (AuthLib.isExpired(token)) {
-      alert('error, expired token')
-    }*/
-    //console.log('build context ', context)
-     //END temp
-
-    alertElement.innerHTML = '';
-    navbarElement.innerHTML = '';
-    tabsElement.innerHTML = '';
-    mainElement.innerHTML = '';
-    postElement.innerHTML = '';
+  if (view != '#login' && !isValidSession) {
+    return window.location.hash = '#login';
   }
 
-  await buildContext();
+  if (view != '#login' && !context) context = await Env.buildContext();
+  if (AuthLib.isExpired(context.token)) context = await Env.buildContext();
+
+  switch (params[0]) {
+    case 'comm':
+      context.communityId = params[1];
+      break;
+    case 'room':
+      context.chatroomId = params[1];
+      break;
+  }
+
+  if (chatNsp && chatNsp.connected) {
+    chatNsp.emit('leave');
+    context.chatroomId = null;
+    chatNsp.removeAllListeners();
+    chatNsp.close();
+    chatNsp = null;
+  }
+
   switch (view) {
     case '#admin':
       if (!context.admin) return window.location.hash = '#main';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.landing();      
       break;
     case '#admin-user':
       if (!context.admin) return window.location.hash = '#main';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.user();      
       break;
     case '#admin-collection':
       if (!context.admin) return window.location.hash = '#main';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.collection();      
       break;
     case '#admin-file':
       if (!context.admin) return window.location.hash = '#main';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.files();      
       break;
     case '#admin-notification':
       if (!context.admin) return window.location.hash = '#main';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       tabsElement.innerHTML = admin.tabs();
       mainElement.innerHTML = admin.notification();      
       break;
     case '#chat':
-      if (!AuthLib.validSession()) return window.location.hash = '#login';
+      //if (!AuthLib.validSession()) return window.location.hash = '#login';
 
       navbarElement.innerHTML = main.navbar({ name, context });
 
-      if (!chatroomId) {
-        const chatRoomResponse = await ChatLib.GetCommunityChatrooms();
+      if (!context.chatroomId) {
+        const chatRoomResponse = await ChatLib.GetCommunityChatrooms(context);
         // TODO - not done here.
-        const usersChatroomsResponse = {};
+        const usersChatroomsResponse = { chatrooms: {} };
+
         if (noErrors(chatRoomResponse) && noErrors(usersChatroomsResponse)) {
-          mainElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse });
-          mainElement.innerHTML += chat.privateIndex({ private: usersChatroomsResponse });
+          mainElement.innerHTML = chat.communityIndex({ communities: chatRoomResponse.chatrooms });
+          mainElement.innerHTML += chat.privateIndex({ private: usersChatroomsResponse.chatrooms });
         }
       } else {
-        const chatroomName = await ChatLib.GetCommunityName(chatroomId);
-        tabsElement.innerHTML = chat.chatRoomName({ name: chatroomName })
-        mainElement.innerHTML = chat.chatRoom();
+        const chatroomNameResponse = await ChatLib.GetCommunityName(context);
+        if (noErrors(chatroomNameResponse)) {  
+          tabsElement.innerHTML = chat.chatRoomName({ name: chatroomNameResponse.name })
+          mainElement.innerHTML = chat.chatRoom();
+        }
 
         const messageElement = <HTMLElement>document.getElementById('message');
         const inputMessage = <HTMLInputElement>document.getElementById('inputMessage');
@@ -247,7 +230,7 @@ const showView = async () => {
             console.log('TODO - notify user stop typing', username)
           });
 
-          chatNsp.emit('join', { username: context.username, chatroom: chatroomId });
+          chatNsp.emit('join', { username: context.username, chatroom: context.chatroomId });
         });
 
         inputMessage.addEventListener('keypress', (event: KeyboardEvent) => {
@@ -274,11 +257,11 @@ const showView = async () => {
       }
       break;
     case '#community':
-      if (!AuthLib.validSession()) return window.location.hash = '#login';
+      //if (!AuthLib.validSession()) return window.location.hash = '#login';
 
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
 
-      const communityResponse = await CommLib.getCommunity(communityId);
+      const communityResponse = await CommLib.getCommunity(context, context.communityId);
       if (noErrors(communityResponse)) {
         const community = communityResponse.community;
         tabsElement.innerHTML = comm.tabs(community)
@@ -346,13 +329,11 @@ const showView = async () => {
       });
       break;
     case '#logout':
-      AuthLib.logout();
-      context = null;
-      AuthLib.clearTokens()
+      Env.logout(context);
       window.location.hash = '#login';
       break;
     case '#main':
-      if (!AuthLib.validSession()) return window.location.hash = '#login';
+      //if (!AuthLib.validSession()) return window.location.hash = '#login';
 
       /**
        * Prepends post
@@ -390,12 +371,19 @@ const showView = async () => {
         .append(msgTime);
       };
 
-      navbarElement.innerHTML = main.navbar({name, context});
-      tabsElement.innerHTML = main.tabs({context});
-      mainElement.innerHTML = main.welcome({context});
+      navbarElement.innerHTML = main.navbar({ name, context });
+      tabsElement.innerHTML = main.tabs({ context });
+      mainElement.innerHTML = main.welcome({ context });
 
       var postContainer = <HTMLElement>document.getElementById('postContainer');
-      const posts = await PostLib.GetPosts(new Date().toISOString());
+      const postsResponse = await PostLib.GetPosts(context, new Date().toISOString());
+      if (postsResponse.error) {
+        return showAlert(postsResponse.error);
+      }
+      var posts:PostLib.Post[];
+      if (postsResponse.posts) {
+        posts = postsResponse.posts;
+      }
       posts.forEach(post => appendPost(post));
 
       const buttonPost = <HTMLButtonElement>document.getElementById('button-post');
@@ -408,8 +396,14 @@ const showView = async () => {
             // send the message to the server; success = append to top of view
             const message_body = (<HTMLInputElement>document.getElementById('message_body')).value;
             if (message_body.length) {
-              const result = await PostLib.CreatePost({message_body});
-              prependPost(result);
+              const newPostResponse = await PostLib.CreatePost(context, {message_body});
+              if (newPostResponse.error) {
+                showAlert(newPostResponse.error);
+                return;
+              }
+              if (newPostResponse.parsedBody) {
+                prependPost(newPostResponse.parsedBody);
+              }
             }
           });
         } else {
@@ -419,10 +413,13 @@ const showView = async () => {
 
       break;
     case '#profile':
-      navbarElement.innerHTML = main.navbar({name, context});
+      navbarElement.innerHTML = main.navbar({ name, context });
       
-      const resProfile = await UserLib.GetProfile();
-      if (!noErrors(resProfile)) break;
+      const resProfile = await UserLib.GetProfile(context);
+      if (!noErrors(resProfile) || !resProfile.profile) {
+        showAlert('Could not retrieve profile.')
+        break;
+      };
       const usersProfile = resProfile.profile;
       mainElement.innerHTML = profile.profile(usersProfile);
       const inputNewCommunity = <HTMLInputElement>document.getElementById('newCommunity');
@@ -436,15 +433,16 @@ const showView = async () => {
         const cellLeave = row.insertCell(1);
 
         cellName.innerHTML = `<a href="#community/${community._id}">${community.name}</a>`;
-        // Not sure how I did this before. Use a table event listener?
+        // TODO - Not sure how I did this before. Use a table event listener?
         cellLeave.innerHTML = `<button class="btn delete" data-id="${community._id}">Leave(TODO)</button>`;
       };
       context.community.forEach(item => {
         addCommunity(item);
       })
 
-      const resAvailComms = await CommLib.getAvailableCommunities();
+      const resAvailComms = await CommLib.getAvailableCommunities(context);
       if (noErrors(resAvailComms)) {
+        if (!resAvailComms.communities) return showAlert('Could not fetch a list of available communities.')
         const communities = resAvailComms.communities;
         communities.forEach(item => {
           const option = document.createElement('option');
@@ -483,12 +481,13 @@ const showView = async () => {
         }
 
         // TODO - add error handling and listen for response message. If message (pending membership) alert user.
-        const result = await CommLib.createJoinCommunity(body);
-        if (result.message) return showAlert(result.message, main.ALERT_SUCCESS);
-        if (noErrors(result)) {
+        const response = await CommLib.createJoinCommunity(context, body);
+        if (response.message) return showAlert(response.message, main.ALERT_SUCCESS);
+        if (noErrors(response)) {
+          if (!response.community) return showAlert('Server did not process request.')
           // append to current list
-          addCommunity(result.community);
-          shouldRefreshContext = true;
+          addCommunity(response.community);
+          Env.setRefreshContext(context);   
         }
         inputNewCommunity.value = '';
       };

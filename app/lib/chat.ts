@@ -1,4 +1,5 @@
 import {apiEndpoint} from '../../config.json';
+import {Context} from './context';
 import * as Auth from './authentication';
 import * as Http from './http';
 
@@ -13,18 +14,12 @@ export interface Community {
  *
  * @return  {Community} community[], list of communitites
  */
-export const GetCommunityChatrooms = async () => {
-  const token = Auth.readToken();
-  if (!token) return { error: 'Token not found' };
-
-  const headers = {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json; charset=UTF-8'
-  };
+export const GetCommunityChatrooms = async (context:Context) => {
+  const token = context.token;
+  if (!token) return { error: 'Token not found in page context.' };
 
   try {
-    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community`, new Headers(headers));
+    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community`, new Headers(Http.authHeader(token)));
     return res.parsedBody;
   } catch (err) {
     return err.parsedBody || { error: err };
@@ -37,18 +32,13 @@ export const GetCommunityChatrooms = async () => {
  * @params  {string} chatroomId
  * @return  {string} community name
  */
-export const GetCommunityName = async (chatroomId:string) => {
-  const token = Auth.readToken();
-  if (!token) return { error: 'Token not found' };
-
-  const headers = {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json; charset=UTF-8'
-  };
+export const GetCommunityName = async (context:Context) => {
+  const token = context.token;
+  const chatroomId = context.chatroomId;
+  if (!token || !chatroomId) return { error: 'Token or Chatroom ID not found in page context.' };
 
   try {
-    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community/name/${chatroomId}`, new Headers(headers));
+    const res = await Http.get<Community[]>(`${apiEndpoint}/chat/community/name/${chatroomId}`, new Headers(Http.authHeader(token)));
     return res.parsedBody;
   } catch (err) {
     return err.parsedBody || { error: err };

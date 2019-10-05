@@ -1,16 +1,8 @@
 import {apiEndpoint} from '../../config.json';
-import {Community} from './community'
+import {Context} from './context';
 import * as Auth from './authentication';
 import * as Http from './http';
 
-export interface Context {
-  admin: boolean;
-  community: Community[];
-  sessionId: string;
-  userId: string;
-  username: string;
-  error?: string;
-};
 
 export interface User {
   firstname: string;
@@ -41,9 +33,9 @@ export interface Profile {
  *
  * @return  {Profile} profile, a users profile
  */
-export const GetProfile = async () => {
-  const token = Auth.readToken();
-  if (!token) return { error: 'Token not found' };
+export const GetProfile = async (context:Context) => {
+  const token = context.token;
+  if (!token) return { error: 'Token not found in page context.' };
 
   const headers = {
     'Accept': 'application/json',

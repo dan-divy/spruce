@@ -24,6 +24,14 @@ const http = <T>(request: RequestInfo): Promise<IHttpResponse<T>> => {
   });
 };
 
+export const authHeader = (token:string) => {
+  return {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json; charset=UTF-8'
+  };
+};
+
 export const get = async <T>(
   path: string,
   headers: HeadersInit,

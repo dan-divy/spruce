@@ -31,14 +31,14 @@ module.exports = (conf) => {
       if (err) return res.status(500).json({ error: `Could not save post. Err: ${err}` });
 
       if (post.file) {
-        res.status(200).json(await Post.findById(post.id)
+        res.status(200).json({ post: await Post.findById(post.id)
           .populate({ path: 'user', select: '-_id username' })
           .populate({ path: 'file', select: '-_id systemFilename' })
-          );
+          });
       } else {
-        res.status(200).json(await Post.findById(post.id)
+        res.status(200).json({ post: await Post.findById(post.id)
           .populate({ path: 'user', select: '-_id username' })
-          );
+          });
       }
     });
   };
@@ -52,7 +52,7 @@ module.exports = (conf) => {
     Post
     .findById(postId)
     .then(post => {
-      res.status(200).json(post);
+      res.status(200).json({ post: post });
     });
   };
 
@@ -77,7 +77,7 @@ module.exports = (conf) => {
     .populate({ path: 'user', select: '-_id username' })
     .populate({ path: 'file', select: '-_id systemFilename' })
     .then(posts => {
-      res.status(200).json(posts);
+      res.status(200).json({ posts: posts });
     });
   };
 
@@ -99,14 +99,14 @@ module.exports = (conf) => {
         if (err) return res.status(500).json({ error: `Could not save post. Err: ${err}` });
 
         if (p.file) {
-          res.status(200).json(await Post.findById(p.id)
+          res.status(200).json({ post: await Post.findById(p.id)
             .populate({ path: 'user', select: '-_id username' })
             .populate({ path: 'file', select: '-_id systemFilename' })
-            );
+            });
         } else {
-          res.status(200).json(await Post.findById(p.id)
+          res.status(200).json({ post: await Post.findById(p.id)
             .populate({ path: 'user', select: '-_id username' })
-            );
+            });
         }
       })
     });

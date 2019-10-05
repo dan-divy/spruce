@@ -1,6 +1,7 @@
 var jwt = require('jsonwebtoken');
 
 import {apiEndpoint} from '../../config.json';
+import {Context} from './context';
 import {User} from './user';
 import * as Auth from './authentication';
 import * as Http from './http';
@@ -26,7 +27,7 @@ export interface Token {
  * @param  {string} type, optional, defaults to 'access'. 'access' and 'refresh' are acceptable 
  * @return  {string} Access token
  */
-export const readToken = async (type = ACCESS) => {
+export const readToken = (type = ACCESS) => {
   var token = '';
   if ((type.toLowerCase() != ACCESS) && (type.toLowerCase() != REFRESH)) return null;
   var name = `${type.toLowerCase()}=`;
@@ -43,12 +44,6 @@ export const readToken = async (type = ACCESS) => {
       token = c.substring(name.length, c.length);
     }
   }
-  /*
-  if (type.toLowerCase() == ACCESS && isExpired(token)) {
-    const tokenResponse = await getNewToken();
-    if (tokenResponse.token) return tokenResponse.token;
-    return null;
-  }*/
   return token;
 };
 
@@ -197,17 +192,12 @@ export const login = async (email: string, password: string) => {
  * Logout
  *
  */
-export const logout = async () => {
-  const token = Auth.readToken();
-
-  const headers = {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json; charset=UTF-8'
-  };
+export const logout = async (context:Context) => {
+  const token = context.token;
 
   try {
-    await Http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(headers));
+    await Http.get<void>(`${apiEndpoint}/auth/logout`, new Headers(Http.authHeader(token)));
+    clearTokens()
   } catch (err) {
     console.log('Logout error. ', err)
   }
@@ -218,18 +208,11 @@ export const logout = async () => {
  *
  * @return  {string} token Token
  */
-export const getNewToken = async () => {
-  const refreshToken = Auth.readToken(REFRESH);
-  if (!refreshToken) return { error: 'Token not found' };
-
-  const headers = {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${refreshToken}`,
-    'Content-Type': 'application/json; charset=UTF-8'
-  };
+export const getNewToken = async (refreshToken:string) => {
+  if (!refreshToken) return { error: 'Refresh token not found. Cannot retrieve a new access token.' };
 
   try {
-    const res = await Http.get<Token>(`${apiEndpoint}/auth/access`, new Headers(headers));
+    const res = await Http.get<Token>(`${apiEndpoint}/auth/access`, new Headers(Http.authHeader(refreshToken)));
     return res.parsedBody;
   } catch (err) {
     return err.parsedBody || { error: err };

@@ -34,8 +34,6 @@ module.exports = (conf) => {
     communityExist.chatroom = newChatRoom._id;
     communityExist.updated_by = userId;
     
-    debug('communityExists', communityExist)
-
     communityExist.save((err, community) => {
       if (err) return res.status(500).json({ error: 'Error saving community chatroom. ', err });
 
@@ -46,10 +44,10 @@ module.exports = (conf) => {
       newChatRoom.save(async (err, chatroom) => {
         if (err) return res.status(500).json({ error: 'Error creating chatroom. ', err });
 
-        res.status(200).json(await Chatroom.findById(chatroom._id)
+        res.status(200).json({ chatroom : await Chatroom.findById(chatroom._id)
           .populate({ path: 'community', select: 'name' })
           .populate({ path: 'manager', select: 'username' })
-        );
+        });
       });
     });
   };
@@ -69,7 +67,7 @@ module.exports = (conf) => {
     )
     .select('name chatroom');
     
-    res.status(200).json(communities);
+    res.status(200).json({ chatrooms: communities });
   };
 
   // Get a community name from the chatroomId
@@ -83,7 +81,7 @@ module.exports = (conf) => {
     .then(chatroom => {
       if (!chatroom) return res.status(400).json({ error: 'Community not found' });
       
-      res.status(200).json(chatroom.community.name);
+      res.status(200).json({ name: chatroom.community.name});
     });
   }
 
@@ -105,9 +103,9 @@ module.exports = (conf) => {
     newChatRoom.save(async (err, chatroom) => {
       if (err) return res.status(500).json({ error: 'Error creating chatroom. ', err });
 
-      res.status(200).json(await Chatroom.findById(chatroom._id)
-        .populate({ path: 'member', select: 'username' })
-      );
+      res.status(200).json({ chatroom: await Chatroom.findById(chatroom._id)
+              .populate({ path: 'member', select: 'username' })
+            });
     });
   };
 
