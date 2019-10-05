@@ -43,11 +43,61 @@ const showAlert = (message, type = main.ALERT_DANGER) => {
  * @param  {object} response A fetch response
  */
 const noErrors = (response) => {
+  console.log(response)
   if (response.error) {
     showAlert(response.error);
   }
   return !response.error;
 }
+
+/**
+ * Clear view
+ */
+const clearView = () => {
+  const alertElement = document.getElementById('app-alerts');
+  const navbarElement = document.getElementById('app-navbar');
+  const tabsElement = document.getElementById('app-tabs');
+  const mainElement = document.getElementById('app-main');  
+  const postElement = document.getElementById('app-post');
+
+  alertElement.innerHTML = '';
+  navbarElement.innerHTML = '';
+  tabsElement.innerHTML = '';
+  mainElement.innerHTML = '';
+  postElement.innerHTML = '';
+};
+
+/**
+ * Show the login view
+ */
+const showLogin = () => {
+  clearView();
+  const navbarElement = document.getElementById('app-navbar');
+  const mainElement = document.getElementById('app-main');  
+
+  mainElement.innerHTML = main.login();
+  const btnFacebook = <HTMLButtonElement>document.getElementById('button-facebook');
+  btnFacebook.onclick = () => AuthLib.socialSignon(AuthLib.FACEBOOK);
+  const btnGoogle = <HTMLButtonElement>document.getElementById('button-google');
+  btnGoogle.onclick = () => AuthLib.socialSignon(AuthLib.GOOGLE);
+  const btnTwitter = <HTMLButtonElement>document.getElementById('button-twitter');
+  btnTwitter.onclick = () => AuthLib.socialSignon(AuthLib.TWITTER);
+  const signinForm = document.forms['form-signin'];
+
+  signinForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const response = await AuthLib.login(
+        (<HTMLInputElement>document.getElementById('email')).value,
+        (<HTMLInputElement>document.getElementById('password')).value
+      );
+    if (noErrors(response) && response.token) {
+      AuthLib.saveToken(response.token, AuthLib.REFRESH);
+      window.location.hash = '#main';
+      window.location.reload();
+    }
+  });
+};
 
 /**
  * Use window location hash to show the specified view
@@ -68,14 +118,21 @@ const showView = async () => {
   // params ex. /#chat/room/5d8cfa2c3b36e84a1e47dff9
   // [params]; params[0] = resource, params[1] = id
   const [view, ...params] = window.location.hash.split('/');
-  const isValidSession = await Env.validSession();
 
-  if (view != '#login' && !isValidSession) {
-    return window.location.hash = '#login';
+  // check for valid session
+  if (await Env.invalidSession()) {
+    return showLogin();
   }
 
-  if (view != '#login' && !context) context = await Env.buildContext();
-  if (AuthLib.isExpired(context.token)) context = await Env.buildContext();
+  // handle null context
+  if (!context) {
+    context = await Env.buildContext();
+  };
+
+  // verify token is not expired
+  if (AuthLib.isExpired(context.token)) {
+    context = await Env.buildContext();
+  };
 
   switch (params[0]) {
     case 'comm':
@@ -131,8 +188,6 @@ const showView = async () => {
       mainElement.innerHTML = admin.notification();      
       break;
     case '#chat':
-      //if (!AuthLib.validSession()) return window.location.hash = '#login';
-
       navbarElement.innerHTML = main.navbar({ name, context });
 
       if (!context.chatroomId) {
@@ -257,8 +312,6 @@ const showView = async () => {
       }
       break;
     case '#community':
-      //if (!AuthLib.validSession()) return window.location.hash = '#login';
-
       navbarElement.innerHTML = main.navbar({ name, context });
 
       const communityResponse = await CommLib.getCommunity(context, context.communityId);
@@ -305,36 +358,13 @@ const showView = async () => {
       break;
     case '#login':
       if (AuthLib.validSession()) return window.location.hash = '#main';
-
-      mainElement.innerHTML = main.login();
-      const btnFacebook = <HTMLButtonElement>document.getElementById('button-facebook');
-      btnFacebook.onclick = () => AuthLib.socialSignon(AuthLib.FACEBOOK);
-      const btnGoogle = <HTMLButtonElement>document.getElementById('button-google');
-      btnGoogle.onclick = () => AuthLib.socialSignon(AuthLib.GOOGLE);
-      const btnTwitter = <HTMLButtonElement>document.getElementById('button-twitter');
-      btnTwitter.onclick = () => AuthLib.socialSignon(AuthLib.TWITTER);
-      const signinForm = document.forms['form-signin'];
-
-      signinForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const response = await AuthLib.login(
-            (<HTMLInputElement>document.getElementById('email')).value,
-            (<HTMLInputElement>document.getElementById('password')).value
-          );
-        if (noErrors(response) && response.token) {
-          AuthLib.saveToken(response.token, AuthLib.REFRESH);
-          window.location.hash = '#main';
-        }
-      });
+      showLogin();
       break;
     case '#logout':
       Env.logout(context);
-      window.location.hash = '#login';
+      showLogin();
       break;
     case '#main':
-      //if (!AuthLib.validSession()) return window.location.hash = '#login';
-
       /**
        * Prepends post
        * Adds a post to the main view
@@ -498,7 +528,7 @@ const showView = async () => {
   }
 };
 
-(() => {
+(async () => {
   document.body.innerHTML = main.main();
 
   window.addEventListener('hashchange', showView, false);

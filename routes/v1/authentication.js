@@ -15,6 +15,7 @@ module.exports = (conf, passport) => {
   const jwtMW = require(path.join(__dirname, pathToRoot, `middleware/${api}/jwt`))(conf);
 
   router.post('/', authController.login);
+  router.get('/', jwtMW.verifyRefreshToken, authController.revoked);
   router.get('/access', jwtMW.verifyRefreshToken, authController.access);
   router.get('/logout', jwtMW.verifyToken, authController.logout);
 

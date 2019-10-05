@@ -4,29 +4,25 @@ import {Community} from './community'
 
 export interface Context {
   // Token populated variables
-  admin?: boolean;
-  community?: Community[];
-  sessionId?: string;
-  userId?: string;
-  username?: string;
+  admin: boolean;
+  community: Community[];
+  sessionId: string;
+  userId: string;
+  username: string;
   // Non-token populated variable
-  error?: string;
-  token?: string;
-  shouldRefreshContext?: boolean;
-  communityId?:string;
-  chatroomId?:string;
+  error: string;
+  token: string;
+  shouldRefreshContext: boolean;
+  communityId:string;
+  chatroomId:string;
 };
 
-//export var context:Context;
-
-export const validSession = async () => {
-  // TODO check to see if refresh token is revoked
-  /*
-  if (AuthLib.isExpired(AuthLib.readToken(AuthLib.REFRESH)) || AuthLib.RevokedRefreshToken()) return false;
-  */
+export const invalidSession = async () => {
   const refreshToken = AuthLib.readToken(AuthLib.REFRESH);
 
-  return !AuthLib.isExpired(refreshToken);
+  if (AuthLib.isExpired(refreshToken)) return true;
+
+  return await AuthLib.RevokedRefreshToken(refreshToken);
 };
 
 export const buildContext = async () => {

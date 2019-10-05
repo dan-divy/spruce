@@ -20,7 +20,7 @@ var tokenSchema = new Schema({
     required: [true, 'Refresh Token is required!'],
     trim: true
   },
-  revoked: Boolean,
+  revoked: { type: Boolean, default: false },
   revoked_on: Date,
   expires_on: { type: Date, default: Date.now },
   created_at: { type: Date, default: Date.now }

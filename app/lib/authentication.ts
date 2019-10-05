@@ -16,6 +16,11 @@ export const FACEBOOK = 'facebook';
 export const GOOGLE = 'google';
 export const TWITTER = 'twitter';
 
+interface RevokedStatus {
+  revoked: boolean;
+  error: string;
+};
+
 export interface Token {
   token: string;
   error: string;
@@ -206,7 +211,7 @@ export const logout = async (context:Context) => {
 /**
  * Fetch a new access token
  *
- * @return  {string} token Token
+ * @return  {parsedBody} parsedBody.token|error
  */
 export const getNewToken = async (refreshToken:string) => {
   if (!refreshToken) return { error: 'Refresh token not found. Cannot retrieve a new access token.' };
@@ -216,6 +221,31 @@ export const getNewToken = async (refreshToken:string) => {
     return res.parsedBody;
   } catch (err) {
     return err.parsedBody || { error: err };
+  }
+};
+
+/**
+ * Check to see if session (refreshToken) is revoked
+ *
+ * @return  {boolean} revoked true/false
+ */
+export const RevokedRefreshToken = async (refreshToken:string) => {
+  if (!refreshToken) {
+    console.error('Refresh token not found. Cannot verify with server.');
+    return true;
+  }
+
+  try {
+    const res = await Http.get<RevokedStatus>(`${apiEndpoint}/auth`, new Headers(Http.authHeader(refreshToken)));
+
+    if (res.parsedBody && res.parsedBody.error) {
+      console.error('Error processing token with server.', res.parsedBody.error);
+      return true;
+    }
+    return res.parsedBody.revoked;
+  } catch (err) {
+    console.error('Error processing token with server.', err);
+    return true;
   }
 };
 

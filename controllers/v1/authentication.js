@@ -116,7 +116,7 @@ module.exports = (conf, passport) => {
     }
   };
 
-  // Loout
+  // Logout
   controller.logout = (req, res) => {
 
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -145,9 +145,32 @@ module.exports = (conf, passport) => {
         })
       });
     } else {
-      res.status(400).json({ error: 'Token required' });
+      res.status(400).json({ error: 'Bearer token not present.' });
     }
   };
+
+  // Revoked token
+  controller.revoked = (req, res) => {
+
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      const token = req.headers.authorization.split(' ')[1];
+      
+      if (!token) return res.status(200).json({ error: 'Refresh token not present.' });
+
+      Token
+      .findOne({ refreshToken: token })
+      .then(foundToken => {
+        if (!foundToken) {
+          return res.status(500).json({ error: 'Refresh token not found' });
+        }
+       
+        res.status(200).json({ revoked: foundToken.revoked });
+      });
+    } else {
+      res.status(400).json({ error: 'Bearer token not present.' });
+    }
+  };
+
 
   ////////// complete at
   // https://scotch.io/tutorials/easy-node-authentication-linking-all-accounts-together
