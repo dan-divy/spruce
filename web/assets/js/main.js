@@ -146,8 +146,8 @@ function startSocket(key) {
     let yesterday =
       visitors.length - 2 >= 0 ? visitors[visitors.length - 2].amount : 0;
     let now = visitors[visitors.length - 1].amount;
-    let percent = Math.round((yesterday / now) * 100);
     let increase = now - yesterday;
+    let percent = Math.round((increase / yesterday * 100));
     console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
