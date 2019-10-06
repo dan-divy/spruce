@@ -1,98 +1,42 @@
 {
-  "name": "spruce",
-  "version": "4.0.0",
+  "name": "spruce-app",
+  "version": "2.0.0",
+  "description": "spruce app to control and start spruce",
+  "main": "www",
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "mocha",
-    "postinstall": "opencollective-postinstall || true",
-    "app": "electron ./app/www"
+    "dev": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "apikeygen": "^1.1.0",
-    "array-tools": "1.8.6",
-    "bcrypt-nodejs": "0.0.3",
-    "chai": "^4.2.0",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "ejs": "~2.5.7",
-    "express": "~4.16.0",
-    "express-session": "^1.15.6",
-    "file-system": "^2.2.2",
-    "formidable": "^1.2.1",
-    "googleapis": "^39.2.0",
-    "guid": "0.0.12",
-    "http-errors": "~1.6.2",
-    "lodash": "^4.17.13",
-    "mocha": "^6.2.0",
-    "mongoose": "^5.3.13",
-    "morgan": "~1.9.0",
-    "mv": "2.1.1",
-    "newsapi": "^2.4.0",
-    "nodegit": "^0.26.2",
-    "npmi": "^4.0.0",
-    "opencollective-postinstall": "^2.0.2",
-    "passport": "^0.4.0",
-    "passport-google-oauth": "^2.0.0",
-    "ps-node": "^0.1.6",
-    "request": "2.88.0",
-    "socket.io": "^2.2.0",
-    "time-ago": "0.2.1",
-    "usage": "^0.7.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dan-divy/spruce.git"
   },
-  "devDependencies": {
-    "electron": "^6.0.9"
-  },
-  "description": "A social media platform written in Node.js (the 5th time)",
-  "main": "./bin/www",
-  "keywords": [
-    "social",
-    "media",
-    "nodejs",
-    "express",
-    "mongodb",
-    "mongoose",
-    "platform"
-  ],
   "build": {
     "publish": [
       {
         "provider": "github",
-        "owner": "DivySrivastava",
-        "repo": "spruce"
+        "owner": "dan-divy",
+        "repo": "spruce",
+        "publishAutoUpdate": true,
+        "releaseType": "prerelease"
       }
     ],
-    "appId": "com.divysrivastava.desktop.spruce",
-    "copyright": "Divy Srivastava 2019",
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "publish": "github",
-      "category": "public.app-category.social-networking"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ],
-      "publish": "github",
-      "publisherName": "DivySrivastava"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "zip",
-        "deb"
-      ],
-      "publish": "github",
-      "maintainer": "Divy Srivastava <dj.srivastava23@gmail.com>"
-    }
+    "artifactName": "${productName}-${os}-${version}.${ext}",
+    "appId": "com.github.dan-divy.Spruce"
   },
-  "author": "Dan-Divy <dj.srivastava23@gmail.com,dan@dancodes.online>",
+  "author": "dan-divy",
   "license": "MIT",
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/dan_divy"
+  "bugs": {
+    "url": "https://github.com/dan-divy/spruce/issues"
+  },
+  "homepage": "https://github.com/dan-divy/spruce#readme",
+  "dependencies": {
+    "file-system": "^2.2.2",
+    "nodegit": "^0.26.2",
+    "npmi": "^4.0.0",
+    "ps-node": "^0.1.6"
+  },
+  "devDependencies": {
+    "electron": "^6.0.11"
   }
 }
