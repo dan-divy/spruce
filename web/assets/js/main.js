@@ -398,7 +398,7 @@ function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
     $.notify("Stopping spruce...", "info");
-    backend.send("end_spruce");
+    socket.emit("shutdown");
     $.notify("Sent stop signal to spruce", "success");
     $("#connecting").fadeIn();
     localStorage.dev_key = "";
