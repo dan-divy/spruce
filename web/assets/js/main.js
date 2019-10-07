@@ -345,9 +345,11 @@ function startSocket(key) {
   });
 }
 let done;
-backend.on("progress-error", function(event, err) {
-  $("#download").fadeOut();
-  $("#connecting").fadeIn();
+backend.on("progress-error", function(event, err, fade) {
+  if(fade) {
+    $("#download").fadeOut();
+    $("#connecting").fadeIn();
+  }
   $.notify(err);
   console.error(obj);
 });
@@ -355,6 +357,7 @@ backend.on("progress", (event, obj) => {
   if (done) return;
   let percent = parseInt(obj.progress * 100) / 100 + "%";
   $("#download").fadeIn();
+  $("#connecting").fadeOut();
   $("#download-progress").attr(
     "aria-valuenow",
     Math.round(parseInt(obj.progress) * 100) / 100

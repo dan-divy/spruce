@@ -32,6 +32,7 @@
   "homepage": "https://github.com/dan-divy/spruce#readme",
   "dependencies": {
     "file-system": "^2.2.2",
+    "node-fetch": "^2.6.0",
     "nodegit": "^0.26.2",
     "npmi": "^4.0.0",
     "ps-node": "^0.1.6"
