@@ -65,6 +65,10 @@ sio.on("connection", function(socket) {
       socket.emit("ram", Math.round(result.memory * 0.000001));
     });
   });
+  socket.on("shutdown", function() {
+    if (!socket.authenticated) return;
+    return process.exit(0);
+  })
 });
 
 server.listen("4206");
