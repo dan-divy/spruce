@@ -13,6 +13,7 @@ export interface Context {
   error: string;
   token: string;
   shouldRefreshContext: boolean;
+  collectionId:string;
   communityId:string;
   chatroomId:string;
 };

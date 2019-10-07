@@ -66,7 +66,7 @@ export const tabs = Handlebars.compile(`
 export const postInput = Handlebars.compile(`
   <div id="postContainer" class="container">
     <div class="form-label-group">
-      <input type="text" id="message_body" class="form-control" placeholder="Post a new message" autofocus>
+      <input type="text" id="message_body" class="form-control" placeholder="Post a new message" autocomplete="off" autofocus>
       <label for="message_body">New post</label>
       <button id="button-send" class="btn btn-lg btn-primary btn-block text-uppercase" type="submit"><i class="fa fa-plus"></i></button>
     </div>

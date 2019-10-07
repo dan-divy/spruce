@@ -7,6 +7,7 @@ const pathToRoot = '../../';
 module.exports = (conf) => {
   if (!conf) throw Error("App configuration required");
 
+  const Collection = require(path.join(__dirname, pathToRoot, 'models/collection'));
   const Community = require(path.join(__dirname, pathToRoot, 'models/community'));
 
   const middleware = {};
@@ -42,21 +43,38 @@ module.exports = (conf) => {
 
   middleware.userIsMember = async (req, res, next) => {
     const userId = req.locals.userId;
+    const communityId = req.body.communityId || req.params.communityId || req.query.communityId || req.locals.communityId;
 
     if (!userId) return res.status(500).json({ error: `User ID was not parsed.`});
+    if (!communityId) return res.status(500).json({ error: `Community ID required.`});
+
+    var isMember = false;
 
     Community
-    .findOne(
-      // Query
-      { $or: [
-        { managers: userId },
-        { members: userId }
-      ]}
-    )
+    .findById(communityId)
     .then(community => {
-      if (!community) return res.status(400).json({ error: `Community name not found or user is not a member.` });
-      next();
+      community.managers.forEach(manager =>{
+        if (manager._id == userId) isMember = isMember || true;
+      })
+      community.members.forEach(member =>{
+        if (member._id == userId) isMember = isMember || true;
+      })
+
+      if (isMember) return next();
+      
+      res.status(400).json({ error: `Community not found or user is not a member.` });
     });
+  };
+
+  middleware.populateLocalCommunityIdFromCollectionId = async (req, res, next) => {
+    const collectionId = req.body.collectionId || req.params.collectionId || req.query.collectionId;
+    if (!collectionId) return res.status(500).json({ error: `Collection ID not found.`});
+
+    const result = await Collection.findById(collectionId).select('community');
+    if (!result.community) return res.status(500).json({ error: `Community ID not found for collection ${collectionId}.`});
+
+    req.locals.communityId = result.community;
+    next();
   };
 
   return middleware;

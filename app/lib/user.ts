@@ -37,14 +37,8 @@ export const GetProfile = async (context:Context) => {
   const token = context.token;
   if (!token) return { error: 'Token not found in page context.' };
 
-  const headers = {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json; charset=UTF-8'
-  };
-
   try {
-    const res = await Http.get<Profile>(`${apiEndpoint}/user/profile`, new Headers(headers));
+    const res = await Http.get<Profile>(`${apiEndpoint}/user/profile`, new Headers(Http.authHeader(token)));
     return res.parsedBody;
   } catch (err) {
     return err.parsedBody || { error: err };

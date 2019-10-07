@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+require('./community');
 require('./file');
 require('./user');
 
@@ -11,7 +12,13 @@ const collectionSchema = Schema({
     required: [true, 'Collection name is required!'],
     trim: true
   },
+  community : { 
+    type : Schema.Types.ObjectId,
+    required: [true, 'Community ID is required!'],
+    ref: 'community'
+  },
   files: [{ type : Schema.Types.ObjectId, ref: 'file' }],
+  relativePath: String,
   created_by : { 
     type : Schema.Types.ObjectId,
     required: [true, 'Collection creator user ID is required!'],

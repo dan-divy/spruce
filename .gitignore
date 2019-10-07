@@ -67,5 +67,6 @@ typings/
 .vscode/sftp.json
 # local uploads
 certs/
+dist/files/
 public/feeds/
 .history/

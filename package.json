@@ -17,6 +17,7 @@
     "bcrypt-nodejs": "0.0.3",
     "compression": "^1.7.4",
     "express": "~4.16.0",
+    "formidable": "^1.2.1",
     "helmet": "^3.21.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",

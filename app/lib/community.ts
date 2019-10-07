@@ -57,8 +57,9 @@ export const createJoinCommunity = async (context:Context, body:any) => {
  *
  * @return  {Community} community
  */
-export const getCommunity = async (context:Context, communityId:string) => {
+export const getCommunity = async (context:Context) => {
   const token = context.token;
+  const communityId = context.communityId;
   if (!token) return { error: 'Token not found in page context.' };
   if (!communityId) return { error: 'Missing community ID.' };
 

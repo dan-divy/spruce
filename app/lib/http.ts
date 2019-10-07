@@ -32,6 +32,13 @@ export const authHeader = (token:string) => {
   };
 };
 
+export const authFileHeader = (token:string) => {
+  return {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+};
+
 export const get = async <T>(
   path: string,
   headers: HeadersInit,
@@ -48,7 +55,16 @@ export const post = async <T>(
 ): Promise<IHttpResponse<T>> => {
   return await http<T>(new Request(path, args));
 };
- 
+
+export const postFile = async <T>(
+  path: string,
+  headers: HeadersInit,
+  body: any,
+  args: RequestInit = { method: "post", headers: headers, body: body }
+): Promise<IHttpResponse<T>> => {
+  return await http<T>(new Request(path, args));
+};
+
 export const put = async <T>(
   path: string,
   body: any,

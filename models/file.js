@@ -2,28 +2,38 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+require('./collection');
+require('./file');
+
 const fileSchema = Schema({
+  size: Number,
+  path: {
+    type: String,
+    required: [true, 'Full path and filename is required!'],
+    trim: true
+  },
+  name: {
+    type: String,
+    required: [true, 'Filename is required!'],
+    trim: true
+  },
+  type: {
+    type: String,
+    required: [true, 'MIME type is required!'],
+    trim: true
+  },
+  hash: String,
+  lastModifiedDate: String,
   user: {
     type: Schema.Types.ObjectId, 
     ref: 'user',
     required: [true, 'User ID is required!']
   },
-  filename: {
-    type: String,
-    required: [true, 'Filename is required!'],
-    trim: true
+  coll: {
+    type: Schema.Types.ObjectId, 
+    ref: 'collection',
+    required: [true, 'Collection ID is required!']
   },
-  systemFilename: {
-    type: String,
-    required: [true, 'Full path and filename is required!'],
-    trim: true
-  },
-  mimetype: {
-    type: String,
-    required: [true, 'MIME type is required!'],
-    trim: true
-  },
-  size: Number,
   privateFile: { type: Boolean, default: false },
   created_at : { type: Date, default: Date.now },
   updated_at : { type: Date, default: Date.now }

@@ -9,7 +9,9 @@ import Socket from 'socket.io-client';
 // Libraries
 import * as AuthLib from './lib/authentication';
 import * as ChatLib from './lib/chat';
+import * as CollLib from './lib/collections';
 import * as CommLib from './lib/community';
+import * as FileLib from './lib/file';
 import * as PostLib from './lib/post';
 import * as UserLib from './lib/user';
 import * as Env from './lib/context';
@@ -20,6 +22,7 @@ import * as Chat from './lib/socket/chat';
 // Templates
 import * as admin from './templates/admin';
 import * as chat from './templates/chat';
+import * as coll from './templates/collection';
 import * as comm from './templates/community';
 import * as main from './templates/main';
 import * as profile from './templates/profile';
@@ -43,7 +46,6 @@ const showAlert = (message, type = main.ALERT_DANGER) => {
  * @param  {object} response A fetch response
  */
 const noErrors = (response) => {
-  console.log(response)
   if (response.error) {
     showAlert(response.error);
   }
@@ -100,6 +102,44 @@ const showLogin = () => {
 };
 
 /**
+ * Show the registration view
+ */
+const showRegister = () => {
+  const mainElement = document.getElementById('app-main');  
+
+  mainElement.innerHTML = main.register();
+  const firstnameInput = <HTMLInputElement>document.getElementById('firstname');
+  const lastnameInput = <HTMLInputElement>document.getElementById('lastname');
+  const usernameInput = <HTMLInputElement>document.getElementById('username');
+  const emailnameInput = <HTMLInputElement>document.getElementById('email')
+  const passwordInput = <HTMLInputElement>document.getElementById('password');
+  const password2Input = <HTMLInputElement>document.getElementById('password2');
+
+  const registerForm = document.forms['form-register'];
+  registerForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (passwordInput.value != password2Input.value) {
+      showAlert('Passwords do not match.');
+      password2Input.focus();
+    } else {
+      const newUser:UserLib.User = {
+        firstname: firstnameInput.value,
+        lastname: lastnameInput.value,
+        username: usernameInput.value,
+        email: emailnameInput.value,
+        password: passwordInput.value
+      }
+      const response = await AuthLib.register(newUser);
+      if (noErrors(response) && response.token) {
+        AuthLib.saveToken(response.token, AuthLib.REFRESH);
+        window.location.hash = '#main';
+      }
+    }
+  });
+};
+
+/**
  * Use window location hash to show the specified view
  */
 const showView = async () => {
@@ -121,7 +161,11 @@ const showView = async () => {
 
   // check for valid session
   if (await Env.invalidSession()) {
-    return showLogin();
+    if (view.startsWith('#register')) {
+      return showRegister();
+    } else {
+      return showLogin();
+    }
   }
 
   // handle null context
@@ -135,6 +179,9 @@ const showView = async () => {
   };
 
   switch (params[0]) {
+    case 'coll':
+      context.collectionId = params[1];
+      break;
     case 'comm':
       context.communityId = params[1];
       break;
@@ -311,54 +358,112 @@ const showView = async () => {
         });
       }
       break;
+    case '#collection': 
+      navbarElement.innerHTML = main.navbar({ name, context });
+
+      const collectionResponse = await CollLib.GetCollection(context);
+      if (!noErrors(collectionResponse) || !collectionResponse.collection) break;
+
+      const collection = collectionResponse.collection;
+      
+      tabsElement.innerHTML = coll.tabs(collection)
+      mainElement.innerHTML = coll.filesContainer();
+
+      const divFiles = <HTMLDivElement>document.getElementById('files');
+
+      if (collection.files && collection.files.length) {
+        collection.files.forEach(file => {
+          if (file.type.startsWith('image')) {
+            divFiles.innerHTML += coll.filesImage(file);
+          } else {
+            divFiles.innerHTML += coll.files(file);
+          }
+        });
+      } else {
+        divFiles.innerHTML += 'Add some files!';
+      }
+
+      const inputUploadFiles = <HTMLInputElement>document.getElementById('inputUploadFiles');
+      const submitUploadFiles = <HTMLFormElement>document.getElementById('submitUploadFiles');
+      submitUploadFiles.addEventListener('click', async event => {
+        event.preventDefault();
+
+        if (!inputUploadFiles.files || !inputUploadFiles.files.length) {
+          return showAlert('Please choose one or more files to upload.');
+        }
+        const encrypt = 'false'; // TEST: encrypt != 'false'
+        const uploadResponse = await FileLib.UploadFilesToCollection(context, inputUploadFiles.files, encrypt);
+
+        if (noErrors(uploadResponse) && uploadResponse.files) {
+
+          const files = uploadResponse.files;
+
+          if (divFiles.innerHTML.length < 32) divFiles.innerHTML = '';
+          if (files && files.length) {
+            files.forEach(file => {
+
+              if (file.type.startsWith('image')) {
+                divFiles.innerHTML += coll.filesImage(file);
+              } else {
+                divFiles.innerHTML += coll.files(file);
+              }
+            });
+          }
+        }
+        if (uploadResponse.reject) showAlert(uploadResponse.reject, main.ALERT_INFO);
+        inputUploadFiles.value = '';
+      });
+
+
+      break;
     case '#community':
       navbarElement.innerHTML = main.navbar({ name, context });
 
-      const communityResponse = await CommLib.getCommunity(context, context.communityId);
-      if (noErrors(communityResponse)) {
-        const community = communityResponse.community;
-        tabsElement.innerHTML = comm.tabs(community)
-        mainElement.innerHTML = comm.collections(community.collections);
+      const communityResponse = await CommLib.getCommunity(context);
+      if (!noErrors(communityResponse) || !communityResponse.community) break;
+      
+      const community = communityResponse.community;
+
+      tabsElement.innerHTML = comm.tabs(community)
+      mainElement.innerHTML = comm.collectionContainer();
+
+      const divCollection = <HTMLDivElement>document.getElementById('collections');
+
+      if (community.collections.length) {
+        divCollection.innerHTML = '';
+        // add each collection to the view.
+        community.collections.forEach(collection => {
+          if (collection.files && collection.files.length) {
+            divCollection.innerHTML += comm.collection(collection);
+          } else {
+            divCollection.innerHTML += comm.collectionEmpty(collection);
+          }
+        })
       }
 
-      break;
-    case '#register':
-      if (AuthLib.validSession()) return window.location.hash = '#main';
+      const inputCreateColleciton = <HTMLInputElement>document.getElementById('newCollection');
+      const buttonCreateCollection = <HTMLButtonElement>document.getElementById('button-create-collection');
+      buttonCreateCollection.addEventListener('click', async event => {
+        if (!inputCreateColleciton.value) return showAlert('Enter the name of the new collection.');
 
-      mainElement.innerHTML = main.register();
-      const firstnameInput = <HTMLInputElement>document.getElementById('firstname');
-      const lastnameInput = <HTMLInputElement>document.getElementById('lastname');
-      const usernameInput = <HTMLInputElement>document.getElementById('username');
-      const emailnameInput = <HTMLInputElement>document.getElementById('email')
-      const passwordInput = <HTMLInputElement>document.getElementById('password');
-      const password2Input = <HTMLInputElement>document.getElementById('password2');
+        const body = {
+          name: inputCreateColleciton.value
+        };
+        const createResponse = await CollLib.CreateCollection(context, body);
 
-      const registerForm = document.forms['form-register'];
-      registerForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
+        if (noErrors(createResponse) && createResponse.collection) {
+          const collection = createResponse.collection;
 
-        if (passwordInput.value != password2Input.value) {
-          showAlert('Passwords do not match.');
-          password2Input.focus();
-        } else {
-          const newUser:UserLib.User = {
-            firstname: firstnameInput.value,
-            lastname: lastnameInput.value,
-            username: usernameInput.value,
-            email: emailnameInput.value,
-            password: passwordInput.value
+          if (divCollection.innerHTML.length < 32) divCollection.innerHTML = '';
+          if (collection.files && collection.files.length) {
+            divCollection.innerHTML += comm.collection(collection);
+          } else {
+            divCollection.innerHTML += comm.collectionEmpty(collection);
           }
-          const response = await AuthLib.register(newUser);
-          if (noErrors(response) && response.token) {
-            AuthLib.saveToken(response.token, AuthLib.REFRESH);
-            window.location.hash = '#main';
-          }
+          inputCreateColleciton.value = null;
         }
       });
-      break;
-    case '#login':
-      if (AuthLib.validSession()) return window.location.hash = '#main';
-      showLogin();
+
       break;
     case '#logout':
       Env.logout(context);
