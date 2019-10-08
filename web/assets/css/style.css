@@ -552,7 +552,8 @@ h1,h2,h3,h4,h5,h6,a,p,body,html,div,span,form,input {
 }
 a:hover,
 a {
-  text-decoration: none;
+  cursor: grab;
+  text-decoration: underline!important;
 }
 .margin-top-20 {
 	margin-top: 20px;

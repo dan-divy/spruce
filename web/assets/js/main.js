@@ -57,6 +57,7 @@ function startSocket(key) {
     config = conf;
     $("#password-div").fadeOut(function() {
       $("#main").fadeIn();
+      backend.send("check_update");
     });
   });
 
@@ -147,7 +148,7 @@ function startSocket(key) {
       visitors.length - 2 >= 0 ? visitors[visitors.length - 2].amount : 0;
     let now = visitors[visitors.length - 1].amount;
     let increase = now - yesterday;
-    let percent = Math.round((increase / yesterday * 100));
+    let percent = Math.round((increase / yesterday) * 100);
     console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
@@ -346,7 +347,7 @@ function startSocket(key) {
 }
 let done;
 backend.on("progress-error", function(event, err, fade) {
-  if(fade) {
+  if (fade) {
     $("#download").fadeOut();
     $("#connecting").fadeIn();
   }
@@ -375,6 +376,24 @@ backend.on("progress", (event, obj) => {
     $("#download").fadeOut();
     startSpruce();
   }
+});
+backend.on("update", function(e, yes) {
+  if (!yes) return;
+  $("#update-version").text(yes);
+  $("#update").fadeIn();
+  $("#update-btn").on("click", function() {
+    $("#update").html(
+      'Are you sure? <a id="update-yes">Yes</a>, <a id="update-no" style="margin-left:0">No</a>'
+    );
+    $("#update-yes").on("click", function() {
+      $("#update").fadeOut();
+      $("#main").fadeOut();
+      backend.send("run_update");
+    });
+    $("#update-no").on("click", function() {
+      $("#update").fadeOut();
+    });
+  });
 });
 
 function startSpruce() {

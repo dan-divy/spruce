@@ -172,7 +172,7 @@ function createWindow() {
       .then(res => res.json())
       .then(body => {
         if (body.version != version) {
-          mainWindow.webContents.send("update", true);
+          mainWindow.webContents.send("update", body.version);
         } else {
           mainWindow.webContents.send("update", false);
         }
