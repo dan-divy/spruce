@@ -1,1 +1,10 @@
 This is here for testing purposes
+    // "publish": [
+    //   {
+    //     "provider": "github",
+    //     "owner": "dan-divy",
+    //     "repo": "spruce",
+    //     "publishAutoUpdate": true,
+    //     "releaseType": "prerelease"
+    //   }
+    // ],

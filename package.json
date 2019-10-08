@@ -1,5 +1,5 @@
 {
-  "name": "spruce-app",
+  "name": "Spruce-app",
   "version": "2.0.0",
   "description": "spruce app to control and start spruce",
   "main": "www",
@@ -13,15 +13,6 @@
     "url": "git+https://github.com/dan-divy/spruce.git"
   },
   "build": {
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "dan-divy",
-        "repo": "spruce",
-        "publishAutoUpdate": true,
-        "releaseType": "prerelease"
-      }
-    ],
     "artifactName": "${productName}-${os}-${version}.${ext}",
     "appId": "com.github.dan-divy.Spruce"
   },
@@ -35,7 +26,7 @@
     "file-system": "^2.2.2",
     "node-fetch": "^2.6.0",
     "nodegit": "^0.26.2",
-    "npmi": "^4.0.0",
+    "npm": "^6.12.0",
     "ps-node": "^0.1.6"
   },
   "devDependencies": {

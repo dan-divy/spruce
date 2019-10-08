@@ -3,7 +3,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const nodeGit = require("nodegit");
 const fs = require("file-system");
-const npmi = require("npmi");
+const npm = require("npm");
 const fetch = require("node-fetch");
 const path = require("path");
 let mainWindow;
@@ -117,27 +117,31 @@ function createWindow() {
               path: pathJoin(__dirname + "/.spruce"), // installation path [default: '.']
               forceInstall: true
             };
-
-            npmi(options, function(err, result) {
-              if (err) {
-                return mainWindow.webContents.send(
-                  "progress-error",
-                  err.toString(),
-                  true
-                );
-              }
+            npm.load({
+              prefix: pathJoin(__dirname + "/.spruce")
+            }, function() {
               mainWindow.webContents.send("progress", {
                 name: "npm",
-                progress: 100,
-                done: true
+                progress: 50
               });
-            });
-            process.stdout.on("data", function(obj) {
-              console.log("CAUGHT: " + obj);
+              npm.commands.install(function(err, result) {
+                if (err) {
+                  return mainWindow.webContents.send(
+                    "progress-error",
+                    err.toString(),
+                    true
+                  );
+                }
+                mainWindow.webContents.send("progress", {
+                  name: "npm",
+                  progress: 100,
+                  done: true
+                });
+              })
             });
             mainWindow.webContents.send("progress", {
               name: "npm",
-              progress: 50
+              progress: 25
             });
           },1000)
         })
