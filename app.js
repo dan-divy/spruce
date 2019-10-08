@@ -38,7 +38,7 @@ app.sessionMiddleware = session(cooky);
 app.set("trust proxy", 1); // trust first proxy
 app.use(app.sessionMiddleware);
 app.use(logger('common', {
-  stream: fs.createWriteStream(__dirname.endsWith(".spruce") ? __dirname + '../data/out.log' : __dirname + "/out.log", {flags: 'a'})
+  stream: fs.createWriteStream(__dirname.endsWith(".spruce") ? __dirname + '/../data/out.log' : __dirname + "/out.log", {flags: 'a'})
 }));
 app.use(logger("tiny"));
 app.use(bodyParser.json());
