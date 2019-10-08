@@ -5,7 +5,8 @@
   "main": "www",
   "scripts": {
     "dev": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "ps-node": "^0.1.6"
   },
   "devDependencies": {
-    "electron": "^6.0.11"
+    "electron": "^6.0.11",
+    "electron-builder": "^21.2.0"
   }
 }
