@@ -409,6 +409,7 @@ function startSpruce() {
 
 function restartSpruce() {
   endSpruce(function() {
+    socket.destroy();
     startSpruce();
   });
 }
@@ -416,6 +417,7 @@ function restartSpruce() {
 function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
+    clearInterval(statsInt);
     $.notify("Stopping spruce...", "info");
     socket.emit("shutdown");
     $.notify("Sent stop signal to spruce", "success");
