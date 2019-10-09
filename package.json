@@ -1,18 +1,19 @@
 {
-  "name": "Spruce-app",
+  "name": "spruce-app",
   "version": "2.0.0",
   "description": "spruce app to control and start spruce",
   "main": "www",
   "scripts": {
     "dev": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-builder"
+    "build": "rm -rf dist; rm -rf .spruce; electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dan-divy/spruce.git"
   },
   "build": {
+    "productName": "Spruce App",
     "artifactName": "${productName}-${os}-${version}.${ext}",
     "appId": "com.github.dan-divy.Spruce"
   },
