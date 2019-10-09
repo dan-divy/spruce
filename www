@@ -40,7 +40,6 @@ function createWindow() {
   mainWindow.on("closed", function() {
     mainWindow = null;
   });
-  console.log(process.platform);
   ipcMain.on("start_spruce", function() {
     let available = true;
     try {
@@ -55,7 +54,7 @@ function createWindow() {
     //   }
     // }
     if (available) {
-      let { pid, stdout } = require("child_process").fork(
+      let proc = require("child_process").fork(
         pathJoin(__dirname + "/.spruce/bin/www"),
         ["--app"],
         {
@@ -63,6 +62,7 @@ function createWindow() {
           silent: true
         }
       );
+      let {pid, stdout, stderr} = proc;
       stdout.on("data", function(data) {
         data = data.toString();
         if (
@@ -74,8 +74,19 @@ function createWindow() {
             "key",
             data.split("Developer key: ")[1].split("\n")[0]
           );
+        } else {
+          console.log(data);
         }
       });
+      stderr.on("data", function(data) {
+        data = new Error(data);
+        console.error(data)
+        //console.error(data);
+        mainWindow.webContents.send("error", data.toString());
+      });
+      proc.on("exit", function(code) {
+        mainWindow.webContents.send("killed", code)
+      })
       console.log(pid);
     } else {
       try {

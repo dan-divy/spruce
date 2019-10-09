@@ -1,5 +1,5 @@
+console.log("Do not paste anything here unless told to by a developer of spruce. ")
 const backend = require("electron").ipcRenderer;
-const copyToClipboard = require("electron").clipboard.writeText;
 const shell = require("electron").shell;
 var config;
 var socket;
@@ -8,16 +8,16 @@ var forced;
 var graph = {};
 var statsInt;
 if (localStorage.dev_key) {
-  console.log(localStorage.dev_key);
+  console.log("Attempt Key: " + localStorage.dev_key);
   startSocket(localStorage.dev_key);
 } else {
   $("#connecting").fadeIn();
 }
 function startSocket(key) {
   if (connected) return;
-  console.log(key);
+  console.log("Connected: " + key);
   socket = io($("#host").val());
-  let i = setInterval(() => {
+  setTimeout(() => {
     if (connected || forced) return (forced = false);
     if (localStorage.dev_key) {
       localStorage.dev_key = "";
@@ -26,7 +26,6 @@ function startSocket(key) {
     } else {
       $.notify("Unable to connect after 7s");
     }
-    clearInterval(i);
     socket.disconnect() && socket.destroy();
     $("#connecting").fadeIn();
   }, 7000);
@@ -36,10 +35,6 @@ function startSocket(key) {
     else return;
     console.log(connecting);
     $.notify("Connected!", "success");
-    if (key) {
-      copyToClipboard(key);
-      $.notify("Password copied to clipboard", "info");
-    }
     $("#connecting").fadeOut(function(authenticated) {
       if (key) {
         return socket.emit("password", key);
@@ -66,7 +61,7 @@ function startSocket(key) {
     clearInterval(statsInt);
     $("#main").fadeOut();
     $("#connecting").fadeIn();
-    $.notify("Disconnected", "warning");
+    $.notify("Connection disconnected", "warning");
     connected = false;
   });
 
@@ -377,6 +372,18 @@ backend.on("progress", (event, obj) => {
     startSpruce();
   }
 });
+backend.on("error", function(e, err) {
+  console.error(err);
+  console.log(err.split("Error:").length > 2)
+  let error = err.split("Error:").length > 2 ? "Error: " + err.split("Error:")[2].split("\n")[0] : err;
+  error = error.length > 50 ? error.slice(0, 50) + "..." : error
+  $.notify(error)
+});
+backend.on("killed", function(e, code) {
+  $("#main").fadeOut();
+  $("#connecting").fadeIn();
+  $.notify("Spruce killed, kill code: " + code)
+});
 backend.on("update", function(e, yes) {
   if (!yes) return;
   $("#update-version").text(yes);
@@ -420,7 +427,6 @@ function endSpruce(cb) {
     clearInterval(statsInt);
     $.notify("Stopping spruce...", "info");
     socket.emit("shutdown");
-    $.notify("Sent stop signal to spruce", "success");
     $("#connecting").fadeIn();
     localStorage.dev_key = "";
     delete localStorage.dev_key;
