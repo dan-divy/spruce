@@ -27,7 +27,10 @@ module.exports = (conf) => {
     res.append('Encrypted', file.encrypted || 'false');
     //res.append('Content-Disposition', `inline; filename=${file.name}`);
     res.contentType(file.type);
-    fs.createReadStream(file.path).pipe(res);
+    fs.access(file.path, fs.constants.R_OK, err => {
+      if (err) return res.status(500).json({ error: 'File not found. Cannot retrieve file.' });
+      fs.createReadStream(file.path).pipe(res);
+    });
   };
 
    // Upload to collection
