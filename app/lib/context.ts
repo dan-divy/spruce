@@ -16,6 +16,7 @@ export interface Context {
   collectionId:string;
   communityId:string;
   chatroomId:string;
+  fileId:string;
 };
 
 export const invalidSession = async () => {

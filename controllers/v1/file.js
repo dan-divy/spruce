@@ -15,10 +15,36 @@ module.exports = (conf) => {
 
   const controller = {};
 
+  controller.getFile = async (req, res) => {
+    const fileId = req.params.fileId || req.query.fileId;
+    if (!fileId) return res.status(400).json({ error: 'File Id not present. Cannot retrieve file.' });
+
+    const file = await File.findById(fileId);
+    if (!file) return res.status(500).json({ error: 'File not found in database. Cannot retrieve file.' });
+
+    res.append('Content-Length', file.size);
+    res.append('File-Name', file.name);
+    res.append('Encrypted', file.encrypted || 'false');
+    res.contentType(file.type);
+    fs.createReadStream(file.path).pipe(res);
+/*
+    fs.readFile(file.path, (err, data) => {
+      if (err) return res.status(500).json({ error: `File could not be read from the file system. Cannot retrieve file. Err: ${err}` });
+
+      res.append('Encrypted', file.encrypted || 'false');
+      res.append('Content-Length', file.size);
+      res.contentType(file.type);
+      return res.status(200).send(data);
+    });*/
+  };
+
    // Upload to collection
   controller.uploadToCollection = async (req, res) => {
     const userId = req.locals.userId;
     const collectionId = req.params.collectionId || req.query.collectionId;
+
+    if (!userId) return res.status(500).json({ error: 'User Id not parsed. Cannot upload file(s)' });
+    if (!collectionId) return res.status(500).json({ error: 'Collection Id not present. Cannot upload file(s)' });
 
     const collection = await Collection.findById(collectionId).populate({ path: 'community', select: 'managers members'});
 
@@ -162,5 +188,4 @@ const evaluateUploadToCollection = async (req, res, name, collection, uploadDir)
     debug('aborted')
 
   });
-
 };

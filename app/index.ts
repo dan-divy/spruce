@@ -140,6 +140,61 @@ const showRegister = () => {
 };
 
 /**
+ * Show a file
+ */
+//const showFile = (blob:Blob, filename: string, type:string) => {
+const showFile = (blob, filename: string, fileType:string) => {
+  const newBlob = new Blob([blob], { type: fileType });
+
+  // Handle IE
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  }
+
+  // All other browsers
+  const url = URL.createObjectURL(newBlob);
+
+  const mainElement = document.getElementById('app-main');
+
+  //document.body.innerHTML
+
+  //console.log(url)
+
+  //img.src = data
+  /*if (fileType.startsWith('image')) {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = filename;
+    img.id = filename;
+    document.body.replaceWith(img);
+
+  } else {
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+  }*/
+
+/*
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+*/
+  var img = document.createElement('img');
+  img.src = url;
+  document.body.replaceWith(img);
+
+
+  // change this from a link to an image 
+  setTimeout(function(){
+    // For Firefox it is necessary to delay revoking the ObjectURL
+    window.URL.revokeObjectURL(url);
+  }, 100);
+};
+
+/**
  * Use window location hash to show the specified view
  */
 const showView = async () => {
@@ -149,7 +204,7 @@ const showView = async () => {
   const mainElement = document.getElementById('app-main');  
   const postElement = document.getElementById('app-post');
 
-  //alertElement.innerHTML = '';
+  alertElement.innerHTML = '';
   navbarElement.innerHTML = '';
   tabsElement.innerHTML = '';
   mainElement.innerHTML = '';
@@ -178,6 +233,7 @@ const showView = async () => {
     context = await Env.buildContext();
   };
 
+  // parse params
   switch (params[0]) {
     case 'coll':
       context.collectionId = params[1];
@@ -187,6 +243,10 @@ const showView = async () => {
       break;
     case 'room':
       context.chatroomId = params[1];
+      break;
+    case 'file':
+      context.collectionId = params[1];
+      context.fileId = params[2];
       break;
   }
 
@@ -360,23 +420,18 @@ const showView = async () => {
       break;
     case '#collection': 
       navbarElement.innerHTML = main.navbar({ name, context });
-
       const collectionResponse = await CollLib.GetCollection(context);
       if (!noErrors(collectionResponse) || !collectionResponse.collection) break;
-
       const collection = collectionResponse.collection;
-      
       tabsElement.innerHTML = coll.tabs(collection)
       mainElement.innerHTML = coll.filesContainer();
-
       const divFiles = <HTMLDivElement>document.getElementById('files');
-
       if (collection.files && collection.files.length) {
         collection.files.forEach(file => {
           if (file.type.startsWith('image')) {
-            divFiles.innerHTML += coll.filesImage(file);
+            divFiles.innerHTML += coll.filesImage({context, file});
           } else {
-            divFiles.innerHTML += coll.files(file);
+            divFiles.innerHTML += coll.files({context, file});
           }
         });
       } else {
@@ -387,25 +442,21 @@ const showView = async () => {
       const submitUploadFiles = <HTMLFormElement>document.getElementById('submitUploadFiles');
       submitUploadFiles.addEventListener('click', async event => {
         event.preventDefault();
-
         if (!inputUploadFiles.files || !inputUploadFiles.files.length) {
           return showAlert('Please choose one or more files to upload.');
         }
+
         const encrypt = 'false'; // TEST: encrypt != 'false'
         const uploadResponse = await FileLib.UploadFilesToCollection(context, inputUploadFiles.files, encrypt);
-
         if (noErrors(uploadResponse) && uploadResponse.files) {
-
           const files = uploadResponse.files;
-
           if (divFiles.innerHTML.length < 32) divFiles.innerHTML = '';
           if (files && files.length) {
             files.forEach(file => {
-
               if (file.type.startsWith('image')) {
-                divFiles.innerHTML += coll.filesImage(file);
+                divFiles.innerHTML += coll.filesImage({context, file});
               } else {
-                divFiles.innerHTML += coll.files(file);
+                divFiles.innerHTML += coll.files({context, file});
               }
             });
           }
@@ -413,8 +464,6 @@ const showView = async () => {
         if (uploadResponse.reject) showAlert(uploadResponse.reject, main.ALERT_INFO);
         inputUploadFiles.value = '';
       });
-
-
       break;
     case '#community':
       navbarElement.innerHTML = main.navbar({ name, context });
@@ -464,6 +513,24 @@ const showView = async () => {
         }
       });
 
+      break;
+    case '#file': 
+      var fileName:string;
+      var fileType:string;
+
+      var fileRes = FileLib.GetFile(context)
+
+      fileRes.then(response => {
+        if (response && noErrors(response)) {
+          fileName = response.fileName;
+          fileType = response.fileType;
+
+          showFile(response.blob(), fileName, fileType);
+        }
+      })
+      .catch(err => {
+        showAlert(err.message);
+      });
       break;
     case '#logout':
       Env.logout(context);

@@ -172,3 +172,7 @@ export const welcome = Handlebars.compile(`
   <div id="postContainer" class="container">
   </div>
 `);
+
+export const fileImage = Handlebars.compile(`
+  <img src="{{fileResponse}}" id="target">
+`);

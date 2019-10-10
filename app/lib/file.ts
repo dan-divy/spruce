@@ -8,12 +8,15 @@ interface File {
   _id: string;
   name: string;
   type: string;
-}
+};
 
-export interface FileResponse {
-  files: File[];
-  message: string;
-  errpr: string;
+export interface FileResponse extends Response {
+  error?: string;
+  encrypted?: boolean;
+  fileName?: string;
+  fileType?: string;
+  length?: number;
+  parsedBody?: {};
 };
 
 /**
@@ -44,4 +47,57 @@ export const UploadFilesToCollection = async (context:Context, files:FileList, e
     return err.parsedBody || { error: err };
   }
   
+};
+
+/**
+ * Get a file
+ *
+ * @param   {Context} context, page context variable
+ * @return  {FileResponse} File request response
+ */
+export const GetFile = async (context:Context) => {
+  const token = context.token;
+  const collectionId = context.collectionId;
+  const fileId = context.fileId;
+
+  let response:FileResponse;
+
+  if (!token || !collectionId) {
+    response.error = 'Token not found in page context.';
+    return response;
+  }
+  if (!collectionId || !fileId) {
+    response.error = 'Collection ID and/or file ID in page context.';
+    return response;
+  }
+
+  const path = `${apiEndpoint}/file/${collectionId}/${fileId}`;
+  const headers = new Headers(Http.authMixHeader(token));
+  const args = { method: "get", headers: headers };
+
+  return new Promise<FileResponse>((resolve, reject) => {
+    fetch(new Request(path, args))
+    .then(res => {
+      response = res;
+      response.fileName = response.headers.get('File-Name');
+      response.length = Number(response.headers.get('Content-Length'));
+      response.fileType = response.headers.get('Content-Type');
+      
+      if (response.ok) {
+        if (response.fileType == 'application/json') {
+          const parsedBody = res.json();
+          response.parsedBody = parsedBody;
+          resolve(response);
+        }
+
+        if (!response.headers.get('Encrypted')) {
+          response.encrypted = false;
+        } else {
+          response.encrypted = response.headers.get('Encrypted') != 'false';
+        }
+        resolve(response);
+      }
+      reject(response);
+    });
+  });
 };

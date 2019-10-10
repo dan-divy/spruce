@@ -15,6 +15,15 @@ module.exports = (conf) => {
   const commMW = require(path.join(__dirname, pathToRoot, `middleware/${api}/community`))(conf);
   const jwtMW = require(path.join(__dirname, pathToRoot, `middleware/${api}/jwt`))(conf);
 
+  // Get a file from a collection
+  router.get('/:collectionId/:fileId',
+    // Middleware callse
+    jwtMW.verifyToken, 
+    commMW.populateLocalCommunityIdFromCollectionId, 
+    commMW.userIsMember,
+    // Controller
+    fileController.getFile);
+    
   // Upload files to a collection
   router.post('/collection/:collectionId', 
     // Middleware callse

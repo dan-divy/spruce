@@ -53,13 +53,14 @@ module.exports = (conf) => {
     Community
     .findById(communityId)
     .then(community => {
+      if (!community) return res.status(500).json({ error: `Community not found.`});
+
       community.managers.forEach(manager =>{
         if (manager._id == userId) isMember = isMember || true;
       })
       community.members.forEach(member =>{
         if (member._id == userId) isMember = isMember || true;
       })
-
       if (isMember) return next();
       
       res.status(400).json({ error: `Community not found or user is not a member.` });
@@ -71,7 +72,7 @@ module.exports = (conf) => {
     if (!collectionId) return res.status(500).json({ error: `Collection ID not found.`});
 
     const result = await Collection.findById(collectionId).select('community');
-    if (!result.community) return res.status(500).json({ error: `Community ID not found for collection ${collectionId}.`});
+    if (!result || !result.community) return res.status(500).json({ error: `Community ID not found for collection ${collectionId}.`});
 
     req.locals.communityId = result.community;
     next();

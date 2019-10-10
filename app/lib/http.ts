@@ -1,6 +1,6 @@
 interface IHttpResponse<T> extends Response {
   parsedBody?: T;
-}
+};
 
 const http = <T>(request: RequestInfo): Promise<IHttpResponse<T>> => {
   return new Promise((resolve, reject) => {
@@ -19,6 +19,7 @@ const http = <T>(request: RequestInfo): Promise<IHttpResponse<T>> => {
         }
       })
       .catch(err => {
+        console.log('error')
         reject(err);
       });
   });
@@ -36,6 +37,13 @@ export const authFileHeader = (token:string) => {
   return {
     'Accept': 'application/json',
     'Authorization': `Bearer ${token}`
+  };
+};
+
+export const authMixHeader = (token:string) => {
+  return {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json; charset=UTF-8'    
   };
 };
 
