@@ -17,3 +17,7 @@ export const files = Handlebars.compile(`
     TODO
   </div> <!-- container.// -->
 `);
+
+export const body_image = Handlebars.compile(`
+  <img id='image' alt="{{filename}}">
+`);

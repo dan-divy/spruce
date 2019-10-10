@@ -56,26 +56,25 @@ export const UploadFilesToCollection = async (context:Context, files:FileList, e
  * @return  {FileResponse} File request response
  */
 export const GetFile = async (context:Context) => {
-  const token = context.token;
-  const collectionId = context.collectionId;
-  const fileId = context.fileId;
-
-  let response:FileResponse;
-
-  if (!token || !collectionId) {
-    response.error = 'Token not found in page context.';
-    return response;
-  }
-  if (!collectionId || !fileId) {
-    response.error = 'Collection ID and/or file ID in page context.';
-    return response;
-  }
-
-  const path = `${apiEndpoint}/file/${collectionId}/${fileId}`;
-  const headers = new Headers(Http.authMixHeader(token));
-  const args = { method: "get", headers: headers };
-
   return new Promise<FileResponse>((resolve, reject) => {
+    const token = context.token;
+    const collectionId = context.collectionId;
+    const fileId = context.fileId;
+
+    let response:FileResponse;
+
+    if (!token || !collectionId) {
+      response.error = 'Token not found in page context.';
+      reject(response);
+    }
+    if (!collectionId || !fileId) {
+      response.error = 'Collection ID and/or file ID in page context.';
+      reject(response);
+    }
+
+    const path = `${apiEndpoint}/file/${collectionId}/${fileId}`;
+    const headers = new Headers(Http.authMixHeader(token));
+    const args = { method: "get", headers: headers };
     fetch(new Request(path, args))
     .then(res => {
       response = res;

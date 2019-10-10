@@ -43,7 +43,7 @@ export const authFileHeader = (token:string) => {
 export const authMixHeader = (token:string) => {
   return {
     'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json; charset=UTF-8'    
+    'Content-Type': 'application/json; charset=UTF-8'
   };
 };
 

@@ -25,17 +25,9 @@ module.exports = (conf) => {
     res.append('Content-Length', file.size);
     res.append('File-Name', file.name);
     res.append('Encrypted', file.encrypted || 'false');
+    //res.append('Content-Disposition', `inline; filename=${file.name}`);
     res.contentType(file.type);
     fs.createReadStream(file.path).pipe(res);
-/*
-    fs.readFile(file.path, (err, data) => {
-      if (err) return res.status(500).json({ error: `File could not be read from the file system. Cannot retrieve file. Err: ${err}` });
-
-      res.append('Encrypted', file.encrypted || 'false');
-      res.append('Content-Length', file.size);
-      res.contentType(file.type);
-      return res.status(200).send(data);
-    });*/
   };
 
    // Upload to collection

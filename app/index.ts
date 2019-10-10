@@ -24,6 +24,7 @@ import * as admin from './templates/admin';
 import * as chat from './templates/chat';
 import * as coll from './templates/collection';
 import * as comm from './templates/community';
+import * as file from './templates/file';
 import * as main from './templates/main';
 import * as profile from './templates/profile';
 
@@ -143,55 +144,31 @@ const showRegister = () => {
  * Show a file
  */
 //const showFile = (blob:Blob, filename: string, type:string) => {
-const showFile = (blob, filename: string, fileType:string) => {
+const showFile = (blob, filename: string, fileType:string) => {  
   const newBlob = new Blob([blob], { type: fileType });
-
   // Handle IE
   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(newBlob);
+    window.navigator.msSaveOrOpenBlob(newBlob, filename);
     return;
   }
 
   // All other browsers
-  const url = URL.createObjectURL(newBlob);
-
-  const mainElement = document.getElementById('app-main');
-
-  //document.body.innerHTML
-
-  //console.log(url)
-
-  //img.src = data
-  /*if (fileType.startsWith('image')) {
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = filename;
-    img.id = filename;
-    document.body.replaceWith(img);
-
-  } else {
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-  }*/
-
-/*
-  var link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-*/
-  var img = document.createElement('img');
-  img.src = url;
-  document.body.replaceWith(img);
-
-
-  // change this from a link to an image 
-  setTimeout(function(){
-    // For Firefox it is necessary to delay revoking the ObjectURL
+  const url = window.webkitURL.createObjectURL(newBlob);
+  window.location.replace(url);
+  setTimeout(() => {
     window.URL.revokeObjectURL(url);
   }, 100);
+
+  /*working...
+    const url = URL.createObjectURL(newBlob);
+    window.location.href = url;
+
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = filename;
+    a.click();
+  */  
 };
 
 /**
@@ -518,14 +495,16 @@ const showView = async () => {
       var fileName:string;
       var fileType:string;
 
-      var fileRes = FileLib.GetFile(context)
+      const fileRes = FileLib.GetFile(context)
 
       fileRes.then(response => {
         if (response && noErrors(response)) {
           fileName = response.fileName;
           fileType = response.fileType;
 
-          showFile(response.blob(), fileName, fileType);
+          response.blob().then(blob => {
+            showFile(blob, fileName, fileType);
+          })
         }
       })
       .catch(err => {
