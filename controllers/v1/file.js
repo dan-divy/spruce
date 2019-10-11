@@ -22,13 +22,14 @@ module.exports = (conf) => {
     const file = await File.findById(fileId);
     if (!file) return res.status(500).json({ error: 'File not found in database. Cannot retrieve file.' });
 
-    res.append('Content-Length', file.size);
-    res.append('File-Name', file.name);
-    res.append('Encrypted', file.encrypted || 'false');
-    //res.append('Content-Disposition', `inline; filename=${file.name}`);
-    res.contentType(file.type);
     fs.access(file.path, fs.constants.R_OK, err => {
       if (err) return res.status(500).json({ error: 'File not found. Cannot retrieve file.' });
+
+      res.append('Content-Length', file.size);
+      res.append('File-Name', file.name);
+      res.append('Encrypted', file.encrypted || 'false');
+      //res.append('Content-Disposition', `inline; filename=${file.name}`);
+      res.contentType(file.type);
       fs.createReadStream(file.path).pipe(res);
     });
   };

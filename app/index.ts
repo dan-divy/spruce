@@ -47,6 +47,7 @@ const showAlert = (message, type = main.ALERT_DANGER) => {
  * @param  {object} response A fetch response
  */
 const noErrors = (response) => {
+  if (!response) return false;
   if (response.error) {
     showAlert(response.error);
   }
@@ -143,7 +144,6 @@ const showRegister = () => {
 /**
  * Show a file
  */
-//const showFile = (blob:Blob, filename: string, type:string) => {
 const showFile = (blob, filename: string, fileType:string) => {  
   const newBlob = new Blob([blob], { type: fileType });
   // Handle IE
@@ -158,17 +158,6 @@ const showFile = (blob, filename: string, fileType:string) => {
   setTimeout(() => {
     window.URL.revokeObjectURL(url);
   }, 100);
-
-  /*working...
-    const url = URL.createObjectURL(newBlob);
-    window.location.href = url;
-
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.href = url;
-    a.download = filename;
-    a.click();
-  */  
 };
 
 /**
@@ -449,10 +438,8 @@ const showView = async () => {
       if (!noErrors(communityResponse) || !communityResponse.community) break;
       
       const community = communityResponse.community;
-
       tabsElement.innerHTML = comm.tabs(community)
       mainElement.innerHTML = comm.collectionContainer();
-
       const divCollection = <HTMLDivElement>document.getElementById('collections');
 
       if (community.collections.length) {
@@ -476,7 +463,6 @@ const showView = async () => {
           name: inputCreateColleciton.value
         };
         const createResponse = await CollLib.CreateCollection(context, body);
-
         if (noErrors(createResponse) && createResponse.collection) {
           const collection = createResponse.collection;
 
@@ -491,14 +477,15 @@ const showView = async () => {
       });
 
       break;
-    case '#file': 
+    case '#file':
+      navbarElement.innerHTML = main.navbar({ name, context });
       var fileName:string;
       var fileType:string;
 
       const fileRes = FileLib.GetFile(context)
 
       fileRes.then(response => {
-        if (response && noErrors(response)) {
+        if (noErrors(response)) {
           fileName = response.fileName;
           fileType = response.fileType;
 
@@ -507,8 +494,11 @@ const showView = async () => {
           })
         }
       })
-      .catch(err => {
-        showAlert(err.message);
+      .catch(async err => {
+        const resonse = await err.json();
+        if (noErrors(resonse)) {
+          showAlert("Could not retrieve file.");
+        }
       });
       break;
     case '#logout':
@@ -558,13 +548,11 @@ const showView = async () => {
 
       var postContainer = <HTMLElement>document.getElementById('postContainer');
       const postsResponse = await PostLib.GetPosts(context, new Date().toISOString());
-      if (postsResponse.error) {
-        return showAlert(postsResponse.error);
-      }
+      if (!noErrors(postsResponse)) break;
+      if (!postsResponse.posts) break;
+
       var posts:PostLib.Post[];
-      if (postsResponse.posts) {
-        posts = postsResponse.posts;
-      }
+      posts = postsResponse.posts;
       posts.forEach(post => appendPost(post));
 
       const buttonPost = <HTMLButtonElement>document.getElementById('button-post');
@@ -578,13 +566,9 @@ const showView = async () => {
             const message_body = (<HTMLInputElement>document.getElementById('message_body')).value;
             if (message_body.length) {
               const newPostResponse = await PostLib.CreatePost(context, {message_body});
-              if (newPostResponse.error) {
-                showAlert(newPostResponse.error);
-                return;
-              }
-              if (newPostResponse.parsedBody) {
-                prependPost(newPostResponse.parsedBody);
-              }
+              if (noErrors(newPostResponse && !newPostResponse.parsedBody)) return;
+
+              prependPost(newPostResponse.parsedBody);
             }
           });
         } else {
@@ -597,10 +581,8 @@ const showView = async () => {
       navbarElement.innerHTML = main.navbar({ name, context });
       
       const resProfile = await UserLib.GetProfile(context);
-      if (!noErrors(resProfile) || !resProfile.profile) {
-        showAlert('Could not retrieve profile.')
-        break;
-      };
+      if (!noErrors(resProfile) || !resProfile.profile) break;
+
       const usersProfile = resProfile.profile;
       mainElement.innerHTML = profile.profile(usersProfile);
       const inputNewCommunity = <HTMLInputElement>document.getElementById('newCommunity');
@@ -622,8 +604,7 @@ const showView = async () => {
       })
 
       const resAvailComms = await CommLib.getAvailableCommunities(context);
-      if (noErrors(resAvailComms)) {
-        if (!resAvailComms.communities) return showAlert('Could not fetch a list of available communities.')
+      if (noErrors(resAvailComms) && resAvailComms.communities) {
         const communities = resAvailComms.communities;
         communities.forEach(item => {
           const option = document.createElement('option');
@@ -663,13 +644,13 @@ const showView = async () => {
 
         // TODO - add error handling and listen for response message. If message (pending membership) alert user.
         const response = await CommLib.createJoinCommunity(context, body);
-        if (response.message) return showAlert(response.message, main.ALERT_SUCCESS);
         if (noErrors(response)) {
           if (!response.community) return showAlert('Server did not process request.')
           // append to current list
           addCommunity(response.community);
           Env.setRefreshContext(context);   
         }
+        if (response.message) showAlert(response.message, main.ALERT_SUCCESS);
         inputNewCommunity.value = '';
       };
       break;
