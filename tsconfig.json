@@ -8,6 +8,9 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   }
 }

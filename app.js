@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const path = require('path');
 
+const wconf = require('./webpack.config.js');
 const nconf = require('nconf');
 nconf
   .argv()
@@ -71,7 +72,7 @@ if (isDev) {
   const webpackConfig = require('./webpack.config.js');
 
   app.use(webpackMiddleware(webpack(webpackConfig), {
-    publicPath: '/',
+    publicPath: wconf.output.publicPath,
     stats: { colors: true }
   }));
   app.use(express.static('static'));
@@ -97,10 +98,7 @@ if (!api) {
 app.set('api', api);
 app.set('conf', nconf.get());
 
-app.get('/api/version', (req, res) => res.status(200).send({ 
-  apiVersion: api, 
-  apiEndpoint: nconf.get('apiEndpoint') 
-}));
+app.get('/api/version', (req, res) => res.status(200).send({ apiVersion: api }));
 app.use(`/api/${api}/auth/`, require(`./routes/${api}/authentication`)(nconf.get(), passport));
 app.use(`/api/${api}/community/`, require(`./routes/${api}/community`)(nconf.get()));
 app.use(`/api/${api}/collection/`, require(`./routes/${api}/collection`)(nconf.get()));

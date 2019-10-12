@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf ./dist/* && cp -r ./static/* ./dist/ && webpack --config webpack.config.js",
-    "dev": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './sessions' --ignore './app' bin/www",
+    "dev": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './src' bin/www",
     "start": "NODE_ENV=production node ./bin/www",
     "test": "mocha && node ./bin/www"
   },
@@ -29,6 +29,7 @@
     "socketio-auth": "^0.1.1"
   },
   "devDependencies": {
+    "@types/bootstrap": "^4.3.1",
     "@types/jquery": "^3.3.31",
     "@types/jsonwebtoken": "^8.3.4",
     "autoprefixer": "^9.6.1",

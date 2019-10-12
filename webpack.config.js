@@ -10,11 +10,12 @@ const node_env = process.env.NODE_ENV || conf.env || 'development';
 const devMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  entry: './app/index.ts',
+  entry: path.join(__dirname, 'src','index.ts'),
   mode: node_env,
   output: {
-    filename: 'bundle.js',
-    path: distDir
+    filename: '[name].bundle.js',
+    path: distDir,
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.ts', '.js', '.css']
@@ -29,7 +30,8 @@ module.exports = {
     }
   },
   module: {
-    rules: [{
+    rules: [
+    {
       enforce: 'pre',
       test: /\.js$/,
       use: ['source-map-loader'],
@@ -41,39 +43,49 @@ module.exports = {
       test: /\.ts$/,
       loader: 'ts-loader',
     },{
-        test: [/.css$|.scss$/],
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader', 
-          'sass-loader',
-          'postcss-loader'
-        ]
-      },{
+      test: [/.css$|.scss$/],
+      use: [
+        {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: (resourcePath, context) => {
+              // publicPath is the relative path of the resource to the context
+              // e.g. for ./css/admin/main.css the publicPath will be ../../
+              // while for ./css/main.css the publicPath will be ../
+              return path.relative(path.dirname(resourcePath), context) + '/';
+            },
+            hmr: devMode,
+          },
+        },
+        'css-loader', 
+        'sass-loader',
+        'postcss-loader'
+      ]
+    },{
       test: /\.(png|woff|woff2|eot|ttf|svg)$/,
       loader: 'url-loader?limit=100000',
     },{
       test: /\.hbs$/,
       loader: 'handlebars-loader',
-    }]
+    }
+    ]
   },
   devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src','index.html'),
+      lang: 'en',
       title: conf.name,
-      filename: 'index.html',
-      'meta': {
-        'viewport': 'width=device-width, initial-scale=1, shrink-to-fit=no'
-      },
       minify: {
         removeComments: true,
-        collapseWhitespace: true
+        //collapseWhitespace: true
       }
     }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // all options are optional
-      filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      filename: devMode ? '[name].css' : '[contenthash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
     new Webpack.ProvidePlugin({
