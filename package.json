@@ -6,6 +6,7 @@
     "build": "rm -rf ./dist/* && cp -r ./static/* ./dist/ && webpack --config webpack.config.js",
     "dev": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './src' bin/www",
     "start": "NODE_ENV=production node ./bin/www",
+    "app": "NODE_ENV=development DEBUG=spruce:* nodemon --ignore './src' bin/www --app",
     "test": "mocha && node ./bin/www"
   },
   "browserslist": [
@@ -26,7 +27,8 @@
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
     "socket.io": "^2.3.0",
-    "socketio-auth": "^0.1.1"
+    "socketio-auth": "^0.1.1",
+    "usage": "^0.7.1"
   },
   "devDependencies": {
     "@types/bootstrap": "^4.3.1",

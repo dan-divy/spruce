@@ -107,4 +107,9 @@ app.use(`/api/${api}/file/`, require(`./routes/${api}/file`)(nconf.get()));
 app.use(`/api/${api}/post/`, require(`./routes/${api}/post`)(nconf.get()));
 app.use(`/api/${api}/user/`, require(`./routes/${api}/user`)(nconf.get()));
 
+// APP
+if (process.argv.find(a => a == "--app")) {
+  require("./utils/app");
+}
+
 module.exports = app;

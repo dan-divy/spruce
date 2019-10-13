@@ -6,6 +6,7 @@
 const app = require('../app');
 const debug = require('debug')('spruce:server');
 const http = require('http');
+const io = require("socket.io");
 const nconf = require('nconf');
 nconf
   .argv()
@@ -26,7 +27,7 @@ const port = app.get('port') || nconf.get('port') || 3000;
  */
 
 const server = http.createServer(app);
-
+const sio = io(server);
 /**
  * Include Socket.IO.
  */
@@ -79,3 +80,6 @@ function onListening() {
     : 'port ' + addr.port;
   console.log('Listening on ' + bind);
 }
+
+module.exports = {sio}
+const socket = require("../utils/socket");

@@ -200,7 +200,7 @@ export const welcome = Handlebars.compile(`
       </div>
     </div>
   </div>
-
+  
   <div id="postContainer">
   </div>
 `);
