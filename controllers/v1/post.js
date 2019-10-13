@@ -7,7 +7,11 @@ const pathToRoot = '../../';
 module.exports = (conf) => {
   const {name, jwt} = conf;
 
+  // Models
   const Post = require(path.join(__dirname, pathToRoot, 'models/post'));
+  // Notifications
+  //const notifNsp = require(path.join(__dirname, pathToRoot, 'bin/www')).notifNsp
+  // Utilities
   const jwtUtils = require(path.join(__dirname, pathToRoot, 'utils/jwt'))(name, jwt);
   
   const controller = {};
@@ -30,16 +34,22 @@ module.exports = (conf) => {
     newPost.save(async (err, post) => {
       if (err) return res.status(500).json({ error: `Could not save post. Err: ${err}` });
 
+      var response;
       if (post.file) {
-        res.status(200).json({ post: await Post.findById(post.id)
-          .populate({ path: 'user', select: '-_id username' })
-          .populate({ path: 'file', select: '-_id systemFilename' })
-          });
+        response = await Post.findById(post.id)
+          .populate({ path: 'user', select: 'username' })
+          .populate({ path: 'file', select: 'name' });
       } else {
-        res.status(200).json({ post: await Post.findById(post.id)
-          .populate({ path: 'user', select: '-_id username' })
-          });
+        response = await Post.findById(post.id)
+          .populate({ path: 'user', select: 'username' });
       }
+
+      const notifNsp = req.app.get('notifNsp');
+      if (notifNsp) {
+        // emit to all on the server
+        notifNsp.emit('post', { post: response }) 
+      }
+      res.status(200).json({});
     });
   };
 

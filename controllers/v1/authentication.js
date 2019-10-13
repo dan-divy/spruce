@@ -35,6 +35,9 @@ module.exports = (conf, passport) => {
       const validPassword = user.validPassword(password);
       if (!validPassword) return res.status(401).json({ error: 'Incorrect credentials.' });
 
+      user.lastLogin = Date();
+      user.save();
+
       // TODO - Social media sign on.
       if (conf.sso.enabled) {
         req.login(user, (err) => {

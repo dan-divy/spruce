@@ -13,15 +13,32 @@ export const tabs = Handlebars.compile(`
 `);
 
 export const collectionContainer = Handlebars.compile(`
-  <div id="collections" class="jumbotron">
-    TODO - show collections
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div id="collections" class="row">
+      </div>
+    </div>
   </div>
 `);
 
-export const collectionEmpty = Handlebars.compile(`
-  ID: {{_id}} <a href="#collection/coll/{{_id}}">Name: {{name}} </a> <br>
-`);
-
 export const collection = Handlebars.compile(`
-  ID: {{_id}} <a href="#collection/coll/{{_id}}">Name: {{name}} </a> File Count: {{files.length}} <br>
+  <div class="col-md-4" data-collectionId="{{_id}}">
+    <div class="card mb-4 shadow-sm">
+      <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: {{name}}">
+        <title>{{name}}</title>
+        <rect width="100%" height="100%" fill="#55595c"></rect>
+        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+      </svg>
+      <div class="card-body">
+        <p class="card-text">Name: {{name}} File(s): {{files.length}}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-collectionId="{{_id}}">View</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-collectionId="{{_id}}">Edit</button>
+          </div>
+          <small class="text-muted">9 mins</small>
+        </div>
+      </div>
+    </div>
+  </div>
 `);

@@ -21,6 +21,7 @@ import * as Env from './lib/context';
 import * as Utils from './lib/utils';
 // Socket Libraries
 import * as Chat from './lib/socket/chat';
+import * as Notifications from './lib/socket/notification';
 
 // Templates
 import * as admin from './templates/admin';
@@ -155,7 +156,7 @@ const showRegister = () => {
  * Adds a post to the main view
  * @param  {Post} post message
  */
-const prependPost = async (post:PostLib.Post) => {
+const prependPost = (post:PostLib.Post) => {
   const postContainer = <HTMLElement>document.getElementById('postContainer');
   const msgBody = document.createElement('p');
   const node = document.createTextNode(`${post.user.username}: ${post.message_body}`);
@@ -174,7 +175,7 @@ const prependPost = async (post:PostLib.Post) => {
  * Adds a post to the main view
  * @param  {Post} post message
  */
-const appendPost = async (post:PostLib.Post) => {
+const appendPost = (post:PostLib.Post) => {
   const postContainer = <HTMLElement>document.getElementById('postContainer');
   const msgBody = document.createElement('p');
   const node = document.createTextNode(`${post.user.username}: ${post.message_body}`);
@@ -238,10 +239,25 @@ const addNotificaiton = (message:string) => {
  * Listen for real-time-notifications
  */
 const listenForNotificaitons = () => {
-  if (!context || !context.token || AuthLib.isExpired(context.token)) return;
+  if (!context || !context.token || AuthLib.isExpired(context.token)) {
+    notifNsp.removeAllListeners();
+    notifNsp.close();
+    notifNsp = null;
+    return;
+  };
 
-  // good session so start listoning
+  if (!notifNsp) {
+    notifNsp = Notifications.Socket(AuthLib.readToken());
 
+    notifNsp.on('connect', () => {
+      notifNsp.emit('join', { sessionId: context.sessionId });
+
+      notifNsp.on('post', data => {
+        if (data.post) prependPost(data.post);
+      });
+
+    }); // notifNsp on connect
+  };
 };
 
 /**
@@ -300,6 +316,10 @@ const showView = async () => {
       break;
   }
 
+  // Real-time notifications
+  listenForNotificaitons();
+
+  // Chatroom cleanup
   if (chatNsp && chatNsp.connected) {
     chatNsp.emit('leave');
     context.chatroomId = null;
@@ -380,8 +400,8 @@ const showView = async () => {
         inputMessage.disabled = true;
         inputMessage.placeholder = 'Loading';
         
-        if (!chatNsp) chatNsp = Chat.Socket(await AuthLib.readToken());
-        chatNsp.on('connect', socket => {
+        if (!chatNsp) chatNsp = Chat.Socket(AuthLib.readToken());
+        chatNsp.on('connect', () => {
           inputMessage.disabled = false;
           inputMessage.placeholder = 'Type here...';
           inputMessage.focus();
@@ -391,7 +411,7 @@ const showView = async () => {
             console.log('Chat Namespace reconnect. Attempt: ', attemptNumber);
 
             // TODO - redirect to login if refresh token is not valid or expired
-            socket.io.opts.query = {
+            chatNsp.Socket.io.opts.query = {
               token: AuthLib.readToken()
             }
           });
@@ -432,14 +452,14 @@ const showView = async () => {
 
           chatNsp.on('user joined', data => {
             const { username, roomcount } = data;
-
-            console.log('TODO - notify user joined', username, roomcount)
+            const message = `${username} joined. There are ${roomcount} members`;
+            addNotificaiton(message);
           });
 
           chatNsp.on('user left', data => {
             const { username, roomcount } = data;
-
-            console.log('TODO - notify user left', username, roomcount)
+            const message = `${username} left. ${roomcount} member(s) remain`;
+            addNotificaiton(message);
           });
 
           chatNsp.on('typing', data => {
@@ -542,11 +562,7 @@ const showView = async () => {
         divCollection.innerHTML = '';
         // add each collection to the view.
         community.collections.forEach(collection => {
-          if (collection.files && collection.files.length) {
-            divCollection.innerHTML += comm.collection(collection);
-          } else {
-            divCollection.innerHTML += comm.collectionEmpty(collection);
-          }
+          divCollection.innerHTML += comm.collection(collection);
         })
       }
 
@@ -624,25 +640,22 @@ const showView = async () => {
           message_body: message,
           //file
         }).then(response => {
-          if (noErrors(response && !response.post)) return;
-
-          prependPost(response.post);
-          new_post.value = '';
+          if (noErrors(response)) new_post.value = '';
         });
       };
 
-      new_post.addEventListener('keypress', (event: KeyboardEvent) => {
+      new_post.addEventListener('keyup', (event: KeyboardEvent) => {
+        if (event.isComposing || event.keyCode === 229) return;
         if (event.key === 'Enter' && new_post.value && new_post.value.length) {
           submitNewPost(new_post.value)
         }
       });
-      const buttonPost = <HTMLButtonElement>document.getElementById('button-post-dialog');
-      buttonPost.addEventListener('click', event => {
-        const buttonSend = <HTMLButtonElement>document.getElementById('button-send');
-        buttonSend.addEventListener('click', event => {
+      const buttonPostDialog = <HTMLButtonElement>document.getElementById('button-post-dialog');
+      buttonPostDialog.addEventListener('click', event => {
+        const buttonSendPost = <HTMLButtonElement>document.getElementById('button-send');
+        buttonSendPost.addEventListener('click', event => {
           submitNewPost(new_post.value)
         });
-
       });
 
       break;
@@ -731,23 +744,20 @@ const showView = async () => {
 
 (() => {
   document.body.innerHTML = main.main();
-
+  const mainElement = document.getElementById('app-main');  
   // Show a splash page
+  mainElement.innerHTML = main.splash();
 
-  // Verify server is accessable
   Env.getAPIVersion().then(response => {
     if (noErrors(response)) {
       apiVersion = response.apiVersion;
-
-      listenForNotificaitons();
-
-      setTimeout(() => addNotificaiton('added later'), 1000);
-      setTimeout(() => addNotificaiton('added later2'), 1000);
-
-      window.addEventListener('hashchange', showView, false);
-      showView().catch(err => window.location.hash = '#main');
     }
-  })
+  });
 
+  setTimeout(() => addNotificaiton('added later'), 1000);
+  setTimeout(() => addNotificaiton('added later2'), 1000);
+
+  window.addEventListener('hashchange', showView, false);
+  showView().catch(err => window.location.hash = '#main');
 })();
 

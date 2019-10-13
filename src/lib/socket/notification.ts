@@ -6,7 +6,7 @@ interface Query {
   token: string,
 }
 
-interface chatOptions {
+interface Options {
   query: Query,
   transports: string[]
 }
@@ -16,20 +16,18 @@ interface User {
   username: string;
 };
 
-export interface Message {
-  message_body: string;
-  user?: User;
-  sent_at?: Date;
+export interface Notification {
+  message: string;
 };
 
 export const Socket = (token:string) => {
   if (!token) return null;
 
-  const options:chatOptions = {
+  const options:Options = {
     query: {
       token: token
     },
     transports: ['websocket']
   };
-  return io(`${host}:${servicePort}/chat`, options);
+  return io(`${host}:${servicePort}/notification`, options);
 };
