@@ -62,6 +62,7 @@ function startSocket(key) {
     $("#main").fadeOut();
     $("#connecting").fadeIn();
     $.notify("Connection disconnected", "warning");
+    clearInterval(statsInt);
     connected = false;
   });
 
@@ -81,7 +82,8 @@ function startSocket(key) {
 
   socket.on("server_analytics", function(data) {
     console.log(data);
-    const visitors = data.find(x => x.name == "visitors").stats;
+    const visitors = data.find(x => x.name == "visitors") ? data.find(x => x.name == "visitors").stats : false;
+    if(!visitors) return;
     console.log(visitors);
     console.log(visitors.map(x => x.date));
     visitors.sort((x, y) => {
