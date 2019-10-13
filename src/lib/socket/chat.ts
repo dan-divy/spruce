@@ -1,13 +1,12 @@
 import io from 'socket.io-client';
 
-import {apiEndpoint, host, servicePort} from '../../../config.json';
+import {host, servicePort} from '../../../config.json';
 
 interface Query {
   token: string,
 }
 
 interface chatOptions {
-  autoConnect?: boolean,
   query: Query,
   transports: string[]
 }

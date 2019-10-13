@@ -18,7 +18,14 @@ module.exports =(name, jwtParams) => {
   const publicKEY  = fs.readFileSync(path.join(__dirname, pathToRoot, jwtParams.cert), 'utf8');
   const functions = {};
 
-  functions.create = (payload, type = 'access') => {
+  const TOKEN_ACCESS = 'access';
+  const TOKEN_REFRESH = 'refresh';
+  const TOKEN_RESOURCE = 'resource';
+  functions.TOKEN_ACCESS = TOKEN_ACCESS;
+  functions.TOKEN_REFRESH = TOKEN_REFRESH;
+  functions.TOKEN_RESOURCE = TOKEN_RESOURCE;
+
+  functions.create = (payload, type = TOKEN_ACCESS) => {
     // Token signing options
     switch (type) {
       case 'refresh':
@@ -52,7 +59,7 @@ module.exports =(name, jwtParams) => {
     }
   };
 
-  functions.verify = (token, type = 'access') => {
+  functions.verify = (token, type = TOKEN_ACCESS) => {
 
     var verifyOptions = {
       algorithm: jwtParams.alg,
@@ -84,53 +91,6 @@ module.exports =(name, jwtParams) => {
     return jwt.decode(token, {complete: true});
     //returns null if token is invalid
   };
-/*
-  functions.verifyToken = (req, res, next) => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      const token = req.headers.authorization.split(' ')[1];
-      const validToken = functions.verify(token);
 
-      if (!token && !validToken && !validToken.userId) {
-        return res.status(401).json({ message: 'Invalid Token' });
-      }
-      // Set the userId for the controller functions
-      if (!req.locals) req.locals = {};
-      req.locals.userId = validToken.userId;
-      next();
-    } else {
-      res.status(400).json({ message: 'Token required' });
-    }
-  }
-
-  functions.verifyRefreshToken = (req, res, next) => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      const token = req.headers.authorization.split(' ')[1];
-      const validToken = functions.verify(token, 'refresh');
-
-      if (!token && !validToken && !validToken.userId) {
-        return res.status(401).json({ message: 'Invalid Token' });
-      }
-      // Set the userId for the controller functions
-      if (!req.locals) req.locals = {};
-      req.locals.userId = validToken.userId;
-      next();
-    } else {
-      res.status(400).json({ message: 'Token required' });
-    }
-  }
-
-  functions.verifyResourceToken = (req, res, next) => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer' || req.query.token) {
-      var token = req.headers.authorization.split(' ')[1] || req.query.token;
-
-      const validToken = functions.verify(token, 'resource');
-      if (!validToken) {
-        return res.status(401).json({ message: 'Invalid Token' });
-      }
-      next();
-    } else {
-      res.status(400).json({ message: 'Token required' });
-    }
-  }*/
   return functions;
 };

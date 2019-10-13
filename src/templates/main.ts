@@ -19,49 +19,13 @@ export const main = Handlebars.compile(`
   <footer id="footer" class="fixed-bottom footer"></footer>
 `);
 
-export const navbar = Handlebars.compile(`
-  <img src="/images/logo/logo.png" class="logo" width="30" height="30" alt="{{name}}">
-  <a class="navbar-brand" href="/#main"> {{name}} </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  {{#if context.sessionId}}
-    <div class="collapse navbar-collapse" id="navbar">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hi, {{context.username}}!</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown03">
-            <a class="dropdown-item" href="#chat"><i class="fa fa-paper-plane">Chat</i></a>
-            <a class="dropdown-item" href="#profile">Profile</a>
-            {{#if context.admin}}
-              <a class="dropdown-item" href="#admin">Admin</a>
-            {{/if}}
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#logout">Log Out</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  {{/if}}
-`);
-
-export const tabs = Handlebars.compile(`
-  <!-- https://support.litmos.com/hc/en-us/articles/115001428953-Sample-HTML-Banner-code -->
-  <div class="list-group-item">
-    <!-- Trigger the modal with a button -->
-    <button id="button-post-dialog" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new-post">
-      <i class="fa fa-plus"> Post </i>
+export const alert = Handlebars.compile(`
+  <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
     </button>
+    {{message}}
   </div>
-
-  {{#if context.sessionId}}
-    {{#each context.community}}
-      <div class="list-group-item">
-        <a href="#community/comm/{{this._id}}">{{this.name}}</a>
-      </div>
-    {{/each}}
-  {{/if}}
 `);
 
 export const footer = Handlebars.compile(`
@@ -83,15 +47,6 @@ export const footerIcons = Handlebars.compile(`
   {{#if notification}}
     NN
   {{/if}}
-`);
-
-export const alert = Handlebars.compile(`
-  <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    {{message}}
-  </div>
 `);
 
 export const login = Handlebars.compile(`
@@ -127,6 +82,33 @@ export const login = Handlebars.compile(`
       </div>
     </div>
   </body>
+`);
+
+export const navbar = Handlebars.compile(`
+  <img src="/images/logo/logo.png" class="logo" width="30" height="30" alt="{{name}}">
+  <a class="navbar-brand" href="/#main"> {{name}} </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  {{#if context.sessionId}}
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hi, {{context.username}}!</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown03">
+            <a class="dropdown-item" href="#chat"><i class="fa fa-paper-plane">Chat</i></a>
+            <a class="dropdown-item" href="#profile">Profile</a>
+            {{#if context.admin}}
+              <a class="dropdown-item" href="#admin">Admin</a>
+            {{/if}}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#logout">Log Out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  {{/if}}
 `);
 
 export const register = Handlebars.compile(`
@@ -178,6 +160,28 @@ export const register = Handlebars.compile(`
       </div>
     </div>
   </body>
+`);
+
+export const splash = Handlebars.compile(`
+  TODO
+`);
+
+export const tabs = Handlebars.compile(`
+  <!-- https://support.litmos.com/hc/en-us/articles/115001428953-Sample-HTML-Banner-code -->
+  <div class="list-group-item">
+    <!-- Trigger the modal with a button -->
+    <button id="button-post-dialog" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new-post">
+      <i class="fa fa-plus"> Post </i>
+    </button>
+  </div>
+
+  {{#if context.sessionId}}
+    {{#each context.community}}
+      <div class="list-group-item">
+        <a href="#community/comm/{{this._id}}">{{this.name}}</a>
+      </div>
+    {{/each}}
+  {{/if}}
 `);
 
 export const welcome = Handlebars.compile(`

@@ -1,14 +1,12 @@
 'uses strict';
 const debug = require('debug')('spruce:socketChat');
-const io = require('socket.io');
-const path = require('path')
+const path = require('path');
 
 const pathToRoot = '../';
 
 // Chat room Socket.IO setup
-
-module.exports = (conf, server) => {
-  const {api, jwt, name} = conf;
+module.exports = (conf, io) => {
+  const {jwt, name} = conf;
 
   // Models
   const Message = require(path.join(__dirname, pathToRoot, 'models/message'));
@@ -16,27 +14,7 @@ module.exports = (conf, server) => {
   // Utilities
   const jwtUtils = require(path.join(__dirname, pathToRoot, 'utils/jwt'))(name, jwt);
 
-  /**
-   * Include Socket.IO.
-   */
-  const options = {
-    /* Server capture path */
-    //path: '/socket.io',
-    /* Serve client files */
-    //serveClient: false,
-    /* below are engine.IO options */
-    /* how many ms without a pong packet to consider the connection closed */
-    //pingTimeout: 5000,
-    /* how many ms before sending a new ping packet */
-    //pingInterval: 25000,
-    /* how many ms before an uncompleted transport upgrade is cancelled */
-    //upgradeTimeout: 10000,
-    // name of the HTTP cookie that contains the client sid to send as part of handshake response headers. Set to false to not send one. */
-    cookie: false,
-    /*transports to allow connections to */
-    transports: ['websocket']
-  };
-  const chatNamespace = io(server, options).of('/chat'); 
+  const chatNamespace = io.of('/chat');
 
   // socket.io authentication middleware
   chatNamespace.use(async (socket, next) => {
@@ -44,7 +22,7 @@ module.exports = (conf, server) => {
    if (!token) return next(new Error('Invalid socket request'));
 
    // verify token
-   const validToken = jwtUtils.verify(token, 'refresh');
+   const validToken = jwtUtils.verify(token, jwtUtils.TOKEN_REFRESH);
    if (validToken) {
      const revoked = await Token.findOne({ refreshToken: token }).revoked || false;
      if (!revoked) {

@@ -30,7 +30,28 @@ const server = http.createServer(app);
 /**
  * Include Socket.IO.
  */
-require('../namespace/chat')(nconf.get(), server);
+const options = {
+  /* Server capture path */
+  //path: '/socket.io',
+  /* Serve client files */
+  //serveClient: false,
+  /* below are engine.IO options */
+  /* how many ms without a pong packet to consider the connection closed */
+  //pingTimeout: 5000,
+  /* how many ms before sending a new ping packet */
+  //pingInterval: 25000,
+  /* how many ms before an uncompleted transport upgrade is cancelled */
+  //upgradeTimeout: 10000,
+  // name of the HTTP cookie that contains the client sid to send as part of handshake response headers. Set to false to not send one. */
+  cookie: false,
+  /*transports to allow connections to */
+  transports: ['websocket']
+};
+const io = require('socket.io')(server, options);
+
+require('../namespace/chat')(nconf.get(), io);
+require('../namespace/notification')(nconf.get(), io);
+app.set('notifNsp', io.of('notification'));
 
 /**
  * Listen on provided port, on all network interfaces.
