@@ -562,11 +562,7 @@ const showView = async () => {
         divCollection.innerHTML = '';
         // add each collection to the view.
         community.collections.forEach(collection => {
-          if (collection.files && collection.files.length) {
-            divCollection.innerHTML += comm.collection(collection);
-          } else {
-            divCollection.innerHTML += comm.collectionEmpty(collection);
-          }
+          divCollection.innerHTML += comm.collection(collection);
         })
       }
 
