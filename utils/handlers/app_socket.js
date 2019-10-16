@@ -5,7 +5,7 @@ const http = require("http");
 const server = http.createServer(app);
 const sio = io(server);
 const Users = require("./user");
-
+const path = require('path');
 const { dev_key } = require("../../routes/developer/api");
 const usage = require("usage");
 
@@ -22,53 +22,61 @@ sio.on("connection", function(socket) {
     if (password == dev_key) {
       socket.authenticated = true;
       socket.emit("correct_password", password, require("../../config/app"));
+      Users.getAll(function(err, users) {
+        users.forEach(u => {
+          u.password = null;
+          u.profile_pic = path.join(__dirname, "/../../public/", u.profile_pic)
+        });
+        if(err) socket.emit("error", err.message || err.toString())
+        socket.emit("fetch-users", users);
+        socket.on("stats", function() {
+          const Analytics = require("../models/analytics");
+          if (!socket.authenticated) return;
+          Analytics.data(function(keys, db) {
+            let database = { online: db.connection.readyState };
+            switch (db.connection.readyState) {
+              case 0:
+                database.msg = "Disconnected";
+                break;
+              case 1:
+                database.msg = "Connected";
+                break;
+              case 2:
+                database.msg = "Connecting";
+                break;
+              case 3:
+                database.msg = "Disconnecting";
+                break;
+            }
+            database.data = keys;
+            socket.emit("database", database);
+          });
+          if (!socket.visitors) {
+            Analytics.find(function(err, docs) {
+              socket.emit("server_analytics", docs);
+            });
+            socket.visitors = true;
+          }
+          socket.emit(
+            "sockets",
+            Object.entries(require("./socket").sockets.connected).length
+          );
+          usage.lookup(process.pid, function(err, result) {
+            if (err) return;
+            socket.emit("cpu", result.cpu);
+            socket.emit("ram", Math.round(result.memory * 0.000001));
+          });
+        });
+        socket.on("shutdown", function() {
+          if (!socket.authenticated) return;
+          return process.exit(0);
+        })
+      });
     } else {
       socket.tries++;
       socket.emit("wrong_password", socket.tries);
     }
   });
-  socket.on("stats", function() {
-    const Analytics = require("../models/analytics");
-    if (!socket.authenticated) return;
-    Analytics.data(function(keys, db) {
-      let database = { online: db.connection.readyState };
-      switch (db.connection.readyState) {
-        case 0:
-          database.msg = "Disconnected";
-          break;
-        case 1:
-          database.msg = "Connected";
-          break;
-        case 2:
-          database.msg = "Connecting";
-          break;
-        case 3:
-          database.msg = "Disconnecting";
-          break;
-      }
-      database.data = keys;
-      socket.emit("database", database);
-    });
-    if (!socket.visitors) {
-      Analytics.find(function(err, docs) {
-        socket.emit("server_analytics", docs);
-      });
-      socket.visitors = true;
-    }
-    socket.emit(
-      "sockets",
-      Object.entries(require("./socket").sockets.connected).length
-    );
-    usage.lookup(process.pid, function(err, result) {
-      if (err) return;
-      socket.emit("cpu", result.cpu);
-      socket.emit("ram", Math.round(result.memory * 0.000001));
-    });
-  });
-  socket.on("shutdown", function() {
-    if (!socket.authenticated) return;
-    return process.exit(0);
-  })
 });
 
 server.listen("4206");
