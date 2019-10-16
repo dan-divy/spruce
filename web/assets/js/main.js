@@ -7,6 +7,14 @@ var connected;
 var forced;
 var graph = {};
 var statsInt;
+$.notify = function (msg, type="success") {
+  $('#notify_message').removeClass()
+  $('#notify_message').addClass('notify_message-'+type)
+  $('#notify_message').html('<center>'+msg+'</center>');
+  $('#notify_message').slideDown(600).delay(3000).slideUp(600);
+  
+}
+$.notify("Welcome to the Spruce App!", "success")
 if (localStorage.dev_key) {
   console.log("Attempt Key: " + localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -15,6 +23,7 @@ if (localStorage.dev_key) {
 }
 function startSocket(key) {
   if (connected) return;
+  $.notify("Attempting to connect!", "success");
   console.log("Connected: " + key);
   socket = io($("#host").val());
   setTimeout(() => {
@@ -22,9 +31,9 @@ function startSocket(key) {
     if (localStorage.dev_key) {
       localStorage.dev_key = "";
       delete localStorage.dev_key;
-      $.notify("Unable to connect automatically");
+      $.notify("Unable to connect automatically", "danger");
     } else {
-      $.notify("Unable to connect after 7s");
+      $.notify("Unable to connect after 7s", "danger");
     }
     socket.disconnect() && socket.destroy();
     $("#connecting").fadeIn();
@@ -348,7 +357,7 @@ backend.on("progress-error", function(event, err, fade) {
     $("#download").fadeOut();
     $("#connecting").fadeIn();
   }
-  $.notify(err);
+  $.notify(err, "danger");
   console.error(obj);
 });
 backend.on("progress", (event, obj) => {
@@ -379,7 +388,7 @@ backend.on("error", function(e, err) {
   console.log(err.split("Error:").length > 2)
   let error = err.split("Error:").length > 2 ? "Error: " + err.split("Error:")[2].split("\n")[0] : err;
   error = error.length > 50 ? error.slice(0, 50) + "..." : error
-  $.notify(error)
+  $.notify(error, "danger")
 });
 backend.on("killed", function(e, code) {
   $("#main").fadeOut();
@@ -407,7 +416,7 @@ backend.on("update", function(e, yes) {
 
 function startSpruce() {
   $("#connecting").fadeOut();
-  $.notify("Starting spruce...", "info");
+  $.notify("Starting spruce...", "warning");
   backend.send("start_spruce");
   backend.on("key", function(event, key) {
     $("#connecting").fadeOut(function() {
@@ -427,7 +436,7 @@ function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
     clearInterval(statsInt);
-    $.notify("Stopping spruce...", "info");
+    $.notify("Stopping spruce...", "warning");
     socket.emit("shutdown");
     $("#connecting").fadeIn();
     localStorage.dev_key = "";

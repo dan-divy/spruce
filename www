@@ -33,7 +33,9 @@ function createWindow() {
     height: 700,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    frame: false,
+    titleBarStyle: "hiddenInset"
   });
 
   mainWindow.loadFile(pathJoin(__dirname + "/web/index.html"));
