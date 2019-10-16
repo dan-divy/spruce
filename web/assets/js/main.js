@@ -1,4 +1,6 @@
-console.log("Do not paste anything here unless told to by a developer of spruce. ")
+console.log(
+  "Do not paste anything here unless told to by a developer of spruce. "
+);
 const backend = require("electron").ipcRenderer;
 const shell = require("electron").shell;
 var config;
@@ -7,14 +9,16 @@ var connected;
 var forced;
 var graph = {};
 var statsInt;
-$.notify = function (msg, type="success") {
-  $('#notify_message').removeClass()
-  $('#notify_message').addClass('notify_message-'+type)
-  $('#notify_message').html('<center>'+msg+'</center>');
-  $('#notify_message').slideDown(600).delay(3000).slideUp(600);
-  
-}
-$.notify("Welcome to the Spruce App!", "success")
+$.notify = function(msg, type = "success") {
+  $("#notify_message").removeClass();
+  $("#notify_message").addClass("notify_message-" + type);
+  $("#notify_message").html("<center>" + msg + "</center>");
+  $("#notify_message")
+    .slideDown(600)
+    .delay(3000)
+    .slideUp(600);
+};
+$.notify("Welcome to the Spruce App!", "success");
 if (localStorage.dev_key) {
   console.log("Attempt Key: " + localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -88,11 +92,29 @@ function startSocket(key) {
         " tries left!</span>"
     );
   });
-
+  socket.on("fetch-users", function(data) {
+    console.log("DATA", data)
+    $("#data-users").html(
+      data.map(
+        u => `
+      <tr>
+        <td><img height="40" src="${u.profile_pic}"></td>
+        <td>${u.username}</td>
+        <td>${u.firstname + " " + u.lastname}</td>
+        <td>${u.dob}</td>
+        <td>${u.posts.length}</td>
+      </tr>`
+      )
+    );
+    $("#user-table").DataTable({ responsive: !0 });
+    $('input[type="search"], select').addClass("form-control");
+  });
   socket.on("server_analytics", function(data) {
     console.log(data);
-    const visitors = data.find(x => x.name == "visitors") ? data.find(x => x.name == "visitors").stats : false;
-    if(!visitors) return;
+    const visitors = data.find(x => x.name == "visitors")
+      ? data.find(x => x.name == "visitors").stats
+      : false;
+    if (!visitors) return;
     console.log(visitors);
     console.log(visitors.map(x => x.date));
     visitors.sort((x, y) => {
@@ -385,15 +407,18 @@ backend.on("progress", (event, obj) => {
 });
 backend.on("error", function(e, err) {
   console.error(err);
-  console.log(err.split("Error:").length > 2)
-  let error = err.split("Error:").length > 2 ? "Error: " + err.split("Error:")[2].split("\n")[0] : err;
-  error = error.length > 50 ? error.slice(0, 50) + "..." : error
-  $.notify(error, "danger")
+  console.log(err.split("Error:").length > 2);
+  let error =
+    err.split("Error:").length > 2
+      ? "Error: " + err.split("Error:")[2].split("\n")[0]
+      : err;
+  error = error.length > 50 ? error.slice(0, 50) + "..." : error;
+  $.notify(error, "danger");
 });
 backend.on("killed", function(e, code) {
   $("#main").fadeOut();
   $("#connecting").fadeIn();
-  $.notify("Spruce killed, kill code: " + code)
+  $.notify("Spruce killed, kill code: " + code);
 });
 backend.on("update", function(e, yes) {
   if (!yes) return;
