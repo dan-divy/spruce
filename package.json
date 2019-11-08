@@ -2,7 +2,7 @@
   "name": "spruce",
   "version": "4.0.0",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node update.js; node ./bin/www",
     "test": "mocha",
     "postinstall": "opencollective-postinstall || true",
     "app": "electron ./app/www"
