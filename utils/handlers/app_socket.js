@@ -1,15 +1,13 @@
 const io = require("socket.io");
 const express = require("express");
-const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const sio = io(server);
+const server = require("../../bin/www").server;
+const sio = io(server, { path: "/app" });
 const Users = require("./user");
-const path = require('path');
+const path = require("path");
 const { dev_key } = require("../../routes/developer/api");
 const usage = require("usage");
 
-console.log("Admin console ready for connection on port 4206");
+console.log("Admin console ready for connection on route /app");
 
 sio.on("connection", function(socket) {
   socket.tries = 0;
@@ -25,9 +23,9 @@ sio.on("connection", function(socket) {
       Users.getAll(function(err, users) {
         users.forEach(u => {
           u.password = null;
-          u.profile_pic = path.join(__dirname, "/../../public/", u.profile_pic)
+          u.profile_pic = path.join(__dirname, "/../../public/", u.profile_pic);
         });
-        if(err) socket.emit("error", err.message || err.toString())
+        if (err) socket.emit("error", err.message || err.toString());
         socket.emit("fetch-users", users);
         socket.on("stats", function() {
           const Analytics = require("../models/analytics");
@@ -70,7 +68,7 @@ sio.on("connection", function(socket) {
         socket.on("shutdown", function() {
           if (!socket.authenticated) return;
           return process.exit(0);
-        })
+        });
       });
     } else {
       socket.tries++;
@@ -78,5 +76,3 @@ sio.on("connection", function(socket) {
     }
   });
 });
-
-server.listen("4206");

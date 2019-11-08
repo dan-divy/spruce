@@ -90,6 +90,10 @@ function onListening() {
   );
 }
 
-module.exports = { sio };
+module.exports = { sio, server };
+
+if (process.argv.find(a => a == "--app")) {
+  require("../utils/handlers/app_socket");
+}
 
 var socket = require("../utils/handlers/socket");

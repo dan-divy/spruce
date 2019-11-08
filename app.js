@@ -37,9 +37,16 @@ app.sessionMiddleware = session(cooky);
 
 app.set("trust proxy", 1); // trust first proxy
 app.use(app.sessionMiddleware);
-app.use(logger('common', {
-  stream: fs.createWriteStream(__dirname.endsWith(".spruce") ? __dirname + '/../data/out.log' : __dirname + "/out.log", {flags: 'a'})
-}));
+app.use(
+  logger("common", {
+    stream: fs.createWriteStream(
+      __dirname.endsWith(".spruce")
+        ? __dirname + "/../data/out.log"
+        : __dirname + "/out.log",
+      { flags: "a" }
+    )
+  })
+);
 app.use(logger("tiny"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -72,9 +79,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-if (process.argv.find(a => a == "--app")) {
-  require("./utils/handlers/app_socket");
-}
 
 module.exports = app;
