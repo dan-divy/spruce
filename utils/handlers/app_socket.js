@@ -1,5 +1,4 @@
 const io = require("socket.io");
-const express = require("express");
 const server = require("../../bin/www").server;
 const sio = io(server, { path: "/app" });
 const Users = require("./user");
