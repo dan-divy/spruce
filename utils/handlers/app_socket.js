@@ -9,6 +9,7 @@ const usage = require("usage");
 console.log("Admin console ready for connection on route /app");
 
 sio.on("connection", function(socket) {
+  sock = socket;
   socket.tries = 0;
   socket.authenticated = false;
   socket.visitors = false;
@@ -24,6 +25,7 @@ sio.on("connection", function(socket) {
           u.password = null;
           u.profile_pic = path.join(__dirname, "/../../public/", u.profile_pic);
         });
+        socket.emit("users", users);
         if (err) socket.emit("error", err.message || err.toString());
         socket.emit("fetch-users", users);
         socket.on("stats", function() {

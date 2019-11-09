@@ -5,7 +5,7 @@
     "start": "node update.js; node ./bin/www",
     "test": "mocha",
     "postinstall": "opencollective-postinstall || true",
-    "app": "electron ./app/www"
+    "app": "node update.js; node ./bin/www --app"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",

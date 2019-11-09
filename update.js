@@ -39,9 +39,9 @@ async function checkForChanges(cb) {
 
   checkForChanges(function(err, data) {
     if (err != true && err) return console.error(err);
-    if (err == true) return console.log("all up to date");
+    if (err == true || !data) return console.log("all up to date");
     console.clear();
-    console.log(commits.length + " updates found");
+    console.log(data.length + " updates found");
     ask("Install updates?", function(err, install) {
       if (err) return console.error(err);
       if (!install) return console.log("aborting install");
