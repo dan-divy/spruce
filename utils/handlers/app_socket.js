@@ -31,25 +31,27 @@ sio.on("connection", function(socket) {
         socket.on("stats", function() {
           const Analytics = require("../models/analytics");
           if (!socket.authenticated) return;
-          Analytics.data(function(keys, db) {
-            let database = { online: db.connection.readyState };
-            switch (db.connection.readyState) {
-              case 0:
-                database.msg = "Disconnected";
-                break;
-              case 1:
-                database.msg = "Connected";
-                break;
-              case 2:
-                database.msg = "Connecting";
-                break;
-              case 3:
-                database.msg = "Disconnecting";
-                break;
-            }
-            database.data = keys;
-            socket.emit("database", database);
-          });
+          if (!socket.analytics)
+            Analytics.data(function(keys, db) {
+              let database = { online: db.connection.readyState };
+              switch (db.connection.readyState) {
+                case 0:
+                  database.msg = "Disconnected";
+                  break;
+                case 1:
+                  database.msg = "Connected";
+                  break;
+                case 2:
+                  database.msg = "Connecting";
+                  break;
+                case 3:
+                  database.msg = "Disconnecting";
+                  break;
+              }
+              database.data = keys;
+              if (database.data.length > 3) socket.analytics = true;
+              socket.emit("database", database);
+            });
           if (!socket.visitors) {
             Analytics.find(function(err, docs) {
               socket.emit("server_analytics", docs);
