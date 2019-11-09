@@ -28,7 +28,7 @@ async function checkForChanges(cb) {
     "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git rev-list HEAD...spruce/master; git remote remove spruce",
     function(err, data) {
       if (!data || err) return cb(err || true);
-      else cb(false, data);
+      else cb(false, data.split("\n"));
     }
   );
 }
@@ -41,7 +41,6 @@ async function checkForChanges(cb) {
     if (err != true && err) return console.error(err);
     if (err == true) return console.log("all up to date");
     console.clear();
-    const commits = data.split("\n");
     console.log(commits.length + " updates found");
     ask("Install updates?", function(err, install) {
       if (err) return console.error(err);
