@@ -18,6 +18,7 @@ describe("Database Tests", function() {
 
   before(function(done) {
     mongoose.connect("mongodb://localhost/spruce-test", {
+      useUnifiedTopology: true,
       useNewUrlParser: true
     });
     const db = mongoose.connection;
