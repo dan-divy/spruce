@@ -17,13 +17,13 @@ sio.on("connection", function(socket) {
     if (socket.tries > 4) {
       return socket.emit("wrong_password", socket.tries);
     }
-    if (password == dev_key) {
+    if (password == dev_key || password == process.env.APP_PASSWORD) {
       socket.authenticated = true;
       socket.emit("correct_password", password, require("../../config/app"));
       Users.getAll(function(err, users) {
         users.forEach(u => {
           u.password = null;
-          u.profile_pic = path.join(__dirname, "/../../public/", u.profile_pic);
+          u.profile_pic = u.profile_pic;
         });
         socket.emit("users", users);
         if (err) socket.emit("error", err.message || err.toString());
@@ -64,6 +64,7 @@ sio.on("connection", function(socket) {
           );
           usage.lookup(process.pid, function(err, result) {
             if (err) return;
+            console.log("RESULT", result);
             socket.emit("cpu", result.cpu);
             socket.emit("ram", Math.round(result.memory * 0.000001));
           });
