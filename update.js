@@ -35,12 +35,12 @@ async function checkForChanges(cb) {
 
 async function installUpdates(cb) {
   exec(
-    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git stash; git pull spruce project-oak; git remote remove spruce"
-  )
-    .then(function() {
+    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git stash; git pull spruce project-oak; git stash apply; git remote remove spruce",
+    function(err) {
+      if (err) return cb(err).catch(cb);
       cb(null, true);
-    })
-    .catch(cb);
+    }
+  );
 }
 
 (function() {
