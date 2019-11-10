@@ -1,10 +1,10 @@
-# Welcome
+# Welcome to Spruce
 
 ![](.gitbook/assets/banner.png)
 
-Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB. 
+Spruce is a tiny but powerful open-source social networking platform made with Node.js and MongoDB.
 
-[![Financial Contributors on Open Collective](https://opencollective.com/dan_divy/all/badge.svg?label=financial+contributors)](https://opencollective.com/dan_divy) [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DivySrivastava/spruce&amp;utm_campaign=Badge_Grade) ![](https://img.shields.io/badge/license-MIT-green.svg) ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
+[![Financial Contributors on Open Collective](https://opencollective.com/dan_divy/all/badge.svg?label=financial+contributors)](https://opencollective.com/dan_divy) [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&utm_medium=referral&utm_content=DivySrivastava/spruce&utm_campaign=Badge_Grade) ![](https://img.shields.io/badge/license-MIT-green.svg) ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
 
 _Deployed_ [_here_](http://spruce.dancodes.online)
 
@@ -14,33 +14,33 @@ Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/c
 
 ## Features
 
-* Sign in using local authentication, Instagram or Google.
-* Search for your other users.
-* Chat with your friends in realtime.
-* All feeds divided into 3 categories 
-  * thoughts \(tweets\)
-  * events \(location can be specified\)
-  * moments \(personal post\)
-* Like and comment on a feed.
-* API for developers
-* View your/others profile.
-* Follow a particular user and get notified for his/her activities.
-* Change your profile picture, bio, people who follow you etc.
-* Electron app
+- Sign in using local authentication, Instagram or Google.
+- Search for your other users.
+- Chat with your friends in realtime.
+- All feeds divided into 3 categories
+  - thoughts \(tweets\)
+  - events \(location can be specified\)
+  - moments \(personal post\)
+- Like and comment on a feed.
+- API for developers
+- View your/others profile.
+- Follow a particular user and get notified for his/her activities.
+- Change your profile picture, bio, people who follow you etc.
+- Electron app
 
 And a lot more to be added soon...
 
 ## To Do's
 
-* Activity feature for user to see follow requests and his/her daily activity.
-* Notifications
+- Activity feature for user to see follow requests and his/her daily activity.
+- Notifications
 
 ## Requirements
 
-* [Node.js](https://nodejs.org)  
-  * expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)
-  * ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)        
-* [MongoDB](http://mongodb.org)
+- [Node.js](https://nodejs.org)
+  - expressjs [ExpressJS HTTP middleware](https://npmjs.org/package/express)
+  - ejs [Embedded JavaScript templates](https://npmjs.org/package/ejs)
+- [MongoDB](http://mongodb.org)
 
 ## Installation
 
@@ -65,7 +65,7 @@ var in_client_id = 'XXXXXXXXXXXXXXXXXX', // <CLIENT_ID>
 Now Replace the `<host>` & `<port>` with the redirect uri specified in the [Instagram API Dashboard](https://www.instagram.com/developer) and [Google API Dashboard](https://developers.google.com). Default is `http://localhost:80/account/oauth`.
 
 ```javascript
-var in_redirect_uri = 'http://localhost:80/account/oauth/:service'
+var in_redirect_uri = "http://localhost:80/account/oauth/:service";
 ```
 
 Finally start the MongoDB server in a seperate bash/pm2
@@ -88,8 +88,8 @@ spruce uses [mongoose](https://npmjs.org/package/mongoose) as an ORM for perform
 
 ## Authors
 
-* [Divy Srivastava](http://github.com/DivySrivastava)
-* [Dan](https://github.com/dan-online)
+- [Divy Srivastava](http://github.com/DivySrivastava)
+- [Dan](https://github.com/dan-online)
 
 ## Contributors
 
@@ -132,4 +132,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
