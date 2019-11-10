@@ -25,7 +25,7 @@ async function ask(question, cb) {
 
 async function checkForChanges(cb) {
   exec(
-    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git rev-list HEAD...spruce/project-oak; git remote remove spruce",
+    "git init; git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git rev-list HEAD...spruce/project-oak; git remote remove spruce",
     function(err, data) {
       if (!data || err) return cb(err || true);
       else cb(false, data.split("\n"));
