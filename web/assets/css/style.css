@@ -667,3 +667,34 @@ a {
 #mainPage {
   margin-top:9rem
 }
+#notify_message{
+  position: fixed;
+  display: none;
+  z-index: 9999;
+  padding-top: 10px;
+  height: 50px;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+  color: white;
+}
+
+.notify_message-success{
+  background-color: #26B99A;
+}
+
+.notify_message-warning{
+  background-color: rgb(255, 135, 37);
+}
+
+.notify_message-danger{
+  background-color: #d9534f;
+}
+.dataTables_length {
+  position:absolute;
+  width:50%
+}
+input {
+  height:30px
+}

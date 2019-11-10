@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist; rm -rf .spruce; electron-builder"
+    "build": "rm -rf dist; rm -rf .spruce; electron-builder",
+    "postinstall": "electron-rebuild -v `node -e \"console.log(require('./package.json').devDependencies['electron'].slice(1));\"`"
   },
   "repository": {
     "type": "git",

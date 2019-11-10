@@ -14,17 +14,17 @@ function pathJoin(where) {
 }
 
 function rimraf(dir_path) {
-    if (fs.existsSync(dir_path)) {
-      fs.readdirSync(dir_path).forEach(function(entry) {
-        var entry_path = path.join(dir_path, entry);
-        if (fs.lstatSync(entry_path).isDirectory()) {
-          rimraf(entry_path);
-        } else {
-          fs.unlinkSync(entry_path);
-        }
-      });
-      fs.rmdirSync(dir_path);
-    }
+  if (fs.existsSync(dir_path)) {
+    fs.readdirSync(dir_path).forEach(function(entry) {
+      var entry_path = path.join(dir_path, entry);
+      if (fs.lstatSync(entry_path).isDirectory()) {
+        rimraf(entry_path);
+      } else {
+        fs.unlinkSync(entry_path);
+      }
+    });
+    fs.rmdirSync(dir_path);
+  }
 }
 
 function createWindow() {
@@ -33,7 +33,9 @@ function createWindow() {
     height: 700,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    frame: false,
+    titleBarStyle: "hiddenInset"
   });
 
   mainWindow.loadFile(pathJoin(__dirname + "/web/index.html"));
@@ -62,7 +64,7 @@ function createWindow() {
           silent: true
         }
       );
-      let {pid, stdout, stderr} = proc;
+      let { pid, stdout, stderr } = proc;
       stdout.on("data", function(data) {
         data = data.toString();
         if (
@@ -79,14 +81,15 @@ function createWindow() {
         }
       });
       stderr.on("data", function(data) {
-        data = new Error(data);
-        console.error(data)
+        data = new Error(data.toString());
+        if (data.message.split("current Server Discovery").length > 1) return; //mongo err
+        console.error(data);
         //console.error(data);
         mainWindow.webContents.send("error", data.toString());
       });
       proc.on("exit", function(code) {
-        mainWindow.webContents.send("killed", code)
-      })
+        mainWindow.webContents.send("killed", code);
+      });
       console.log(pid);
     } else {
       try {
@@ -128,33 +131,36 @@ function createWindow() {
               path: pathJoin(__dirname + "/.spruce"), // installation path [default: '.']
               forceInstall: true
             };
-            npm.load({
-              prefix: pathJoin(__dirname + "/.spruce")
-            }, function() {
-              mainWindow.webContents.send("progress", {
-                name: "npm",
-                progress: 50
-              });
-              npm.commands.install(function(err, result) {
-                if (err) {
-                  return mainWindow.webContents.send(
-                    "progress-error",
-                    err.toString(),
-                    true
-                  );
-                }
+            npm.load(
+              {
+                prefix: pathJoin(__dirname + "/.spruce")
+              },
+              function() {
                 mainWindow.webContents.send("progress", {
                   name: "npm",
-                  progress: 100,
-                  done: true
+                  progress: 50
                 });
-              })
-            });
+                npm.commands.install(function(err, result) {
+                  if (err) {
+                    return mainWindow.webContents.send(
+                      "progress-error",
+                      err.toString(),
+                      true
+                    );
+                  }
+                  mainWindow.webContents.send("progress", {
+                    name: "npm",
+                    progress: 100,
+                    done: true
+                  });
+                });
+              }
+            );
             mainWindow.webContents.send("progress", {
               name: "npm",
               progress: 25
             });
-          },1000)
+          }, 1000);
         })
         .catch(err => {
           mainWindow.webContents.send("progress-error", err.toString(), true);
@@ -166,7 +172,7 @@ function createWindow() {
       if (results[0] && results[0].command == "spruce") {
         process.kill(results[0].pid);
         console.log("ended");
-        console.log(cb)
+        console.log(cb);
         if (typeof cb == "function") cb();
       }
     });

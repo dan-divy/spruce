@@ -1,4 +1,6 @@
-console.log("Do not paste anything here unless told to by a developer of spruce. ")
+console.log(
+  "Do not paste anything here unless told to by a developer of spruce. "
+);
 const backend = require("electron").ipcRenderer;
 const shell = require("electron").shell;
 var config;
@@ -7,6 +9,28 @@ var connected;
 var forced;
 var graph = {};
 var statsInt;
+let slideQueue = [];
+$.notify = function(msg, type = "success") {
+  slideQueue.push({ msg, type });
+};
+let runningSlide;
+setInterval(() => {
+  if (slideQueue.length == 0 || runningSlide) return;
+  runningSlide = true;
+  let { msg, type } = slideQueue[0];
+  $("#notify_message").removeClass();
+  $("#notify_message").addClass("notify_message-" + type);
+  $("#notify_message").html("<center>" + msg + "</center>");
+  $("#notify_message")
+    .slideDown(600)
+    .delay(2000)
+    .slideUp(600, null, function() {
+      slideQueue.splice(0, 1);
+      runningSlide = false;
+    });
+}, 1000);
+
+$.notify("Welcome to the Spruce App!", "success");
 if (localStorage.dev_key) {
   console.log("Attempt Key: " + localStorage.dev_key);
   startSocket(localStorage.dev_key);
@@ -15,18 +39,21 @@ if (localStorage.dev_key) {
 }
 function startSocket(key) {
   if (connected) return;
+  $.notify("Attempting to connect!", "warning");
   console.log("Connected: " + key);
-  socket = io($("#host").val());
+  socket = io($("#host").val(), { path: "/app" });
   setTimeout(() => {
     if (connected || forced) return (forced = false);
     if (localStorage.dev_key) {
       localStorage.dev_key = "";
       delete localStorage.dev_key;
-      $.notify("Unable to connect automatically");
+      $.notify("Unable to connect automatically", "danger");
     } else {
-      $.notify("Unable to connect after 7s");
+      $.notify("Unable to connect after 7s", "danger");
     }
     socket.disconnect() && socket.destroy();
+    socket = null;
+    clearInterval(statsInt);
     $("#connecting").fadeIn();
   }, 7000);
   socket.on("connect", function() {
@@ -82,8 +109,10 @@ function startSocket(key) {
 
   socket.on("server_analytics", function(data) {
     console.log(data);
-    const visitors = data.find(x => x.name == "visitors") ? data.find(x => x.name == "visitors").stats : false;
-    if(!visitors) return;
+    const visitors = data.find(x => x.name == "visitors")
+      ? data.find(x => x.name == "visitors").stats
+      : false;
+    if (!visitors) return;
     console.log(visitors);
     console.log(visitors.map(x => x.date));
     visitors.sort((x, y) => {
@@ -320,6 +349,24 @@ function startSocket(key) {
       current_datetime.getSeconds();
     $("#stats-status").html("Connected at " + formatted_date);
   });
+
+  socket.on("users", function(users) {
+    $("#users-body").html(
+      users.map(
+        u => `
+    <tr>
+      <td><img height="30" src="${u.profile_pic ||
+        "../spruce/spruce/public/images/logo/logo.png"}"></td>
+      <td>${u.username}</td>
+      <td>${u.firstname}</td>
+      <td>${u.lastname}</td>
+      <td>${u.bio}</td>
+  </tr>`
+      )
+    );
+    $("#users-table").DataTable({ responsive: !0 });
+  });
+
   socket.on("sockets", function(data) {
     changeStatus("now", data);
     let current_datetime = new Date();
@@ -348,7 +395,7 @@ backend.on("progress-error", function(event, err, fade) {
     $("#download").fadeOut();
     $("#connecting").fadeIn();
   }
-  $.notify(err);
+  $.notify(err, "danger");
   console.error(obj);
 });
 backend.on("progress", (event, obj) => {
@@ -376,15 +423,18 @@ backend.on("progress", (event, obj) => {
 });
 backend.on("error", function(e, err) {
   console.error(err);
-  console.log(err.split("Error:").length > 2)
-  let error = err.split("Error:").length > 2 ? "Error: " + err.split("Error:")[2].split("\n")[0] : err;
-  error = error.length > 50 ? error.slice(0, 50) + "..." : error
-  $.notify(error)
+  console.log(err.split("Error:").length > 2);
+  let error =
+    err.split("Error:").length > 2
+      ? "Error: " + err.split("Error:")[2].split("\n")[0]
+      : err;
+  error = error.length > 50 ? error.slice(0, 50) + "..." : error;
+  $.notify(error, "danger");
 });
 backend.on("killed", function(e, code) {
   $("#main").fadeOut();
   $("#connecting").fadeIn();
-  $.notify("Spruce killed, kill code: " + code)
+  $.notify("Spruce killed, kill code: " + code);
 });
 backend.on("update", function(e, yes) {
   if (!yes) return;
@@ -407,7 +457,7 @@ backend.on("update", function(e, yes) {
 
 function startSpruce() {
   $("#connecting").fadeOut();
-  $.notify("Starting spruce...", "info");
+  $.notify("Starting spruce...", "warning");
   backend.send("start_spruce");
   backend.on("key", function(event, key) {
     $("#connecting").fadeOut(function() {
@@ -427,7 +477,7 @@ function endSpruce(cb) {
   forced = true;
   $("#main").fadeOut(function() {
     clearInterval(statsInt);
-    $.notify("Stopping spruce...", "info");
+    $.notify("Stopping spruce...", "warning");
     socket.emit("shutdown");
     $("#connecting").fadeIn();
     localStorage.dev_key = "";
@@ -443,6 +493,7 @@ function logout() {
   forced = true;
   socket.destroy();
   socket.disconnect();
+  delete localStorage.dev_key;
   $("#main").fadeOut(function() {
     $("#connecting").fadeIn();
   });
@@ -450,7 +501,7 @@ function logout() {
 
 function openBrowser(def) {
   if (def) {
-    shell.openExternal("https://github.com/dan-divy/spruce");
+    return shell.openExternal("https://github.com/dan-divy/spruce");
   }
   shell.openExternal(`http://${config.http.host}:${config.http.port}`);
 }
