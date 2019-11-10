@@ -1,7 +1,7 @@
 const package = require("./package.json");
 const exec = require("child_process").exec;
 const prompts = require("prompts");
-
+const force = process.argv.find(s => s == "-f") != undefined;
 let oldlog = console.log;
 console.log = function(...args) {
   return oldlog("spruce update: " + args);
@@ -25,7 +25,7 @@ async function ask(question, cb) {
 
 async function checkForChanges(cb) {
   exec(
-    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git rev-list HEAD...spruce/master; git remote remove spruce",
+    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git rev-list HEAD...spruce/project-oak; git remote remove spruce",
     function(err, data) {
       if (!data || err) return cb(err || true);
       else cb(false, data.split("\n"));
@@ -33,8 +33,18 @@ async function checkForChanges(cb) {
   );
 }
 
+async function installUpdates(cb) {
+  exec(
+    "git remote add spruce https://github.com/dan-divy/spruce; git fetch spruce; git stash; git pull spruce project-oak; git remote remove spruce"
+  )
+    .then(function() {
+      cb(null, true);
+    })
+    .catch(cb);
+}
+
 (function() {
-  if (package.update == false) return;
+  if (package.update == false && !force) return;
   else console.log("checking for updates...");
 
   checkForChanges(function(err, data) {
@@ -45,6 +55,10 @@ async function checkForChanges(cb) {
     ask("Install updates?", function(err, install) {
       if (err) return console.error(err);
       if (!install) return console.log("aborting install");
+      installUpdates(function(err, finished) {
+        if (err) console.error(err.message);
+        else console.log("update finished");
+      });
     });
   });
 })();
