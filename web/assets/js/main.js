@@ -3,11 +3,11 @@ console.log(
 );
 const backend = require("electron").ipcRenderer;
 const shell = require("electron").shell;
-var config;
 var socket;
 var connected;
 var forced;
 var graph = {};
+var hostName;
 var statsInt;
 let slideQueue = [];
 $.notify = function(msg, type = "success") {
@@ -77,6 +77,8 @@ function startSocket(key, host = $("#host").val()) {
   socket.on("correct_password", function(key, conf) {
     localStorage.dev_key = key;
     localStorage.host = host;
+    hostName = host;
+    $("#host-info").text(host.split("//")[1]);
     config = conf;
     $("#password-div").fadeOut(function() {
       $("#main").fadeIn();
@@ -109,13 +111,10 @@ function startSocket(key, host = $("#host").val()) {
   });
 
   socket.on("server_analytics", function(data) {
-    console.log(data);
     const visitors = data.find(x => x.name == "visitors")
       ? data.find(x => x.name == "visitors").stats
       : false;
     if (!visitors) return;
-    console.log(visitors);
-    console.log(visitors.map(x => x.date));
     visitors.sort((x, y) => {
       return (
         x.date.split("-")[x.date.split("-").length - 1] -
@@ -176,7 +175,6 @@ function startSocket(key, host = $("#host").val()) {
     let now = visitors[visitors.length - 1].amount;
     let increase = now - yesterday;
     let percent = Math.round((increase / yesterday) * 100);
-    console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
       var symbol = "+";
@@ -264,7 +262,6 @@ function startSocket(key, host = $("#host").val()) {
   });
   socket.on("database", function(data) {
     let count = 0;
-    console.log(data.data);
     data.data.forEach(x => (count += x.count));
     changeStatus("database", count);
     $("#database-status").html(data.msg);
@@ -510,5 +507,7 @@ function openBrowser(def) {
   if (def) {
     return shell.openExternal("https://github.com/dan-divy/spruce");
   }
-  shell.openExternal(`http://${config.http.host}:${config.http.port}`);
+  let link = `${hostName}`;
+  console.log(link);
+  shell.openExternal(link);
 }
