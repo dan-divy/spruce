@@ -33,15 +33,15 @@ setInterval(() => {
 $.notify("Welcome to the Spruce App!", "success");
 if (localStorage.dev_key) {
   console.log("Attempt Key: " + localStorage.dev_key);
-  startSocket(localStorage.dev_key);
+  startSocket(localStorage.dev_key, localStorage.host);
 } else {
   $("#connecting").fadeIn();
 }
-function startSocket(key) {
+function startSocket(key, host = $("#host").val()) {
   if (connected) return;
   $.notify("Attempting to connect!", "warning");
   console.log("Connected: " + key);
-  socket = io($("#host").val(), { path: "/app" });
+  socket = io(host, { path: "/app" });
   setTimeout(() => {
     if (connected || forced) return (forced = false);
     if (localStorage.dev_key) {
@@ -76,6 +76,7 @@ function startSocket(key) {
 
   socket.on("correct_password", function(key, conf) {
     localStorage.dev_key = key;
+    localStorage.host = host;
     config = conf;
     $("#password-div").fadeOut(function() {
       $("#main").fadeIn();
@@ -194,6 +195,7 @@ function startSocket(key) {
     const color = $(`#${name}-color`);
     const face = $(`#${name}-icon`);
     const text = $(`#${name}-status`);
+    if (value.toString().startsWith("-0")) value = 0;
     function emotion(good) {
       if (good) {
         text.text("Good");
@@ -238,6 +240,11 @@ function startSocket(key) {
   statsInt = setInterval(function() {
     socket.emit("stats");
   }, 1000);
+  socket.on("sys-info", function(data) {
+    data.forEach(s => {
+      $("#" + s.name + "-info").text(s.value);
+    });
+  });
   socket.on("cpu", function(data) {
     changeStatus("cpu", data);
     let current_datetime = new Date();
@@ -355,8 +362,8 @@ function startSocket(key) {
       users.map(
         u => `
     <tr>
-      <td><img height="30" src="${u.profile_pic ||
-        "../spruce/spruce/public/images/logo/logo.png"}"></td>
+      <td><img height="30" src="${host}${u.profile_pic ||
+          "../spruce/spruce/public/images/logo/logo.png"}"></td>
       <td>${u.username}</td>
       <td>${u.firstname}</td>
       <td>${u.lastname}</td>
@@ -364,7 +371,7 @@ function startSocket(key) {
   </tr>`
       )
     );
-    $("#users-table").DataTable({ responsive: !0 });
+    $("#users-table").DataTable({ responsive: !0, destroy: true });
   });
 
   socket.on("sockets", function(data) {
