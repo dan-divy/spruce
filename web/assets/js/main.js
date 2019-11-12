@@ -406,7 +406,6 @@ backend.on("progress-error", function(event, err, fade) {
 backend.on("progress", (event, obj) => {
   let percent = parseInt(obj.progress * 100) / 100 + "%";
   if (done) return;
-  console.log("Seconds left: " + currentSpeed);
   $("#download").fadeIn();
   $("#connecting").fadeOut();
   $("#download-progress").attr(

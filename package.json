@@ -25,14 +25,16 @@
   },
   "homepage": "https://github.com/dan-divy/spruce#readme",
   "dependencies": {
+    "electron-rebuild": "^1.8.6",
     "file-system": "^2.2.2",
+    "node-abi": "^2.12.0",
     "node-fetch": "^2.6.0",
     "nodegit": "^0.26.2",
     "npm": "^6.12.0",
     "ps-node": "^0.1.6"
   },
   "devDependencies": {
-    "electron": "^8.0.0-beta.2",
+    "electron": "^7.1.1",
     "electron-builder": "^21.2.0"
   }
 }
