@@ -1,8 +1,7 @@
 console.log(
   "Do not paste anything here unless told to by a developer of spruce. "
 );
-const backend = require("electron").ipcRenderer;
-const shell = require("electron").shell;
+const backend = ipcRenderer;
 var socket;
 var connected;
 var forced;
@@ -10,11 +9,23 @@ var graph = {};
 var hostName;
 var statsInt;
 let slideQueue = [];
-$.notify = function(msg, type = "success") {
+let pause;
+$.notify = function(msg, type = "success", force) {
   slideQueue.push({ msg, type });
 };
 let runningSlide;
+
+function loadPage(id) {
+  if ($("#" + id).css("display") == "block") return;
+  let pages = ["connecting", "download", "password-div", "main"];
+  pages.forEach(x => (x != id ? $("#" + x).fadeOut() : true));
+  $("#" + id)
+    .delay(200)
+    .fadeIn();
+}
+
 setInterval(() => {
+  if (pause) return;
   if (slideQueue.length == 0 || runningSlide) return;
   runningSlide = true;
   let { msg, type } = slideQueue[0];
@@ -23,24 +34,22 @@ setInterval(() => {
   $("#notify_message").html("<center>" + msg + "</center>");
   $("#notify_message")
     .slideDown(600)
-    .delay(2000)
+    .delay(1000)
     .slideUp(600, null, function() {
       slideQueue.splice(0, 1);
       runningSlide = false;
     });
-}, 1000);
+}, 500);
 
-$.notify("Welcome to the Spruce App!", "success");
 if (localStorage.dev_key) {
-  console.log("Attempt Key: " + localStorage.dev_key);
   startSocket(localStorage.dev_key, localStorage.host);
 } else {
-  $("#connecting").fadeIn();
+  loadPage("connecting");
+  $.notify("Welcome to the Spruce App!", "success");
 }
 function startSocket(key, host = $("#host").val()) {
   if (connected) return;
   $.notify("Attempting to connect!", "warning");
-  console.log("Connected: " + key);
   socket = io(host, { path: "/app" });
   setTimeout(() => {
     if (connected || forced) return (forced = false);
@@ -54,22 +63,21 @@ function startSocket(key, host = $("#host").val()) {
     socket.disconnect() && socket.destroy();
     socket = null;
     clearInterval(statsInt);
-    $("#connecting").fadeIn();
+    loadPage("connecting");
   }, 7000);
   socket.on("connect", function() {
     socket.emit("client_analytics");
     if (!connected) connected = true;
     else return;
-    console.log(connecting);
     $.notify("Connected!", "success");
     $("#connecting").fadeOut(function(authenticated) {
       if (key) {
         return socket.emit("password", key);
       }
       if (!authenticated) {
-        $("#password-div").fadeIn();
+        loadPage("password-div");
       } else {
-        $("#main").fadeIn();
+        loadPage("main");
       }
     });
   });
@@ -81,7 +89,7 @@ function startSocket(key, host = $("#host").val()) {
     $("#host-info").text(host.split("//")[1]);
     config = conf;
     $("#password-div").fadeOut(function() {
-      $("#main").fadeIn();
+      loadPage("main");
       backend.send("check_update");
     });
   });
@@ -89,8 +97,7 @@ function startSocket(key, host = $("#host").val()) {
   socket.on("disconnect", function() {
     if (!connected) return;
     clearInterval(statsInt);
-    $("#main").fadeOut();
-    $("#connecting").fadeIn();
+    loadPage("connecting");
     $.notify("Connection disconnected", "warning");
     clearInterval(statsInt);
     connected = false;
@@ -99,9 +106,9 @@ function startSocket(key, host = $("#host").val()) {
   socket.on("wrong_password", function(tries) {
     if (localStorage.dev_key) {
       delete localStorage.dev_key;
-      $("#connecting").fadeIn();
+      loadPage("connecting");
     } else {
-      $("#password-div").fadeIn();
+      loadPage("password-div");
     }
     $("#password-error").html(
       '<span style="color: red">Password was incorrect, ' +
@@ -237,6 +244,20 @@ function startSocket(key, host = $("#host").val()) {
   socket.emit("stats");
   statsInt = setInterval(function() {
     socket.emit("stats");
+    let current_datetime = new Date();
+    let formatted_date =
+      current_datetime.getFullYear() +
+      "-" +
+      (current_datetime.getMonth() + 1) +
+      "-" +
+      current_datetime.getDate() +
+      ", " +
+      current_datetime.getHours() +
+      ":" +
+      current_datetime.getMinutes() +
+      ":" +
+      current_datetime.getSeconds();
+    $("#stats-status").html("Connected at " + formatted_date);
   }, 1000);
   socket.on("sys-info", function(data) {
     data.forEach(s => {
@@ -245,40 +266,12 @@ function startSocket(key, host = $("#host").val()) {
   });
   socket.on("cpu", function(data) {
     changeStatus("cpu", data);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
   });
   socket.on("database", function(data) {
     let count = 0;
     data.data.forEach(x => (count += x.count));
     changeStatus("database", count);
     $("#database-status").html(data.msg);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
     let a = [
       "A",
       "B",
@@ -338,20 +331,6 @@ function startSocket(key, host = $("#host").val()) {
   });
   socket.on("ram", function(data) {
     changeStatus("ram", data);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
   });
 
   socket.on("users", function(users) {
@@ -373,20 +352,6 @@ function startSocket(key, host = $("#host").val()) {
 
   socket.on("sockets", function(data) {
     changeStatus("now", data);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
   });
   $("#password-button").click(function() {
     $("#password-error").html("");
@@ -396,8 +361,7 @@ function startSocket(key, host = $("#host").val()) {
 let done;
 backend.on("progress-error", function(event, err, fade) {
   if (fade) {
-    $("#download").fadeOut();
-    $("#connecting").fadeIn();
+    loadPage("connecting");
   }
   $.notify(err, "danger");
   console.error(err);
@@ -406,8 +370,7 @@ backend.on("progress-error", function(event, err, fade) {
 backend.on("progress", (event, obj) => {
   let percent = parseInt(obj.progress * 100) / 100 + "%";
   if (done) return;
-  $("#download").fadeIn();
-  $("#connecting").fadeOut();
+  loadPage("download");
   $("#download-progress").attr(
     "aria-valuenow",
     Math.round(parseInt(obj.progress) * 100) / 100
@@ -437,14 +400,13 @@ backend.on("error", function(e, err) {
   $.notify(error, "danger");
 });
 backend.on("killed", function(e, code) {
-  $("#main").fadeOut();
-  $("#connecting").fadeIn();
+  loadPage("connecting");
   $.notify("Spruce killed, kill code: " + code);
 });
 backend.on("update", function(e, yes) {
   if (!yes) return;
   $("#update-version").text(yes);
-  $("#update").fadeIn();
+  loadPage("update");
   $("#update-btn").on("click", function() {
     $("#update").html(
       'Are you sure? <a id="update-yes">Yes</a>, <a id="update-no" style="margin-left:0">No</a>'
@@ -474,7 +436,7 @@ function startSpruce() {
 function restartSpruce() {
   endSpruce(function() {
     socket.destroy();
-    startSpruce();
+    startSocket(localStorage.dev_key, localStorage.host);
   });
 }
 
@@ -484,7 +446,7 @@ function endSpruce(cb) {
     clearInterval(statsInt);
     $.notify("Stopping spruce...", "warning");
     socket.emit("shutdown");
-    $("#connecting").fadeIn();
+    loadPage("connecting");
     localStorage.dev_key = "";
     delete localStorage.dev_key;
     socket.on("disconnect", function() {
@@ -499,9 +461,7 @@ function logout() {
   socket.destroy();
   socket.disconnect();
   delete localStorage.dev_key;
-  $("#main").fadeOut(function() {
-    $("#connecting").fadeIn();
-  });
+  loadPage("connecting");
 }
 
 function openBrowser(def) {
@@ -509,6 +469,5 @@ function openBrowser(def) {
     return shell.openExternal("https://github.com/dan-divy/spruce");
   }
   let link = `${hostName}`;
-  console.log(link);
   shell.openExternal(link);
 }

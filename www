@@ -38,7 +38,8 @@ function createWindow() {
     width: 1400,
     height: 700,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: path.join(__dirname, "web", "assets", "js", "preload.js")
     },
     frame: false,
     titleBarStyle: "hiddenInset"
