@@ -400,11 +400,13 @@ backend.on("progress-error", function(event, err, fade) {
     $("#connecting").fadeIn();
   }
   $.notify(err, "danger");
-  console.error(obj);
+  console.error(err);
 });
+
 backend.on("progress", (event, obj) => {
-  if (done) return;
   let percent = parseInt(obj.progress * 100) / 100 + "%";
+  if (done) return;
+  console.log("Seconds left: " + currentSpeed);
   $("#download").fadeIn();
   $("#connecting").fadeOut();
   $("#download-progress").attr(
