@@ -1,17 +1,10 @@
 #!/usr/bin/env node
 
 const { app, BrowserWindow, ipcMain } = require("electron");
-const nodeGit = require("nodegit");
 const fs = require("file-system");
-const npm = require("npm");
 const fetch = require("node-fetch");
 const path = require("path");
 let mainWindow;
-const ps = require("ps-node");
-
-function pathJoin(where) {
-  return path.resolve(where);
-}
 
 function rimraf(dir_path) {
   if (fs.existsSync(dir_path)) {
@@ -27,190 +20,34 @@ function rimraf(dir_path) {
   }
 }
 
+fs.readdir(path.join(__dirname, "events"), function(err, folders) {
+  folders.forEach(folder => {
+    fs.readdir(path.join(__dirname, "events", folder), function(err, files) {
+      files.forEach(file => {
+        let name = file.split(".")[0];
+        ipcMain.on(name, function() {
+          require(path.join(__dirname, "events", folder, file))(mainWindow);
+        });
+      });
+    });
+  });
+});
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 700,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: path.join(__dirname, "web", "assets", "js", "preload.js")
     },
     frame: false,
     titleBarStyle: "hiddenInset"
   });
 
-  mainWindow.loadFile(pathJoin(__dirname + "/web/index.html"));
+  mainWindow.loadFile(path.resolve(__dirname + "/web/index.html"));
   mainWindow.on("closed", function() {
     mainWindow = null;
-  });
-  ipcMain.on("start_spruce", function() {
-    let available = true;
-    try {
-      fs.readFileSync(pathJoin(__dirname + "/.spruce/bin/www"));
-    } catch (err) {
-      available = false;
-    }
-    // transferProgress: {
-    //   throttle: 0,
-    //   callback: (progress) => {
-    //     return Object.keys(progress.__proto__).map(k => console.log(`${k}: ${progress[k]()}`))
-    //   }
-    // }
-    if (available) {
-      let proc = require("child_process").fork(
-        pathJoin(__dirname + "/.spruce/bin/www"),
-        ["--app"],
-        {
-          detached: true,
-          silent: true
-        }
-      );
-      let { pid, stdout, stderr } = proc;
-      stdout.on("data", function(data) {
-        data = data.toString();
-        if (
-          data.split("Developer key: ").length &&
-          data.split("Developer key: ").length > 1
-        ) {
-          console.log(data);
-          mainWindow.webContents.send(
-            "key",
-            data.split("Developer key: ")[1].split("\n")[0]
-          );
-        } else {
-          console.log(data);
-        }
-      });
-      stderr.on("data", function(data) {
-        data = new Error(data.toString());
-        if (data.message.split("current Server Discovery").length > 1) return; //mongo err
-        console.error(data);
-        //console.error(data);
-        mainWindow.webContents.send("error", data.toString());
-      });
-      proc.on("exit", function(code) {
-        mainWindow.webContents.send("killed", code);
-      });
-      console.log(pid);
-    } else {
-      try {
-        fs.rmdirSync(pathJoin(__dirname + "/.spruce"));
-      } catch (err) {}
-      console.log("Downloading...");
-      nodeGit
-        .Clone(
-          "https://github.com/dan-divy/spruce",
-          pathJoin(__dirname + "/.spruce"),
-          {
-            checkoutBranch: "project-oak",
-            fetchOpts: {
-              callbacks: {
-                transferProgress: function(stats) {
-                  const progress =
-                    (100 * (stats.receivedObjects() + stats.indexedObjects())) /
-                    (stats.totalObjects() * 2);
-                  mainWindow.webContents.send("progress", {
-                    name: "git",
-                    progress
-                  });
-                }
-              }
-            }
-          }
-        )
-        .then(function() {
-          mainWindow.webContents.send("progress", {
-            name: "git",
-            progress: 100
-          });
-          mainWindow.webContents.send("progress", {
-            name: "npm",
-            progress: 0
-          });
-          setTimeout(() => {
-            var options = {
-              path: pathJoin(__dirname + "/.spruce"), // installation path [default: '.']
-              forceInstall: true
-            };
-            npm.load(
-              {
-                prefix: pathJoin(__dirname + "/.spruce")
-              },
-              function() {
-                mainWindow.webContents.send("progress", {
-                  name: "npm",
-                  progress: 50
-                });
-                npm.commands.install(function(err, result) {
-                  if (err) {
-                    return mainWindow.webContents.send(
-                      "progress-error",
-                      err.toString(),
-                      true
-                    );
-                  }
-                  mainWindow.webContents.send("progress", {
-                    name: "npm",
-                    progress: 100,
-                    done: true
-                  });
-                });
-              }
-            );
-            mainWindow.webContents.send("progress", {
-              name: "npm",
-              progress: 25
-            });
-          }, 1000);
-        })
-        .catch(err => {
-          mainWindow.webContents.send("progress-error", err.toString(), true);
-        });
-    }
-  });
-  ipcMain.on("end_spruce", function(cb) {
-    ps.lookup({ command: "spruce" }, function(err, results) {
-      if (results[0] && results[0].command == "spruce") {
-        process.kill(results[0].pid);
-        console.log("ended");
-        console.log(cb);
-        if (typeof cb == "function") cb();
-      }
-    });
-  });
-  ipcMain.on("check_update", function() {
-    let available = true;
-    try {
-      fs.readFileSync(pathJoin(__dirname + "/.spruce/bin/www"));
-    } catch (err) {
-      available = false;
-    }
-    if (!available) return;
-    const version = require(pathJoin(__dirname + "/.spruce/package.json"))
-      .version;
-    fetch(
-      "https://raw.githubusercontent.com/dan-divy/spruce/project-oak/package.json"
-    )
-      .then(res => res.json())
-      .then(body => {
-        if (body.version != version) {
-          mainWindow.webContents.send("update", body.version);
-        } else {
-          mainWindow.webContents.send("update", false);
-        }
-      });
-  });
-  ipcMain.on("run_update", function() {
-    try {
-      rimraf(pathJoin(__dirname + "/.spruce/"));
-      console.log("Done delete");
-      ipcMain.emit("end_spruce", function() {
-        ipcMain.emit("start_spruce");
-      });
-    } catch (err) {
-      console.error(err);
-      mainWindow.webContents.send("progress-error", err.toString());
-      return;
-    }
   });
 }
 
