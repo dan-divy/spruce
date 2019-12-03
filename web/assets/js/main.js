@@ -1,22 +1,13 @@
 console.log(
   "Do not paste anything here unless told to by a developer of spruce. "
 );
-<<<<<<< HEAD
-const backend = require("electron").ipcRenderer;
-const shell = require("electron").shell;
-var config;
-=======
 const backend = ipcRenderer;
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 var socket;
 var connected;
 var forced;
 var graph = {};
 var hostName;
 var statsInt;
-<<<<<<< HEAD
-$.notify = function(msg, type = "success") {
-=======
 let slideQueue = [];
 let pause;
 $.notify = function(msg, type = "success", force) {
@@ -38,18 +29,11 @@ setInterval(() => {
   if (slideQueue.length == 0 || runningSlide) return;
   runningSlide = true;
   let { msg, type } = slideQueue[0];
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   $("#notify_message").removeClass();
   $("#notify_message").addClass("notify_message-" + type);
   $("#notify_message").html("<center>" + msg + "</center>");
   $("#notify_message")
     .slideDown(600)
-<<<<<<< HEAD
-    .delay(3000)
-    .slideUp(600);
-};
-$.notify("Welcome to the Spruce App!", "success");
-=======
     .delay(1000)
     .slideUp(600, null, function() {
       slideQueue.splice(0, 1);
@@ -57,7 +41,6 @@ $.notify("Welcome to the Spruce App!", "success");
     });
 }, 500);
 
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 if (localStorage.dev_key) {
   startSocket(localStorage.dev_key, localStorage.host);
 } else {
@@ -66,14 +49,8 @@ if (localStorage.dev_key) {
 }
 function startSocket(key, host = $("#host").val()) {
   if (connected) return;
-<<<<<<< HEAD
-  $.notify("Attempting to connect!", "success");
-  console.log("Connected: " + key);
-  socket = io($("#host").val());
-=======
   $.notify("Attempting to connect!", "warning");
   socket = io(host, { path: "/app" });
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   setTimeout(() => {
     if (connected || forced) return (forced = false);
     if (localStorage.dev_key) {
@@ -157,19 +134,10 @@ function startSocket(key, host = $("#host").val()) {
     $('input[type="search"], select').addClass("form-control");
   });
   socket.on("server_analytics", function(data) {
-<<<<<<< HEAD
-    console.log(data);
-=======
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
     const visitors = data.find(x => x.name == "visitors")
       ? data.find(x => x.name == "visitors").stats
       : false;
     if (!visitors) return;
-<<<<<<< HEAD
-    console.log(visitors);
-    console.log(visitors.map(x => x.date));
-=======
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
     visitors.sort((x, y) => {
       return (
         x.date.split("-")[x.date.split("-").length - 1] -
@@ -412,11 +380,7 @@ backend.on("progress-error", function(event, err, fade) {
     loadPage("connecting");
   }
   $.notify(err, "danger");
-<<<<<<< HEAD
-  console.error(obj);
-=======
   console.error(err);
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 });
 
 backend.on("progress", (event, obj) => {
@@ -452,12 +416,7 @@ backend.on("error", function(e, err) {
   $.notify(error, "danger");
 });
 backend.on("killed", function(e, code) {
-<<<<<<< HEAD
-  $("#main").fadeOut();
-  $("#connecting").fadeIn();
-=======
   loadPage("connecting");
->>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   $.notify("Spruce killed, kill code: " + code);
 });
 backend.on("update", function(e, yes) {
