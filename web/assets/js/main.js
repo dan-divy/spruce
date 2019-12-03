@@ -8,11 +8,27 @@ var forced;
 var graph = {};
 var hostName;
 var statsInt;
-let slideQueue = [];
+let slideQueue;
 let pause;
+
 $.notify = function(msg, type = "success", force) {
-  slideQueue.push({ msg, type });
+  console.log(msg);
+  if (slideQueue) {
+    clearTimeout(slideQueue);
+  }
+  slideQueue = setTimeout(() => {
+    $("#notify_message").slideUp(600);
+  }, 5000);
+
+  $("#notify_message")
+    .slideUp(600)
+    .delay(700)
+    .removeClass()
+    .addClass("notify_message-" + type)
+    .html("<center>" + msg + "</center>")
+    .slideDown(600);
 };
+
 let runningSlide;
 
 function loadPage(id) {
@@ -23,23 +39,6 @@ function loadPage(id) {
     .delay(200)
     .fadeIn();
 }
-
-setInterval(() => {
-  if (pause) return;
-  if (slideQueue.length == 0 || runningSlide) return;
-  runningSlide = true;
-  let { msg, type } = slideQueue[0];
-  $("#notify_message").removeClass();
-  $("#notify_message").addClass("notify_message-" + type);
-  $("#notify_message").html("<center>" + msg + "</center>");
-  $("#notify_message")
-    .slideDown(600)
-    .delay(1000)
-    .slideUp(600, null, function() {
-      slideQueue.splice(0, 1);
-      runningSlide = false;
-    });
-}, 500);
 
 if (localStorage.dev_key) {
   startSocket(localStorage.dev_key, localStorage.host);
@@ -66,10 +65,11 @@ function startSocket(key, host = $("#host").val()) {
     loadPage("connecting");
   }, 7000);
   socket.on("connect", function() {
-    socket.emit("client_analytics");
+    console.log("CONNECT");
     if (!connected) connected = true;
     else return;
-    $.notify("Connected!", "success");
+    socket.emit("client_analytics");
+    $.notify("Connected to host", "success");
     $("#connecting").fadeOut(function(authenticated) {
       if (key) {
         return socket.emit("password", key);
@@ -117,7 +117,7 @@ function startSocket(key, host = $("#host").val()) {
     );
   });
   socket.on("fetch-users", function(data) {
-    console.log("DATA", data)
+    console.log("DATA", data);
     $("#data-users").html(
       data.map(
         u => `
