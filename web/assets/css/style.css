@@ -690,4 +690,14 @@ a {
 
 .notify_message-danger{
   background-color: #d9534f;
+<<<<<<< HEAD
+=======
+}
+.dataTables_length {
+  position:absolute;
+  width:50%
+}
+input {
+  height:30px
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 }

@@ -1,35 +1,79 @@
 console.log(
   "Do not paste anything here unless told to by a developer of spruce. "
 );
+<<<<<<< HEAD
 const backend = require("electron").ipcRenderer;
 const shell = require("electron").shell;
 var config;
+=======
+const backend = ipcRenderer;
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 var socket;
 var connected;
 var forced;
 var graph = {};
+var hostName;
 var statsInt;
+<<<<<<< HEAD
 $.notify = function(msg, type = "success") {
+=======
+let slideQueue = [];
+let pause;
+$.notify = function(msg, type = "success", force) {
+  slideQueue.push({ msg, type });
+};
+let runningSlide;
+
+function loadPage(id) {
+  if ($("#" + id).css("display") == "block") return;
+  let pages = ["connecting", "download", "password-div", "main"];
+  pages.forEach(x => (x != id ? $("#" + x).fadeOut() : true));
+  $("#" + id)
+    .delay(200)
+    .fadeIn();
+}
+
+setInterval(() => {
+  if (pause) return;
+  if (slideQueue.length == 0 || runningSlide) return;
+  runningSlide = true;
+  let { msg, type } = slideQueue[0];
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   $("#notify_message").removeClass();
   $("#notify_message").addClass("notify_message-" + type);
   $("#notify_message").html("<center>" + msg + "</center>");
   $("#notify_message")
     .slideDown(600)
+<<<<<<< HEAD
     .delay(3000)
     .slideUp(600);
 };
 $.notify("Welcome to the Spruce App!", "success");
+=======
+    .delay(1000)
+    .slideUp(600, null, function() {
+      slideQueue.splice(0, 1);
+      runningSlide = false;
+    });
+}, 500);
+
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 if (localStorage.dev_key) {
-  console.log("Attempt Key: " + localStorage.dev_key);
-  startSocket(localStorage.dev_key);
+  startSocket(localStorage.dev_key, localStorage.host);
 } else {
-  $("#connecting").fadeIn();
+  loadPage("connecting");
+  $.notify("Welcome to the Spruce App!", "success");
 }
-function startSocket(key) {
+function startSocket(key, host = $("#host").val()) {
   if (connected) return;
+<<<<<<< HEAD
   $.notify("Attempting to connect!", "success");
   console.log("Connected: " + key);
   socket = io($("#host").val());
+=======
+  $.notify("Attempting to connect!", "warning");
+  socket = io(host, { path: "/app" });
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   setTimeout(() => {
     if (connected || forced) return (forced = false);
     if (localStorage.dev_key) {
@@ -40,31 +84,35 @@ function startSocket(key) {
       $.notify("Unable to connect after 7s", "danger");
     }
     socket.disconnect() && socket.destroy();
-    $("#connecting").fadeIn();
+    socket = null;
+    clearInterval(statsInt);
+    loadPage("connecting");
   }, 7000);
   socket.on("connect", function() {
     socket.emit("client_analytics");
     if (!connected) connected = true;
     else return;
-    console.log(connecting);
     $.notify("Connected!", "success");
     $("#connecting").fadeOut(function(authenticated) {
       if (key) {
         return socket.emit("password", key);
       }
       if (!authenticated) {
-        $("#password-div").fadeIn();
+        loadPage("password-div");
       } else {
-        $("#main").fadeIn();
+        loadPage("main");
       }
     });
   });
 
   socket.on("correct_password", function(key, conf) {
     localStorage.dev_key = key;
+    localStorage.host = host;
+    hostName = host;
+    $("#host-info").text(host.split("//")[1]);
     config = conf;
     $("#password-div").fadeOut(function() {
-      $("#main").fadeIn();
+      loadPage("main");
       backend.send("check_update");
     });
   });
@@ -72,8 +120,7 @@ function startSocket(key) {
   socket.on("disconnect", function() {
     if (!connected) return;
     clearInterval(statsInt);
-    $("#main").fadeOut();
-    $("#connecting").fadeIn();
+    loadPage("connecting");
     $.notify("Connection disconnected", "warning");
     clearInterval(statsInt);
     connected = false;
@@ -82,9 +129,9 @@ function startSocket(key) {
   socket.on("wrong_password", function(tries) {
     if (localStorage.dev_key) {
       delete localStorage.dev_key;
-      $("#connecting").fadeIn();
+      loadPage("connecting");
     } else {
-      $("#password-div").fadeIn();
+      loadPage("password-div");
     }
     $("#password-error").html(
       '<span style="color: red">Password was incorrect, ' +
@@ -110,13 +157,19 @@ function startSocket(key) {
     $('input[type="search"], select').addClass("form-control");
   });
   socket.on("server_analytics", function(data) {
+<<<<<<< HEAD
     console.log(data);
+=======
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
     const visitors = data.find(x => x.name == "visitors")
       ? data.find(x => x.name == "visitors").stats
       : false;
     if (!visitors) return;
+<<<<<<< HEAD
     console.log(visitors);
     console.log(visitors.map(x => x.date));
+=======
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
     visitors.sort((x, y) => {
       return (
         x.date.split("-")[x.date.split("-").length - 1] -
@@ -177,7 +230,6 @@ function startSocket(key) {
     let now = visitors[visitors.length - 1].amount;
     let increase = now - yesterday;
     let percent = Math.round((increase / yesterday) * 100);
-    console.log(now, yesterday);
     $("#graph-daily").text(percent);
     if (increase >= 0) {
       var symbol = "+";
@@ -196,6 +248,7 @@ function startSocket(key) {
     const color = $(`#${name}-color`);
     const face = $(`#${name}-icon`);
     const text = $(`#${name}-status`);
+    if (value.toString().startsWith("-0")) value = 0;
     function emotion(good) {
       if (good) {
         text.text("Good");
@@ -239,9 +292,6 @@ function startSocket(key) {
   socket.emit("stats");
   statsInt = setInterval(function() {
     socket.emit("stats");
-  }, 1000);
-  socket.on("cpu", function(data) {
-    changeStatus("cpu", data);
     let current_datetime = new Date();
     let formatted_date =
       current_datetime.getFullYear() +
@@ -256,27 +306,20 @@ function startSocket(key) {
       ":" +
       current_datetime.getSeconds();
     $("#stats-status").html("Connected at " + formatted_date);
+  }, 1000);
+  socket.on("sys-info", function(data) {
+    data.forEach(s => {
+      $("#" + s.name + "-info").text(s.value);
+    });
+  });
+  socket.on("cpu", function(data) {
+    changeStatus("cpu", data);
   });
   socket.on("database", function(data) {
     let count = 0;
-    console.log(data.data);
     data.data.forEach(x => (count += x.count));
     changeStatus("database", count);
     $("#database-status").html(data.msg);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
     let a = [
       "A",
       "B",
@@ -336,37 +379,27 @@ function startSocket(key) {
   });
   socket.on("ram", function(data) {
     changeStatus("ram", data);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
   });
+
+  socket.on("users", function(users) {
+    $("#users-body").html(
+      users.map(
+        u => `
+    <tr>
+      <td><img height="30" src="${host}${u.profile_pic ||
+          "../spruce/spruce/public/images/logo/logo.png"}"></td>
+      <td>${u.username}</td>
+      <td>${u.firstname}</td>
+      <td>${u.lastname}</td>
+      <td>${u.bio}</td>
+  </tr>`
+      )
+    );
+    $("#users-table").DataTable({ responsive: !0, destroy: true });
+  });
+
   socket.on("sockets", function(data) {
     changeStatus("now", data);
-    let current_datetime = new Date();
-    let formatted_date =
-      current_datetime.getFullYear() +
-      "-" +
-      (current_datetime.getMonth() + 1) +
-      "-" +
-      current_datetime.getDate() +
-      ", " +
-      current_datetime.getHours() +
-      ":" +
-      current_datetime.getMinutes() +
-      ":" +
-      current_datetime.getSeconds();
-    $("#stats-status").html("Connected at " + formatted_date);
   });
   $("#password-button").click(function() {
     $("#password-error").html("");
@@ -376,17 +409,20 @@ function startSocket(key) {
 let done;
 backend.on("progress-error", function(event, err, fade) {
   if (fade) {
-    $("#download").fadeOut();
-    $("#connecting").fadeIn();
+    loadPage("connecting");
   }
   $.notify(err, "danger");
+<<<<<<< HEAD
   console.error(obj);
+=======
+  console.error(err);
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
 });
+
 backend.on("progress", (event, obj) => {
-  if (done) return;
   let percent = parseInt(obj.progress * 100) / 100 + "%";
-  $("#download").fadeIn();
-  $("#connecting").fadeOut();
+  if (done) return;
+  loadPage("download");
   $("#download-progress").attr(
     "aria-valuenow",
     Math.round(parseInt(obj.progress) * 100) / 100
@@ -416,14 +452,18 @@ backend.on("error", function(e, err) {
   $.notify(error, "danger");
 });
 backend.on("killed", function(e, code) {
+<<<<<<< HEAD
   $("#main").fadeOut();
   $("#connecting").fadeIn();
+=======
+  loadPage("connecting");
+>>>>>>> ba6b650b49c26708d5263f1f0afbad01d344d574
   $.notify("Spruce killed, kill code: " + code);
 });
 backend.on("update", function(e, yes) {
   if (!yes) return;
   $("#update-version").text(yes);
-  $("#update").fadeIn();
+  loadPage("update");
   $("#update-btn").on("click", function() {
     $("#update").html(
       'Are you sure? <a id="update-yes">Yes</a>, <a id="update-no" style="margin-left:0">No</a>'
@@ -453,7 +493,7 @@ function startSpruce() {
 function restartSpruce() {
   endSpruce(function() {
     socket.destroy();
-    startSpruce();
+    startSocket(localStorage.dev_key, localStorage.host);
   });
 }
 
@@ -463,7 +503,7 @@ function endSpruce(cb) {
     clearInterval(statsInt);
     $.notify("Stopping spruce...", "warning");
     socket.emit("shutdown");
-    $("#connecting").fadeIn();
+    loadPage("connecting");
     localStorage.dev_key = "";
     delete localStorage.dev_key;
     socket.on("disconnect", function() {
@@ -477,14 +517,14 @@ function logout() {
   forced = true;
   socket.destroy();
   socket.disconnect();
-  $("#main").fadeOut(function() {
-    $("#connecting").fadeIn();
-  });
+  delete localStorage.dev_key;
+  loadPage("connecting");
 }
 
 function openBrowser(def) {
   if (def) {
-    shell.openExternal("https://github.com/dan-divy/spruce");
+    return shell.openExternal("https://github.com/dan-divy/spruce");
   }
-  shell.openExternal(`http://${config.http.host}:${config.http.port}`);
+  let link = `${hostName}`;
+  shell.openExternal(link);
 }
