@@ -10,12 +10,14 @@ const newsapi = new NewsAPI("a4c4e845fea64f9e9c72541aa354a29e").v2;
 router.get("/", function(req, res, next) {
   if (req.session._id && req.session.user) {
     user.getAll((err, users) => {
+      var posts = [];
       for (var i = 0; i < users.length; i++) {
         for (var j = 0; j < users[i].posts.length; j++) {
           users[i].posts[j].timeago = ta.ago(users[i].posts[j].createdAt);
+          posts.push({ user: users[i], post: users[i].posts[j] });
         }
       }
-      var posts = [];
+
       user.findOne({ username: req.session.user }, (error, req_user) => {
         /*   for(var z=0;z<req_user.followers.length;z++) {
             user.findOne({_id:req_user.followers[z]}, (e,followedUser) => {
@@ -30,7 +32,7 @@ router.get("/", function(req, res, next) {
           title: req.app.conf.name,
           lastSeen: lastSeen,
           people: users,
-          posts: true
+          posts: posts.reverse()
         });
       });
     });
