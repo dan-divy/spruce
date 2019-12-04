@@ -122,3 +122,4 @@ function genAPIKey(cb) {
     })  */
 }
 module.exports = router;
+module.exports.dev_key = secure_dev_key;

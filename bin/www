@@ -3,12 +3,12 @@
 /**
  * Module dependencies.
  */
+process.title = "spruce";
 
 var app = require("../app");
 var io = require("socket.io");
 var debug = require("debug")("v2.0.0:server");
 var http = require("http");
-
 /**
  * Get port from environment and store in Express.
  */
@@ -90,4 +90,10 @@ function onListening() {
   );
 }
 
-module.exports = { sio };
+module.exports = { sio, server };
+
+if (process.argv.find(a => a == "--app")) {
+  require("../utils/handlers/app_socket");
+}
+
+var socket = require("../utils/handlers/socket");
