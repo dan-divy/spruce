@@ -6,8 +6,8 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist; electron-builder; npm version minor",
-    "postinstall": "electron-rebuild -v `node -e \"console.log(require('./package.json').devDependencies['electron'].slice(1));\"`"
+    "build": "npm version 2.0.0-`git rev-parse --short HEAD` > dist/bye; rm -rf dist; electron-builder; npm version minor",
+    "postinstall": "electron-rebuild -v `node -e \"console.log(require('./package.json').devDependencies['electron'].slice(1));\"`;"
   },
   "repository": {
     "type": "git",
