@@ -1,6 +1,6 @@
 {
   "name": "spruce-app",
-  "version": "2.0.0",
+  "version": "2.0.0-d51c286",
   "description": "spruce app to control and start spruce",
   "main": "www",
   "scripts": {
