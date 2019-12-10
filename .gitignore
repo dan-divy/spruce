@@ -1,3 +1,4 @@
 node_modules
 .spruce/
 data/out.log
+dist/

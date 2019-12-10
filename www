@@ -2,7 +2,6 @@
 
 const { app, BrowserWindow, ipcMain } = require("electron");
 const fs = require("file-system");
-const fetch = require("node-fetch");
 const path = require("path");
 let mainWindow;
 
@@ -26,7 +25,10 @@ fs.readdir(path.join(__dirname, "events"), function(err, folders) {
       files.forEach(file => {
         let name = file.split(".")[0];
         ipcMain.on(name, function() {
-          require(path.join(__dirname, "events", folder, file))(mainWindow);
+          require(path.join(__dirname, "events", folder, file))(
+            mainWindow,
+            app
+          );
         });
       });
     });

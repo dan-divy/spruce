@@ -3,20 +3,21 @@ const nodeGit = require("nodegit");
 const npm = require("npm");
 const path = require("path");
 
-function pathJoin(where) {
+function pathJoin(...where) {
+  where = where.join("/");
   return path.resolve(where);
 }
 
-module.exports = function(mainWindow) {
+module.exports = function(mainWindow, app) {
   let available = true;
   try {
-    fs.readFileSync(pathJoin(__dirname + "/../../.spruce/bin/www"));
+    fs.readFileSync(pathJoin(app.getPath("appData") + "/spruce/bin/www"));
   } catch (err) {
     available = false;
   }
   if (available) {
     let proc = require("child_process").fork(
-      pathJoin(__dirname + "/../../.spruce/bin/www"),
+      pathJoin(app.getPath("appData"), "spruce/bin/www"),
       ["--app"],
       {
         detached: true,
@@ -52,16 +53,16 @@ module.exports = function(mainWindow) {
     console.log(pid);
   } else {
     try {
-      fs.rmdirSync(pathJoin(__dirname + "/../../.spruce"));
+      fs.rmdirSync(pathJoin(app.getPath("appData"), "spruce"));
     } catch (err) {}
     console.log("Downloading...");
     nodeGit
       .Clone(
         "https://github.com/dan-divy/spruce",
-        pathJoin(__dirname + "/../../.spruce"),
+        pathJoin(app.getPath("appData"), "spruce"),
         {
           bare: false,
-          checkoutBranch: "project-oak",
+          checkoutBranch: "master",
           fetchOpts: {
             callbacks: {
               transferProgress: function(stats) {
@@ -87,13 +88,9 @@ module.exports = function(mainWindow) {
           progress: 0
         });
         setTimeout(() => {
-          var options = {
-            path: pathJoin(__dirname + "/../../.spruce"), // installation path [default: '.']
-            forceInstall: true
-          };
           npm.load(
             {
-              prefix: pathJoin(__dirname + "/../../.spruce")
+              prefix: pathJoin(app.getPath("appData"), "spruce")
             },
             function() {
               mainWindow.webContents.send("progress", {
