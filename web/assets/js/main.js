@@ -31,6 +31,11 @@ $.notify = function(msg, type = "success", force) {
 
 let runningSlide;
 
+backend.send("config");
+backend.on("config", function(e, conf) {
+  $("#version").text("Spruce v" + conf.version)
+});
+
 function loadPage(id) {
   if ($("#" + id).css("display") == "block") return;
   let pages = ["connecting", "download", "password-div", "main"];
