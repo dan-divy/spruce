@@ -6,7 +6,7 @@ Spruce is a tiny but powerful open-source social networking platform made with N
 
 [![Financial Contributors on Open Collective](https://opencollective.com/dan_divy/all/badge.svg?label=financial+contributors)](https://opencollective.com/dan_divy) [![Gitter](https://badges.gitter.im/spruce-social/community.svg)](https://gitter.im/spruce-social/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fae0af1cd8784133bdb3e86727e3ff2a)](https://www.codacy.com/app/DivySrivastava/spruce?utm_source=github.com&utm_medium=referral&utm_content=DivySrivastava/spruce&utm_campaign=Badge_Grade) ![](https://img.shields.io/badge/license-MIT-green.svg) ![](https://api.travis-ci.org/DivySrivastava/spruce.svg?branch=master)
 
-_Deployed_ [_here_](http://spruce.dancodes.online)
+_Deployed_ [_here_](https://sprucev3.dancodes.online/)
 
 Get the live MongoDB stats out [here](https://cloud.mongodb.com/freemonitoring/cluster/SQXXT6OAMR757LIEYJRN3WDUCIRAEYYV).
 
