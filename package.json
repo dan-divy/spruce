@@ -35,8 +35,7 @@
     "prompts": "^2.2.1",
     "request": "2.88.0",
     "socket.io": "^2.3.0",
-    "time-ago": "0.2.1",
-    "usage": "^0.7.1"
+    "time-ago": "0.2.1"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",
@@ -90,5 +89,8 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/dan_divy"
+  },
+  "optionalDependencies": {
+    "usage": "^0.7.1"
   }
 }
