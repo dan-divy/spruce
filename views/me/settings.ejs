@@ -2,6 +2,11 @@
 <html>
   <%- include('../head') -%>
   <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
+  <style>
+  .feed-view-img {
+    display: none;
+  }
+  </style>
   <body>
   <%- include('../navbar')	-%>
     <br>
@@ -44,7 +49,7 @@
           show_notification('Profile picture updated!', 'success')
       })
       .fail(function(data){
-          show_notification(data.responseText, 'danger')  
+          show_notification(data.responseText, 'danger')
       });
     }
     function change(value, key) {
@@ -61,7 +66,7 @@
             show_notification(key + ' changed to ' + value.toString().slice(0, 80), 'success')
         })
         .fail(function(data){
-            show_notification(data.responseText, 'error')  
+            show_notification(data.responseText, 'error')
         });
     }
 
