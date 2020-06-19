@@ -13,7 +13,7 @@ module.exports = {
 	"author":"Divy Srivastava",
 	"version":"2.0.0",
 	"db": {
-		"connectionUri":"mongodb://thoughtlotto:B3arcats!2#45@ds155614.mlab.com:55614/heroku_d9fqbm16",
+		"connectionUri":"mongodb://thoughtlotto:B3arcats!2#45@ds351719-a0.mlab.com:51719,ds351719-a1.mlab.com:51719/heroku_3xjscc08?replicaSet=rs-ds351719",
 		//"connectionUri":"mongodb://"+dbHost+":27017/spruce",
 		"params": {},
 		"collections": [
