@@ -89,7 +89,8 @@ router.post('/upload', formParser,function(req, res, next) {
 			final_location = null;
 		}
 			db.findOne({username:req.session.user}, (err, u) => {
-				console.log(u)
+				console.log(u
+          if(u!=undefined) {
 				u.posts.push({
 					_id:random_id,
 					author:req.session.user,
@@ -109,7 +110,9 @@ router.post('/upload', formParser,function(req, res, next) {
 					// Redirect back after the job is done.
 					res.redirect('/')
 				})
-			
+			} else {
+        res.redirect('/')
+      }
 		})
 })
 module.exports = router;
