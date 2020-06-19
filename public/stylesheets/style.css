@@ -470,7 +470,7 @@ a ~ a {
 
 .tab-div {
   color: white;
-  background: linear-gradient(150deg,#26B99A 10%,rgb(38, 183, 110) 90%); */
+  background: #97af7a;
 
 }
 .padding {
@@ -504,7 +504,7 @@ a ~ a {
   width:200px;
   height:200px;
   border-radius: 20px;
-  border:2px solid #18bc9c;
+  border:2px solid #97af7a;
 }
 .upload-btn-wrapper {
   position: relative;
@@ -578,7 +578,7 @@ a {
 }
 
 .notify_message-success{
-    background-color: #26B99A;
+    background-color: #97af7a;
 }
 
 .notify_message-danger{
