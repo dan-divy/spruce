@@ -65,7 +65,7 @@ typings/
 .next
 
 .vscode/sftp.json
-# local uploads
+# local uploads 
 public/feeds
 public/images/profile_pictures
 .history/
