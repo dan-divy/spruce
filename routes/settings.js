@@ -89,7 +89,7 @@ router.post('/upload', formParser,function(req, res, next) {
 			final_location = null;
 		}
 			db.findOne({username:req.session.user}, (err, u) => {
-				console.log(u
+				console.log(u)
           if(u!=undefined) {
 				u.posts.push({
 					_id:random_id,
