@@ -19,9 +19,9 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <!-- -->
                 <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
-                <% if(people[i].posts[z].author == user.username) { %>
-                  <li><a href="/me/post/<%=people[i].posts[z]._id%>"><i class="fa fa-cog"></i> Edit</a></li>
+                <!--<li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
+              -->  <% if(people[i].posts[z].author == user.username) { %>
+                <!--  <li><a href="/me/post/<%=people[i].posts[z]._id%>"><i class="fa fa-cog"></i> Edit</a></li>-->
                   <li><a href="/me/post/delete/<%=people[i].posts[z]._id%>"><i class="fa fa-trash"></i> Delete</a></li>
                 <% } %>
               </ul>
