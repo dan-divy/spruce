@@ -62,7 +62,7 @@ typings/
 .env
 
 # next.js build output
-.next
+.next 
 
 .vscode/sftp.json
 # local uploads
