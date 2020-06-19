@@ -1,7 +1,7 @@
 var dbHost = process.env.dbHost || "localhost";
 module.exports = {
-	"name":"spruce",
-	"title":"spruce",
+	"name":"ThoughtLotto",
+	"title":"ThoughtLotto",
 	"commands":{
 		"package":"electron-packager electron.js spruce --electronVersion=2.0.12 --overwrite --icon=/public/images/logo/logo.png --prune=true --out=release",
 		"build":""
