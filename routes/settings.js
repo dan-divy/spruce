@@ -49,9 +49,12 @@ router.get('/post/:action/:query', function(req, res, next) {
 				console.log(u);
 				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url)
         try {
-          u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
-
           fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
+        } catch (e) {
+          console.log(e);
+        }
+        try {
+          u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
 				u.save(err => {
 					if (err) throw err;
 					console.log('Post deleted');
@@ -59,6 +62,7 @@ router.get('/post/:action/:query', function(req, res, next) {
 				})
       } catch (e) {
         console.log(e);
+        res.redirect('/')
       }
 			});
 		}
