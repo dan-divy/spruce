@@ -47,13 +47,19 @@ router.get('/post/:action/:query', function(req, res, next) {
 			db.findOne({username:req.session.user}, (err, u) => {
 				let id = req.params.query
 				console.log(u);
-				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url) fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
-				u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
+				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url)
+        try {
+          u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
+
+          fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
 				u.save(err => {
 					if (err) throw err;
 					console.log('Post deleted');
 					res.redirect('/')
 				})
+      } catch (e) {
+        console.log(e);
+      }
 			});
 		}
       break;
