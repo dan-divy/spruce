@@ -129,7 +129,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
 				if(fs.existsSync((__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1]))) {
 					fs.unlinkSync(__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1])
 				}
-				file.path = __dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1];
+				file.path = user.profile_pic;
 
 			});
 
