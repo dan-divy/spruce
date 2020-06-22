@@ -128,7 +128,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
 								delete req.session.user;
 								req.session.user = profile.username;
 								req.session._id = profile._id;
-								res.status(200).send("/images/profile_pictures/" + user.username + '.' + file.name.split('.')[1])
+								res.status(200).send(final_location)
 							})
 						}
 					});
