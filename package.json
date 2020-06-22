@@ -30,7 +30,9 @@
     "passport-google-oauth": "^2.0.0",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
-    "time-ago": "0.2.1"
+    "time-ago": "0.2.1",
+    "multer": "*",
+    "cloudinary": "*"
   },
   "devDependencies": {
     "electron": "2.0.12"

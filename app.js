@@ -16,6 +16,7 @@ var restApi = require("./routes/api/v1/index");
 var publicApiRouter = require("./routes/developer/api");
 var chatRouter = require("./routes/chat");
 
+
 var app = express();
 app.conf = require("./config/app");
 // view engine setup
@@ -53,6 +54,8 @@ app.use("/developer", publicApiRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
