@@ -107,10 +107,10 @@ router.post('/v1/user/:mode', function(req, res, next) {
 					return;
 				}
 				var final_location, type;
-				if(req.files.filetoupload.name) {
+				if(file.name) {
 				// Assign static_url path
 
-	      cloudinary.v2.uploader.upload(req.files.filetoupload.path,
+	      cloudinary.v2.uploader.upload(file.path,
 	        function(error, result) {
 	          console.log(result, error);
 	          if (!error) {
@@ -138,10 +138,10 @@ router.post('/v1/user/:mode', function(req, res, next) {
 					return;
 				}
 				var final_location, type;
-				if(req.files.filetoupload.name) {
+				if(file.name) {
 				// Assign static_url path
 
-	      cloudinary.v2.uploader.upload(req.files.filetoupload.path,
+	      cloudinary.v2.uploader.upload(file.path,
 	        function(error, result) {
 	          console.log(result, error);
 	          if (!error) {
