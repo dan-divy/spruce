@@ -103,6 +103,29 @@ router.post('/v1/user/:mode', function(req, res, next) {
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return res.status(404).send('Unsupported file type!');
 				}
+				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
+					return;
+				}
+				var final_location, type;
+				if(req.files.filetoupload.name) {
+				// Assign static_url path
+
+	      cloudinary.v2.uploader.upload(req.files.filetoupload.path,
+	        function(error, result) {
+	          console.log(result, error);
+	          if (!error) {
+	            final_location = result.url;
+							user['profile_pic'] = final_location;
+							user.save((err, profile) => {
+								delete req.session.user;
+								req.session.user = profile.username;
+								req.session._id = profile._id;
+								res.status(200).send(final_location)
+							})
+						}
+					});
+			return;
+		}
 				if(fs.existsSync((__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1]))) {
 					fs.unlinkSync(__dirname.split('/routes')[0] + '/public/images/profile_pictures/' + user.username + '.' + file.name.split('.')[1])
 				}
