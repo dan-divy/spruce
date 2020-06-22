@@ -123,21 +123,23 @@ router.post('/v1/user/:mode', function(req, res, next) {
 	          console.log(result, error);
 	          if (!error) {
 	            final_location = result.url;
-	            type = mime.lookup(req.files.filetoupload.name).split("/")[1];
 							user['profile_pic'] = final_location;
 							user.save((err, profile) => {
 								delete req.session.user;
 								req.session.user = profile.username;
 								req.session._id = profile._id;
-								res.status(200).send(final_location)
+								res.status(200).send("/images/profile_pictures/" + user.username + '.' + file.name.split('.')[1])
 							})
 						}
 					});
-				}
 			return;
-		})
+		}
 		return;
-	}
+	})
+})
+}
+
+
 	db.findOne({_id: req.body._id}, (err, user) => {
 		if(err) return res.end(err);
 		if(!user) return res.sendStatus(404);
