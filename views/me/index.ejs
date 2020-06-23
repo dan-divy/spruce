@@ -2,40 +2,27 @@
 <html>
   <%- include('../head') -%>
     <link rel="stylesheet" type="text/css" href="/stylesheets/moment.css">
-    <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" />
-    <style>
-    .feed-view-img {
-      display: none;
-    }
-    .gram-card-image img {
-    max-height: 35vh !important;
-    width: auto;
-}
-.logo {
-    border-radius: 50% !important;
-     width: 40px !important;
-    height: 40px !important;
-}
-    </style>
+    <link type="text/css" rel="stylesheet" media="screen" href="/animations/jquery-sakura.min.css" /> 
   <body>
   <%- include('../navbar')	-%>
     <br>
     <div class="container" id="mainPage">
       <img src="<%= user.profile_pic %>" class="logo">
-      (<%= user.firstname %> <%= user.lastname %>)
-
+      <a class="gram-card-user-name" href="">@<%= user.username %></a>
+      (<%= user.firstname %> <%= user.lastname %>) 
+     
       <br><br><span class="bio"><%- user.bio %></span><br><br>
-
+     
       <div class="float-right margin-right-10">
-
-
+        
+        
         <a class="btn btn-action btn-sm btn-default" href="/me/settings">Settings</a>
       </div>
       <br><br><br>
-
-
+      
+     
     </div>
-
+    
     <div class="container">
       <center>
       <% for(var x=0;x<user.posts.length;x++) { %>
@@ -44,12 +31,12 @@
       </center>
     </div>
     <div class="container">
-      <br> <br>
+      <br><br>
       Developer mode : <input type="checkbox" name="dev-mode" id="dev-mode"><br>
                 <span class="bio" id="dev-key" style="display: none;">Enter developer key to verify your account: <form onsubmit="window.location.href = '/developer/verify/' + this.getElementsByTagName('input')[0].value; return false"><input class="form-control"></form></span>
               <br><br>
               </div>
-
+   
     <div id="notify_message" class="notify_message-success">
     	<center>Settings</center>
     </div>

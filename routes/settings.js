@@ -7,6 +7,7 @@ const mime = require('mime-types')
 var db = require('../utils/handlers/user');
 var formParser = require('../utils/form-parser.js');
 const fs = require('file-system');
+var cloudinary = require('../config/cloudinary');
 
 var image_types = ["png","jpeg","gif"];
 
@@ -47,23 +48,13 @@ router.get('/post/:action/:query', function(req, res, next) {
 			db.findOne({username:req.session.user}, (err, u) => {
 				let id = req.params.query
 				console.log(u);
-				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url)
-        try {
-          fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
-        } catch (e) {
-          console.log(e);
-        }
-        try {
-          u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
+				if(u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url) fs.unlinkSync('./public' + u.posts[u.posts.indexOf(u.posts.find(x => x._id == id))].static_url);
+				u.posts.splice(u.posts.indexOf(u.posts.find(x => x._id == id)), 1);
 				u.save(err => {
 					if (err) throw err;
 					console.log('Post deleted');
 					res.redirect('/')
 				})
-      } catch (e) {
-        console.log(e);
-        res.redirect('/')
-      }
 			});
 		}
       break;
@@ -80,27 +71,6 @@ router.get('/upload', function(req, res, next) {
 		})
 
 })
-
-var cloudinary = require('cloudinary');
-
-cloudinary.config({
-  cloud_name: 'nametagio',
-  api_key: '226387842149764',
-  api_secret: 'RK9oPEEeAx7uwc79ttZ0A2rRMLI'
-});
-var multer = require("multer");
-var storage = multer.diskStorage({
-  destination: function(req, file, callback) {
-    callback(null, './public/uploads'); // set the destination
-  },
-  filename: function(req, file, callback) {
-    callback(null, Date.now() + '.jpg'); // set the file name and extension
-  }
-});
-var upload = multer({
-  storage: storage
-});
-
 router.post('/upload', formParser,function(req, res, next) {
 			// Generate a random id
 			var random_id = guid.raw();
@@ -145,6 +115,5 @@ router.post('/upload', formParser,function(req, res, next) {
 		} else {
 			final_location = null;
 		}
-
 })
 module.exports = router;

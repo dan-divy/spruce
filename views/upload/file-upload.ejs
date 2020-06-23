@@ -7,6 +7,7 @@
       <a href="/" class="float-left black">
       <h2>
         <img src="/images/logo/logo.png" class="logo">
+        spruce
       </h2>
       </a>
       <div class="float-right margin-top-20">
@@ -22,7 +23,7 @@
         <div class="gram-card">
     <div class="gram-card-header">
       <img src="/images/logo/logo.png" class="gram-card-user-image">
-
+      <a class="gram-card-user-name" href="/u/"><%= user %></a>
 
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
@@ -51,12 +52,12 @@
 
     <div class="gram-card-content">
       <p><a class="gram-card-content-user" href="/u/<%= user %>"><%= user %></a><br>
-        <input type="text" name="caption" placeholder="My awesome idea..." class="form-control">
-        <!--<select class="form-control" name="type">
+        <input type="text" name="caption" placeholder="some_cool_text" class="form-control">
+        <select class="form-control" name="type">
           <option>thoughts</option>
           <option>moments</option>
           <option>events</option>
-        </select>-->
+        </select>
      </p>
 
       <br>
@@ -82,7 +83,7 @@
       </form>
     </div>
   <div id="notify_message" class=" notify_message-success">
-  	<center>You are now a part of ThoughtLotto!</center>
+  	<center>You are now a part of spruce!</center>
   </div>
   <%- include('../footer') -%>
   </body>

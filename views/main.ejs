@@ -2,11 +2,12 @@
 <div class="column col-xs-12 col-sm-9 col-lg-10" style="margin:auto" id="main">
 
 <ul class="list-group">
-  <!--<li class="list-group-item list-group-item-primary">
+  <li class="list-group-item list-group-item-primary">
     <img src="<%= user.profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
+     <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> <br>
      <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
      <br>
-   </li>-->
+   </li>
  </ul>
  <% for(var i=0;i<people.length;i++) { %>
  <% for(var z=0;z<people[i].posts.length;z++) { %>
@@ -14,18 +15,17 @@
 <div class="gram-card">
     <div class="gram-card-header">
       <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image lozad">
+      <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].authorID %>"><%= people[i].posts[z].author %></a>
 
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
-              <!-- -->
-                <ul class="dropdown-menu dropdown-menu-right">
-                <!--<li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
-              -->  <% if(people[i].posts[z].author == user.username) { %>
-                <!--  <li><a href="/me/post/<%=people[i].posts[z]._id%>"><i class="fa fa-cog"></i> Edit</a></li>-->
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
+                <% if(people[i].posts[z].author == user.username) { %>
+                  <li><a href="/me/post/<%=people[i].posts[z]._id%>"><i class="fa fa-cog"></i> Edit</a></li>
                   <li><a href="/me/post/delete/<%=people[i].posts[z]._id%>"><i class="fa fa-trash"></i> Delete</a></li>
                 <% } %>
               </ul>
-              <!--   -->
               </div>
               <div class="time"><%= people[i].posts[z].timeago %></div>
     </div>
@@ -37,7 +37,7 @@
       <center>
         <a href="<%= people[i].posts[z].static_url %>" class="progressive replace">
             <img author="<%= people[i].posts[z].author %>" src="/images/load.gif" id="<%= people[i].posts[z]._id %>" class="post img-responsive lozad preview">
-        </a>
+        </a>        
       <% } else { %>
       <video author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive" controls></video>
       <% } %>
@@ -75,7 +75,7 @@
       <button data="people[i].posts[z].likes" <% if(people[i].posts[z].likes.includes(user.username)) { %> disabled <% } %>onclick="this.innerHTML =  '<i class=\'glyphicon glyphicon-thumbs-up\'></i> ' + (parseInt(<%= people[i].posts[z].likes.length %>) + 1); this.disabled = true;" class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="<%= people[i].posts[z].author %>" id="<%= people[i].posts[z]._id %>-like">
         <i class="glyphicon glyphicon-thumbs-up"></i> <%= people[i].posts[z].likes.length %></button>
 
-      <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Comment here..."/>
+      <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Click enter to comment here..."/>
 
     </div>
 

@@ -31,8 +31,7 @@
     "request": "2.88.0",
     "socket.io": "^2.2.0",
     "time-ago": "0.2.1",
-    "multer": "*",
-    "cloudinary": "*"
+    "cloudinary": "1.22.0"
   },
   "devDependencies": {
     "electron": "2.0.12"

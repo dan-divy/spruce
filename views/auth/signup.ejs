@@ -1,24 +1,14 @@
 <!DOCTYPE html>
 <html>
   <%- include('../head') -%>
-  <style>
-  .btn-action {
-      color: #ffffff;
-      background-color: #97af7a;
-      border-color: #000000;
-      width: 100%;
-  }
-  a {
-    color: #5a7a36;
-    text-decoration: none;
-}
-  </style>
+
   <body>
     <div class="container-fluid">
-      <a href="/" class="float-left logo">
+      <a href="/" class="float-left">
         <h2>
-          <!--<img src="/images/logo/logo.png" class="logo">
-        --></h2>
+          <img src="/images/logo/logo.png" class="logo">
+          spruce
+        </h2>
       </a>
 
     </div>
@@ -30,41 +20,25 @@
         <%= error %>
     </div>
     <% } %>
-    <center><img src="/images/logo/logo.png" class="header-logo"></center>
-
         <!-- Signup FORM -->
     <form action="/account/new" method="post" enctype="multipart/form-data">
-         <label class="text-muted">Your Name</label>
+         <label class="text-muted">Full name</label>
         <div class="form-group">
 
-        <input type="text" placeholder="First Name" class="form-control" style="width: 48%;float: left;" name="fn" required="">
-        <input type="text" placeholder="Last Name" class="form-control" style="width: 48%;float: right;" name="ln" required="">
+        <input type="text" placeholder="first_name" class="form-control" style="width: 48%;float: left;" name="fn" required="">
+        <input type="text" placeholder="last_name" class="form-control" style="width: 48%;float: right;" name="ln" required="">
         </div>
         <br><br>
         <div class="form-group">
             <label class="text-muted">Username</label>
-            <input type="text" placeholder="U/N" class="form-control" name="username" required="">
+            <input type="text" placeholder="your_nick_name" class="form-control" name="username" required="">
         </div>
         <div class="form-group">
             <label class="text-muted">Password</label>
-            <input type="password" placeholder="P/W" class="form-control" name="password" required="">
+            <input type="password" placeholder="the_secret" class="form-control" name="password" required="">
         </div>
-        <label class="text-muted">Date of Birth</label>
+        <label class="text-muted">Date of birth</label>
         <div class="form-group">
-        <select class="form-control" name="month" style="float: left;width: 33%;">
-            <option>Jan</option>
-            <option>Feb</option>
-            <option>Mar</option>
-            <option>April</option>
-            <option>May</option>
-            <option>June</option>
-            <option>July</option>
-            <option>Aug</option>
-            <option>Sept</option>
-            <option>Oct</option>
-            <option>Nov</option>
-            <option>Dec</option>
-        </select>
         <select class="form-control" name="day" style="float: left;width: 33%;">
             <option>1</option>
             <option>2</option>
@@ -98,6 +72,20 @@
             <option>30</option>
            <option>31</option>
          </select>
+        <select class="form-control" name="month" style="float: left;width: 33%;">
+            <option>Jan</option>
+            <option>Feb</option>
+            <option>Mar</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>Aug</option>
+            <option>Sept</option>
+            <option>Oct</option>
+            <option>Nov</option>
+            <option>Dec</option>
+        </select>
         <select class="form-control" name="year" style="float: left;width: 33%;">
             <option>1960</option>
             <option>1961</option>
@@ -154,10 +142,10 @@
             <option>2012</option>
         </select>
         </div><br><br>
-        <button type="submit" class="btn btn-success btn-action">Submit</button>
+        <button type="submit" class="btn btn-success btn-action">GET STARTED</button>
     </form>
     <hr>
-   <p class="text-muted">Already a part of it? <a href="/account/getin">Login Here!</a></p>
+   <p class="text-muted">Already a part of it? <a href="/account/getin">login now!</a></p>
    </div>
 
   </body>

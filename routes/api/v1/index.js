@@ -9,28 +9,8 @@ var ig = require('../../../config/instagram');
 var g = require('../../../config/google');
 var formidable = require("formidable");
 var fs = require("file-system");
+var cloudinary = require('../../../config/cloudinary');
 
-
-
-var cloudinary = require('cloudinary');
-
-cloudinary.config({
-  cloud_name: 'nametagio',
-  api_key: '226387842149764',
-  api_secret: 'RK9oPEEeAx7uwc79ttZ0A2rRMLI'
-});
-var multer = require("multer");
-var storage = multer.diskStorage({
-  destination: function(req, file, callback) {
-    callback(null, './public/uploads'); // set the destination
-  },
-  filename: function(req, file, callback) {
-    callback(null, Date.now() + '.jpg'); // set the file name and extension
-  }
-});
-var upload = multer({
-  storage: storage
-});
 
 router.post('/v1/comment', function(req, res, next) {
 	db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
@@ -92,13 +72,10 @@ router.post('/v1/user/:mode', function(req, res, next) {
 	if(!req.session.user) return res.sendStatus(404);
 	if(req.params.mode == 'picture') {
 		db.findOne({_id: req.query.id}, (err, user) => {
-		if(!user) return res.sendStatus(404);
-		var image_types = ["png","jpeg","gif", "jpg"];
-		var form = new formidable.IncomingForm();
-
+			if(!user) return res.sendStatus(404);
+			var image_types = ["png","jpeg","gif", "jpg"];
+			var form = new formidable.IncomingForm();
 			form.parse(req);
-
-
 			form.on('fileBegin', function (name, file){
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return res.status(404).send('Unsupported file type!');
@@ -106,79 +83,48 @@ router.post('/v1/user/:mode', function(req, res, next) {
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return;
 				}
-				var final_location, type;
 				if(file.name) {
-				// Assign static_url path
-
-	      cloudinary.v2.uploader.upload(file.path,
-	        function(error, result) {
-	          console.log(result, error);
-	          if (!error) {
-	            final_location = result.url;
-							console.log(result.url);
-							user['profile_pic'] = final_location;
-							user.save((err, profile) => {
-								delete req.session.user;
-								req.session.user = profile.username;
-								req.session._id = profile._id;
-								res.status(200).send(final_location)
-							})
-						}
-					});
-			return;
-		}
-return;
-
+			    cloudinary.v2.uploader.upload(file.path,
+			      function(error, result) {
+			        console.log(result, error);
+			        if (!error) {
+								user['profile_pic'] = result.url;
+								user.save((err, profile) => {
+									delete req.session.user;
+									req.session.user = profile.username;
+									req.session._id = profile._id;
+									res.status(200).send(result.url)
+								})
+							}
+						});
+					return;
+				}
+				return;
 			});
-
 			form.on('file', function (name, file){
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return;
 				}
-				var final_location, type;
 				if(file.name) {
-				// Assign static_url path
-
-	      cloudinary.v2.uploader.upload(file.path,
-	        function(error, result) {
-	          console.log(result, error);
-	          if (!error) {
-	            final_location = result.url;
-							console.log(result.url);
-							user['profile_pic'] = final_location;
-							user.save((err, profile) => {
-								delete req.session.user;
-								req.session.user = profile.username;
-								req.session._id = profile._id;
-								res.status(200).send(final_location)
-							})
-						}
+		      cloudinary.v2.uploader.upload(file.path,
+		        function(error, result) {
+		          console.log(result, error);
+		          if (!error) {
+								user['profile_pic'] = result.url;
+								user.save((err, profile) => {
+									delete req.session.user;
+									req.session.user = profile.username;
+									req.session._id = profile._id;
+									res.status(200).send(result.url)
+								})
+							}
 					});
-			return;
-		}
-		return;
-	})
-})
-}
-
-
-	db.findOne({_id: req.body._id}, (err, user) => {
-		if(err) return res.end(err);
-		if(!user) return res.sendStatus(404);
-
-		user[req.body.key] = req.body.value;
-		/*user.save(function(err) {
-			if(err) console.error(err);
-			return res.sendStatus(200);
-		})*/
-		user.save((err, profile) => {
-				delete req.session.user;
-				req.session.user = profile.username;
-				req.session._id = profile._id;
-				res.status(200).send('done')
-
+					return;
+				}
+				return;
+			});
 		})
-	})
+	}
 });
 
 router.get('/v1/search', function(req, res, next) {

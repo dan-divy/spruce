@@ -470,7 +470,7 @@ a ~ a {
 
 .tab-div {
   color: white;
-  background: #97af7a;
+  background: linear-gradient(150deg,#26B99A 10%,rgb(38, 183, 110) 90%); */
 
 }
 .padding {
@@ -504,7 +504,7 @@ a ~ a {
   width:200px;
   height:200px;
   border-radius: 20px;
-  border:2px solid #97af7a;
+  border:2px solid #18bc9c;
 }
 .upload-btn-wrapper {
   position: relative;
@@ -521,8 +521,8 @@ a ~ a {
 }
 
 .logo {
-  /* border-radius: 50%; */
-  /* width: 40px; */
+  border-radius: 50%;
+  width: 40px;
   height: 40px;
 }
 h1,h2,h3,h4,h5,h6,a,p,body,html,div,span,form,input {
@@ -578,7 +578,7 @@ a {
 }
 
 .notify_message-success{
-    background-color: #97af7a;
+    background-color: #26B99A;
 }
 
 .notify_message-danger{

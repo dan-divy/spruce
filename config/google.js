@@ -1,6 +1,6 @@
-var client_id = process.env.g_client_id || '185312647242-3nqfd5msf5ks89kmeeiaqa4j3md9lvpr.apps.googleusercontent.com',
-	client_secret = process.env.g_client_secret || 'VHMqXofwZUJIl12w3DUeyzXb',
-    redirect_uri = process.env.g_redirect_uri || 'http://localhost:8000/account/oauth/google',
+var client_id = process.env.g_client_id || '<CLIENT_ID>',
+	client_secret = process.env.g_client_secret || '<CLIENT_SECRET>',
+    redirect_uri = process.env.g_redirect_uri || '<host>:<port>/account/oauth/google',
     auth_url = 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=' + redirect_uri + '&scope=profile%20email&client_id=' + client_id
 
 module.exports = {
