@@ -9,8 +9,7 @@ var ig = require('../../../config/instagram');
 var g = require('../../../config/google');
 var formidable = require("formidable");
 var fs = require("file-system");
-var cloudinary = require('../../../config/cloudinary');
-
+const {cloudinary, isSetup} = require('../../../config/cloudinary.js');
 
 router.post('/v1/comment', function(req, res, next) {
 	db.comment({username:req.body.author},{by:req.session.user,text:req.body.text},req.body._id, (err, result)=> {
@@ -83,7 +82,7 @@ router.post('/v1/user/:mode', function(req, res, next) {
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return;
 				}
-				if(file.name) {
+				if(file.name && isSetup) {
 			    cloudinary.v2.uploader.upload(file.path,
 			      function(error, result) {
 			        console.log(result, error);
@@ -98,14 +97,37 @@ router.post('/v1/user/:mode', function(req, res, next) {
 							}
 						});
 					return;
+				} else {
+					if (
+          fs.existsSync(
+            __dirname.split("/routes")[0] +
+              "/public/images/profile_pictures/" +
+              user.username +
+              "." +
+              file.name.split(".")[1]
+          )
+        ) {
+          fs.unlinkSync(
+            __dirname.split("/routes")[0] +
+              "/public/images/profile_pictures/" +
+              user.username +
+              "." +
+              file.name.split(".")[1]
+          );
+        }
+        file.path =
+          __dirname.split("/routes")[0] +
+          "/public/images/profile_pictures/" +
+          user.username +
+          "." +
+          file.name.split(".")[1];
 				}
-				return;
-			});
+      });
 			form.on('file', function (name, file){
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
 					return;
 				}
-				if(file.name) {
+				if(file.name && isSetup) {
 		      cloudinary.v2.uploader.upload(file.path,
 		        function(error, result) {
 		          console.log(result, error);
@@ -120,10 +142,47 @@ router.post('/v1/user/:mode', function(req, res, next) {
 							}
 					});
 					return;
+				} else {
+					user["profile_pic"] =
+	          "/images/profile_pictures/" +
+	          user.username +
+	          "." +
+	          file.name.split(".")[1];
+	        user.save((err, profile) => {
+	          delete req.session.user;
+	          req.session.user = profile.username;
+	          req.session._id = profile._id;
+	          res
+	            .status(200)
+	            .send(
+	              "/images/profile_pictures/" +
+	                user.username +
+	                "." +
+	                file.name.split(".")[1]
+	            );
+	        });
 				}
-				return;
 			});
-		})
+			return;
+		});
+		return;
+	} else {
+		db.findOne({ _id: req.body._id }, (err, user) => {
+	    if (err) return res.end(err);
+	    if (!user) return res.sendStatus(404);
+
+	    user[req.body.key] = req.body.value;
+	    /*user.save(function(err) {
+				if(err) console.error(err);
+				return res.sendStatus(200);
+			})*/
+	    user.save((err, profile) => {
+	      delete req.session.user;
+	      req.session.user = profile.username;
+	      req.session._id = profile._id;
+	      res.status(200).send("done");
+	    });
+	  });
 	}
 });
 
