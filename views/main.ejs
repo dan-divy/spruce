@@ -3,68 +3,67 @@
 
 <ul class="list-group">
   <li class="list-group-item list-group-item-primary">
-    <img src="<%= user.profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image">
+    <img src="<%= user.profile_pic %>?cache=<%= Math.random() %>" class="gram-card-user-image">
      <a class="gram-card-user-name" href="/me"> @<%= user.username %>'s Dashboard</a> <br>
      <span class="label label-info" style="float:right;">last login <%= lastSeen %></span>
      <br>
    </li>
  </ul>
- <% for(var i=0;i<people.length;i++) { %>
- <% for(var z=0;z<people[i].posts.length;z++) { %>
+ <%- posts.map(obj => `
 
 <div class="gram-card">
     <div class="gram-card-header">
-      <img src="<%= people[i].profile_pic %>?cache=<%= Math.round() %>" class="gram-card-user-image lozad">
-      <a class="gram-card-user-name" href="/u/<%= people[i].posts[z].authorID %>"><%= people[i].posts[z].author %></a>
+      <img src="${ obj.user.profile_pic }?cache=${ Math.random() }" class="gram-card-user-image lozad">
+      <a class="gram-card-user-name" href="/u/${ obj.post.authorID }">${ obj.post.author }</a>
 
             <div class="dropdown gram-card-time">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-option-vertical"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="<%= people[i].posts[z].static_url %>"><i class="fa fa-share"></i> View</a></li>
-                <% if(people[i].posts[z].author == user.username) { %>
-                  <li><a href="/me/post/<%=people[i].posts[z]._id%>"><i class="fa fa-cog"></i> Edit</a></li>
-                  <li><a href="/me/post/delete/<%=people[i].posts[z]._id%>"><i class="fa fa-trash"></i> Delete</a></li>
-                <% } %>
+                <li><a href="${ obj.post.static_url }"><i class="fa fa-share"></i> View</a></li>
+                ${obj.post.author == user.username ? `
+                  <li><a href="/me/post/${obj.post._id}"><i class="fa fa-cog"></i> Edit</a></li>
+                  <li><a href="/me/post/delete/${obj.post._id}"><i class="fa fa-trash"></i> Delete</a></li>
+                ` : ""}
               </ul>
               </div>
-              <div class="time"><%= people[i].posts[z].timeago %></div>
+              <div class="time">${ obj.post.timeago }</div>
     </div>
 <br>
 <br>
     <div class="gram-card-image">
-      <% if(people[i].posts[z].static_url) { %>
-      <% if(people[i].posts[z].type == 'png' || people[i].posts[z].type == 'jpg' || people[i].posts[z].type == 'jpeg') { %>
+      ${obj.post.static_url ? `
+      ${obj.post.type == 'png' || obj.post.type == 'jpg' || obj.post.type == 'jpeg' ? `
       <center>
-        <a href="<%= people[i].posts[z].static_url %>" class="progressive replace">
-            <img author="<%= people[i].posts[z].author %>" src="/images/load.gif" id="<%= people[i].posts[z]._id %>" class="post img-responsive lozad preview">
+        <a href="${ obj.post.static_url }" class="progressive replace">
+            <img author="${ obj.post.author }" src="/images/load.gif" id="${ obj.post._id }" class="post img-responsive lozad preview">
         </a>        
-      <% } else { %>
-      <video author="<%= people[i].posts[z].author %>" src="<%= people[i].posts[z].static_url %>" id="<%= people[i].posts[z]._id %>" class="post img-responsive" controls></video>
-      <% } %>
+      ` : `
+      <video author="${ obj.post.author }" src="${ obj.post.static_url }" id="${ obj.post._id }" class="post img-responsive" controls></video>
+      `}
       </center>
-      <% } %>
+       ` : "" }
     </div>
     <div class="gram-card-content">
 
-      <p><a class="gram-card-content-user" href="/u/undefined_void"><%= people[i].posts[z].author %></a>
-        <%= people[i].posts[z].caption %>
-        <span class="label label-info"><%= people[i].posts[z].category %></span>
+      <p><a class="gram-card-content-user" href="/u/undefined_void">${ obj.post.author}</a>
+        ${ obj.post.caption }
+        <span class="label label-info">${ obj.post.category }</span>
 
      </p>
 
-      <p class="comments"><%= people[i].posts[z].comments.length %> comment(s).</p>
+      <p class="comments">${ obj.post.comments.length } comment(s).</p>
       <br>
 
       <div class="comments-div">
 
       <div>
-        <% for(var c=0;c<people[i].posts[z].comments.length;c++) { %>
-        <a class="user-comment" href="/u/<%= people[i].posts[z].comments[c].by %>">
-        <%= people[i].posts[z].comments[c].by %>
+        ${obj.post.comments.map(comment => `
+        <a class="user-comment" href="/u/${ comment.by }">
+        ${ comment.by }
       </a>
-       <%= people[i].posts[z].comments[c].text %>
+       ${ comment.text }
        <br>
-       <% } %>
+       `).join("")}
      </div>
 
       </div>
@@ -72,16 +71,14 @@
     </div>
 
     <div class="gram-card-footer">
-      <button data="people[i].posts[z].likes" <% if(people[i].posts[z].likes.includes(user.username)) { %> disabled <% } %>onclick="this.innerHTML =  '<i class=\'glyphicon glyphicon-thumbs-up\'></i> ' + (parseInt(<%= people[i].posts[z].likes.length %>) + 1); this.disabled = true;" class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="<%= people[i].posts[z].author %>" id="<%= people[i].posts[z]._id %>-like">
-        <i class="glyphicon glyphicon-thumbs-up"></i> <%= people[i].posts[z].likes.length %></button>
+      <button data="obj.post.likes" ${obj.post.likes.includes(user.username) ?  "disabled" : ""} onclick="this.innerHTML =  '<i class=\'glyphicon glyphicon-thumbs-up\'></i> ' + (parseInt(${ obj.post.likes.length }) + 1); this.disabled = true;" class="footer-action-icons likes btn btn-link non-hoverable like-button-box" author="${ obj.post.author }" id="${ obj.post._id }-like">
+        <i class="glyphicon glyphicon-thumbs-up"></i> ${ obj.post.likes.length }</button>
 
-      <input id="<%= people[i].posts[z]._id %>" class="comments-input comment-input-box" author="<%= people[i].posts[z].author %>" type="text" id="comment" placeholder="Click enter to comment here..."/>
+      <input id="${ obj.post._id }" class="comments-input comment-input-box" author="${ obj.post.author }" type="text" id="comment" placeholder="Click enter to comment here..."/>
 
     </div>
 
   </div>
 <br>
-
-  <% } %>
-  <% } %>
+`).join("") %>
   </div>

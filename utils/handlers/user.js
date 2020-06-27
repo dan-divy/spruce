@@ -6,6 +6,7 @@ const a = require("array-tools");
 const _ = require("lodash/_arrayIncludes");
 
 mongoose.connect(require("../../config/app").db.connectionUri, {
+  useUnifiedTopology: true,
   useNewUrlParser: true
 });
 
@@ -38,9 +39,7 @@ function createNew(obj, cb) {
       if (user) {
         return cb(null, false);
       } else {
-        var bio = `Hey there! I'm ${obj.fn} ;)! Wish me on ${obj.day} ${
-          obj.month
-        }`;
+        var bio = `Hey there! I'm ${obj.fn} ;)! Wish me on ${obj.day} ${obj.month}`;
         var dob = obj.day + " " + obj.month + " " + obj.year;
         var newUser = new User({
           username: obj.username,
@@ -174,8 +173,9 @@ function comment(user, comment, _id, cb) {
   });
 }
 function like(user, like, _id, cb) {
+  console.log(user);
   User.findOne(user).exec((err, obj) => {
-    //	if (!obj) return cb("Does not exist.",null);
+    if (!obj) return cb("Does not exist.", null);
     //console.log(obj);
     for (var i = 0; i < obj.posts.length; i++) {
       if (obj.posts[i]._id == _id) {

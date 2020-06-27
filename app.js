@@ -5,6 +5,7 @@ var session = require("express-session");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var fs = require("file-system");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -15,9 +16,12 @@ var categoryRouter = require("./routes/category");
 var restApi = require("./routes/api/v1/index");
 var publicApiRouter = require("./routes/developer/api");
 var chatRouter = require("./routes/chat");
+var counterRouter = require("./utils/handlers/counter");
 
 var app = express();
+
 app.conf = require("./config/app");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -33,11 +37,22 @@ app.sessionMiddleware = session(cooky);
 
 app.set("trust proxy", 1); // trust first proxy
 app.use(app.sessionMiddleware);
+app.use(
+  logger("common", {
+    stream: fs.createWriteStream(
+      __dirname.endsWith(".spruce")
+        ? __dirname + "/../data/out.log"
+        : __dirname + "/out.log",
+      { flags: "a" }
+    )
+  })
+);
 app.use(logger("tiny"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(counterRouter);
 
 app.use("/", indexRouter);
 app.use("/u", usersRouter);

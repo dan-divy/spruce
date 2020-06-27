@@ -68,3 +68,4 @@ typings/
 # local uploads
 public/feeds/
 .history/
+.DS_Store

@@ -1,40 +1,42 @@
 {
-  "name": "pudding",
+  "name": "spruce",
   "version": "4.0.0",
+  "update": false,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "mocha && node ./bin/www"
+    "start": "node update.js; node ./bin/www",
+    "test": "mocha",
+    "postinstall": "opencollective-postinstall || true",
+    "app": "node update.js; node ./bin/www --app"
   },
   "dependencies": {
     "apikeygen": "^1.1.0",
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "chai": "^4.2.0",
-    "cookie-parser": "~1.4.3",
+    "cookie-parser": "^1.4.4",
     "debug": "~2.6.9",
-    "ejs": "~2.5.7",
+    "ejs": "^2.5.9",
     "express": "~4.16.0",
-    "express-session": "^1.15.6",
+    "express-session": "^1.17.0",
     "file-system": "^2.2.2",
     "formidable": "^1.2.1",
     "googleapis": "^39.2.0",
     "guid": "0.0.12",
     "http-errors": "~1.6.2",
-    "lodash": "^4.17.13",
-    "mocha": "^6.2.0",
-    "mongoose": "^5.3.13",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.2",
+    "mongoose": "^5.7.9",
     "morgan": "~1.9.0",
     "mv": "2.1.1",
     "newsapi": "^2.4.0",
+    "opencollective-postinstall": "^2.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "prompts": "^2.2.1",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
     "time-ago": "0.2.1",
     "cloudinary": "1.22.0"
-  },
-  "devDependencies": {
-    "electron": "2.0.12"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",
@@ -83,6 +85,13 @@
       "maintainer": "Divy Srivastava <dj.srivastava23@gmail.com>"
     }
   },
-  "author": "Divy Srivastava <dj.srivastava23@gmail.com>",
-  "license": "MIT"
+  "author": "Dan-Divy <dj.srivastava23@gmail.com,dan@dancodes.online>",
+  "license": "MIT",
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/dan_divy"
+  },
+  "optionalDependencies": {
+    "usage": "^0.7.1"
+  }
 }

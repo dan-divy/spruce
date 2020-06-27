@@ -39,7 +39,7 @@ router.get('/verify/:key', function(req, res, next) {
             });
         })
     } else {
-        res.status(405).send('Incorrect key! Check the console on startup!'); 
+        res.status(405).send('Incorrect key! Check the console on startup!');
      }
     });
 
@@ -66,7 +66,7 @@ router.use(function(req, res, next) {
             })
         })
     }
-   
+
 });
 router.get('/', function(req, res, next) {
 	res.render('dev/index', {
@@ -122,3 +122,4 @@ function genAPIKey(cb) {
     })  */
 }
 module.exports = router;
+module.exports.dev_key = secure_dev_key;
