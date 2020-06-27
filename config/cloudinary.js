@@ -6,9 +6,9 @@ cloudinary.config({
   api_secret: process.env.coudinary_api_secret || '<API_SECRET>'
 });
 
-var isSetup = false;
+var isSetup = false; //change to true if using cloudinary
 
 module.exports = {
     cloudinary,
-    isSetup //change to true if using cloudinary
+    isSetup
 };
