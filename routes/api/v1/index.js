@@ -43,40 +43,6 @@ router.post("/v1/like", function(req, res, next) {
   );
 });
 
-<<<<<<< HEAD
-router.post('/v1/user/:mode', function(req, res, next) {
-	if(!req.session.user) return res.sendStatus(404);
-	if(req.params.mode == 'picture') {
-		db.findOne({_id: req.query.id}, (err, user) => {
-			if(!user) return res.sendStatus(404);
-			var image_types = ["png","jpeg","gif", "jpg"];
-			var form = new formidable.IncomingForm();
-			form.parse(req);
-			form.on('fileBegin', function (name, file){
-				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
-					return res.status(404).send('Unsupported file type!');
-				}
-				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
-					return;
-				}
-				if(file.name && isSetup) {
-			    cloudinary.v2.uploader.upload(file.path,
-			      function(error, result) {
-			        console.log(result, error);
-			        if (!error) {
-								user['profile_pic'] = result.url;
-								user.save((err, profile) => {
-									delete req.session.user;
-									req.session.user = profile.username;
-									req.session._id = profile._id;
-									res.status(200).send(result.url)
-								})
-							}
-						});
-					return;
-				} else {
-					if (
-=======
 router.post("/v1/follow", function(req, res, next) {
   db.findOne(req.body, (err, user) => {
     var disabled = false;
@@ -118,7 +84,6 @@ router.post("/v1/user/:mode", function(req, res, next) {
           return res.status(404).send("Unsupported file type!");
         }
         if (
->>>>>>> 08051acf378c63ed6d48d3aeee065690441f07ec
           fs.existsSync(
             __dirname.split("/routes")[0] +
               "/public/images/profile_pictures/" +
@@ -141,7 +106,6 @@ router.post("/v1/user/:mode", function(req, res, next) {
           user.username +
           "." +
           file.name.split(".")[1];
-				}
       });
 			form.on('file', function (name, file){
 				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
