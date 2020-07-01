@@ -9,6 +9,7 @@ var ig = require("../../../config/instagram");
 var g = require("../../../config/google");
 var formidable = require("formidable");
 var fs = require("file-system");
+const {cloudinary, isSetup} = require('../../../config/cloudinary.js');
 
 router.post("/v1/comment", function(req, res, next) {
   db.comment(
@@ -106,50 +107,67 @@ router.post("/v1/user/:mode", function(req, res, next) {
           "." +
           file.name.split(".")[1];
       });
+			form.on('file', function (name, file){
+				if(!image_types.includes(file.name.split('.')[1].toLowerCase())) {
+					return;
+				}
+				if(file.name && isSetup) {
+		      cloudinary.v2.uploader.upload(file.path,
+		        function(error, result) {
+		          console.log(result, error);
+		          if (!error) {
+								user['profile_pic'] = result.url;
+								user.save((err, profile) => {
+									delete req.session.user;
+									req.session.user = profile.username;
+									req.session._id = profile._id;
+									res.status(200).send(result.url)
+								})
+							}
+					});
+					return;
+				} else {
+					user["profile_pic"] =
+	          "/images/profile_pictures/" +
+	          user.username +
+	          "." +
+	          file.name.split(".")[1];
+	        user.save((err, profile) => {
+	          delete req.session.user;
+	          req.session.user = profile.username;
+	          req.session._id = profile._id;
+	          res
+	            .status(200)
+	            .send(
+	              "/images/profile_pictures/" +
+	                user.username +
+	                "." +
+	                file.name.split(".")[1]
+	            );
+	        });
+				}
+			});
+			return;
+		});
+		return;
+	} else {
+		db.findOne({ _id: req.body._id }, (err, user) => {
+	    if (err) return res.end(err);
+	    if (!user) return res.sendStatus(404);
 
-      form.on("file", function(name, file) {
-        if (!image_types.includes(file.name.split(".")[1].toLowerCase())) {
-          return;
-        }
-        user["profile_pic"] =
-          "/images/profile_pictures/" +
-          user.username +
-          "." +
-          file.name.split(".")[1];
-        user.save((err, profile) => {
-          delete req.session.user;
-          req.session.user = profile.username;
-          req.session._id = profile._id;
-          res
-            .status(200)
-            .send(
-              "/images/profile_pictures/" +
-                user.username +
-                "." +
-                file.name.split(".")[1]
-            );
-        });
-      });
-      return;
-    });
-    return;
-  }
-  db.findOne({ _id: req.body._id }, (err, user) => {
-    if (err) return res.end(err);
-    if (!user) return res.sendStatus(404);
-
-    user[req.body.key] = req.body.value;
-    /*user.save(function(err) {
-			if(err) console.error(err);
-			return res.sendStatus(200);
-		})*/
-    user.save((err, profile) => {
-      delete req.session.user;
-      req.session.user = profile.username;
-      req.session._id = profile._id;
-      res.status(200).send("done");
-    });
-  });
+	    user[req.body.key] = req.body.value;
+	    /*user.save(function(err) {
+				if(err) console.error(err);
+				return res.sendStatus(200);
+			})*/
+	    user.save((err, profile) => {
+	      delete req.session.user;
+	      req.session.user = profile.username;
+	      req.session._id = profile._id;
+	      res.status(200).send("done");
+	    });
+	  });
+	}
 });
 
 router.get("/v1/search", function(req, res, next) {
