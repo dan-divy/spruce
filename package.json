@@ -23,7 +23,7 @@
     "googleapis": "^39.2.0",
     "guid": "0.0.12",
     "http-errors": "~1.6.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mocha": "^6.2.2",
     "mongoose": "^5.7.9",
     "morgan": "~1.9.0",
