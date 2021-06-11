@@ -13,6 +13,7 @@
     "array-tools": "1.8.6",
     "bcrypt-nodejs": "0.0.3",
     "chai": "^4.2.0",
+    "cloudinary": "1.22.0",
     "cookie-parser": "^1.4.4",
     "debug": "~2.6.9",
     "ejs": "^2.5.9",
@@ -35,8 +36,7 @@
     "prompts": "^2.2.1",
     "request": "2.88.0",
     "socket.io": "^2.2.0",
-    "time-ago": "0.2.1",
-    "cloudinary": "1.22.0"
+    "time-ago": "0.2.1"
   },
   "description": "A social media platform written in Node.js (the 5th time)",
   "main": "./bin/www",
